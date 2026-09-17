@@ -5,15 +5,21 @@ from typing import Any
 
 from pd_engine.types import Product, RoleType
 
-from .climate import CLIMATE_LABEL, in_growing_season, in_summer, season_for
+from .climate import CLIMATE_LABEL, in_growing_season, in_summer, in_winter, season_for
 from .intervals import Interval, IntervalTable, usage_labels
 from .rates import RateBook
 
 LIME_WAIT_DAYS = 42
 IRON_GAP_DAYS = 3
 MIX_SNAP_DAYS = 7
-HORIZON_DAYS = 365
-MAX_EVENTS = 180
+MAX_EVENTS = 500
+_PLACE_CAP = 40
+
+
+def _calendar_end(start: date) -> date:
+    """Exclusive end of the 12-month view (first of the start month, next year)."""
+    return date(start.year + 1, start.month, 1)
+
 
 DISCLAIMER = (
     "Typical temperate / southern Australia program for warm-season lawns and home gardens. "
@@ -83,9 +89,17 @@ def program_products_from_catalog(
     return products, notes
 
 
-def _first_ok(start: date, interval: Interval, product: Product, *, fungal: bool) -> date | None:
+def _first_ok(
+    start: date,
+    interval: Interval,
+    product: Product,
+    *,
+    fungal: bool,
+    until: date | None = None,
+) -> date | None:
     day = start
-    for _ in range(HORIZON_DAYS):
+    stop = until or (start + timedelta(days=366))
+    while day < stop:
         if _date_allowed(day, interval, product, fungal=fungal):
             return day
         day += timedelta(days=1)
@@ -122,6 +136,28 @@ def _product_blocks_iron(product: Product, interval: Interval) -> bool:
     )
 
 
+def _step_after(last: date, interval: Interval) -> int:
+    """Normal cadence, doubled in winter for frequent year-round sprays."""
+    base = interval.cadence_days
+    if base <= 0:
+        return 14
+    if interval.window != "year_round" or interval.one_off or base > 42:
+        return base
+    nxt = last + timedelta(days=base)
+    if in_winter(nxt):
+        return base * 2
+    return base
+
+
+def _how_often_label(interval: Interval) -> str:
+    text = interval.how_often
+    if interval.window == "year_round" and not interval.one_off and 0 < interval.cadence_days <= 42:
+        return text.rstrip(".") + " · about half as often in winter (Jun–Aug)"
+    if interval.window == "growing_season":
+        return text.rstrip(".") + " · pause in winter"
+    return text
+
+
 def _start_offset(
     product: Product,
     interval: Interval,
@@ -150,29 +186,35 @@ def _place_dates(
     fungal: bool,
     offset: int,
 ) -> list[date]:
-    first = _first_ok(start + timedelta(days=offset), interval, product, fungal=fungal)
+    end = _calendar_end(start)
+    first = _first_ok(
+        start + timedelta(days=offset),
+        interval,
+        product,
+        fungal=fungal,
+        until=end,
+    )
     if first is None:
         return []
     if interval.one_off or interval.cadence_days <= 0 or interval.max_per_year <= 1:
         return [first]
 
     out = [first]
-    day = first
-    end = start + timedelta(days=HORIZON_DAYS)
-    while len(out) < interval.max_per_year:
-        day = day + timedelta(days=interval.cadence_days)
+    last = first
+    while len(out) < _PLACE_CAP:
+        day = last + timedelta(days=_step_after(last, interval))
         if day >= end:
             break
         if _date_allowed(day, interval, product, fungal=fungal):
             out.append(day)
+            last = day
             continue
         # Skip closed windows (winter / fungal summer) and resume when allowed.
-        resumed = _first_ok(day, interval, product, fungal=fungal)
+        resumed = _first_ok(day, interval, product, fungal=fungal, until=end)
         if resumed is None or resumed >= end:
             break
-        if resumed != day:
-            day = resumed
-        out.append(day)
+        last = resumed
+        out.append(resumed)
     return out
 
 
@@ -285,10 +327,11 @@ def build_calendar(
         rate_label = (rate.per_100m2 if rate else "") or ""
         amount_label = (rate.for_area if rate else None)
         url = product.product_url or (rate.product_url if rate else None)
+        how_often = _how_often_label(interval)
         card = _product_dict(product)
         card.update(
             {
-                "how_often": interval.how_often,
+                "how_often": how_often,
                 "method": interval.method,
                 "tank_group": interval.tank_group,
                 "tank_mix": tank_mix,
@@ -318,7 +361,7 @@ def build_calendar(
                     "name": _short_name(product),
                     "full_name": product.name,
                     "role": product.role_type.value,
-                    "how_often": interval.how_often,
+                    "how_often": how_often,
                     "rate_label": rate_label,
                     "amount_label": amount_label,
                     "notes": " ".join(b for b in note_bits if b),
@@ -342,6 +385,14 @@ def build_calendar(
         card["applications"] = counts.get(card["id"], 0)
 
     all_notes = list(extra_notes or []) + place_warnings(products, lawn=lawn)
+    if any(
+        (interval_for[p.id].window == "year_round" and not interval_for[p.id].one_off and interval_for[p.id].cadence_days <= 42)
+        or interval_for[p.id].window == "growing_season"
+        for p in products
+    ):
+        all_notes.append(
+            "Winter is quieter on warm-season lawns: year-round sprays run about half as often in June–August, and growing-season feeds pause until spring."
+        )
     mix_names = []
     seen_mix: set[str] = set()
     for ev in events:

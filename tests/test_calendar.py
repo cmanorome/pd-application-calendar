@@ -183,6 +183,49 @@ def test_usage_guide_export_joins_on_sku():
     assert any(r["sku"] == "STM" and "3 mL" in r["amount_text"] for r in rate_rows)
 
 
+def test_year_round_fills_twelfth_month():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-01",
+            "area_m2": 100,
+            "skus": ["SWS", "STM", "A8X"],
+        }
+    )
+    august = [e for e in plan["events"] if e["date"].startswith("2027-08")]
+    assert any(e["sku"] == "SWS" for e in august), "year-round seaweed should still run in August"
+    assert any(e["sku"] == "STM" for e in august)
+    assert not any(e["sku"] == "A8X" for e in august), "Activ8EXTRA is growing-season only"
+    assert max(e["date"] for e in plan["events"] if e["sku"] == "SWS") < "2027-09-01"
+
+
+def test_winter_eases_year_round_cadence():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-01",
+            "skus": ["SWS", "STM", "A8X"],
+        }
+    )
+    winter = sorted(
+        date.fromisoformat(e["date"])
+        for e in plan["events"]
+        if e["sku"] == "SWS" and e["date"][5:7] in {"06", "07", "08"}
+    )
+    growing = [
+        date.fromisoformat(e["date"])
+        for e in plan["events"]
+        if e["sku"] == "SWS" and e["date"][5:7] in {"09", "10", "11", "12", "01", "02", "03", "04"}
+    ]
+    assert winter, "year-round products should still apply in winter, just less often"
+    for a, b in zip(winter, winter[1:]):
+        assert (b - a).days >= 21, f"winter gap too tight: {a} -> {b}"
+    assert len(winter) < len(growing) / 2
+    assert not any(e["sku"] == "A8X" and e["date"][5:7] in {"06", "07", "08"} for e in plan["events"])
+
+
 if __name__ == "__main__":
     test_lawn_calendar_has_events()
     test_iron_not_same_day_as_seaweed()
@@ -194,4 +237,6 @@ if __name__ == "__main__":
     test_usage_guide_dots()
     test_mixable_concentrates_share_spray_days()
     test_usage_guide_export_joins_on_sku()
+    test_year_round_fills_twelfth_month()
+    test_winter_eases_year_round_cadence()
     print("ok")

@@ -220,10 +220,21 @@
       #pick_count { font-weight: 600; color: var(--green-dark); }
       .footer { padding: 28px 0 40px; }
       .empty { color: var(--muted); font-size: 14px; padding: 16px 0; }
+      .print-table, .print-jobs { width: 100%; border-collapse: collapse; font-size: 12px; }
+      .print-table th, .print-table td, .print-jobs th, .print-jobs td {
+        text-align: left; vertical-align: top; padding: 6px 10px 6px 0; border-bottom: 1px solid #eee;
+      }
+      .print-jobs th { width: 72px; white-space: nowrap; }
+      .print-note { font-size: 12px; color: #4b5563; line-height: 1.45; margin: 12px 0 8px; }
       @media print {
-        .header, .no-print, .actions { display: none !important; }
-        body { background: white; }
-        .container { width: 100%; }
+        .header, .no-print, .actions, .screen-only { display: none !important; }
+        .print-only { display: block !important; }
+        body { background: white; color: #111; }
+        .container { width: 100%; max-width: none; }
+        .prod-row { break-inside: avoid; }
+        .prod-row img, .use-legend { display: none !important; }
+        .tip { background: #fff; border: 1px solid #ddd; }
+        a { color: inherit; text-decoration: none; }
       }
     </style>
   </head>
@@ -641,6 +652,208 @@
           <div class="days">${cells}</div></section>`;
       }
 
+      const PRINT_NAMES = {
+        A8X: "Activ8EXTRA",
+        A8M: "Activ8Mate",
+        "886": "Champion Fairway",
+        "892": "Champion Greens",
+        SWS: "Seaweed Secrets",
+        STM: "Stimulizer",
+        "29800": "Quantum H",
+        NSWL: "Soil Wetter Liquid",
+        "664": "Soil Wetter Granular",
+        LIR: "Liquid Iron",
+        LEN: "Lawn Envy",
+        MG: "MaxGreen",
+        "414": "Fulvic Acid Liquid",
+        "29814": "Fulvic Acid Powder",
+        "29782": "Rescue Remedy",
+        "513": "Humate Granules",
+        "526": "Humic Acid Powder",
+        LIMEGr: "Lime Granules",
+        DOL: "Dolomite",
+        "1075": "Gypsum Granules",
+        "636": "Gypsum Liquid",
+        "557": "VolcaMin",
+        "846": "Iron Sulphate",
+        "547": "Iron Chelate",
+        "758": "Neem Granules",
+        "575": "Flowers Fruits Roots (granular)",
+        "721": "Flowers Fruits Roots (liquid)",
+        "1156": "Roots Shoots Leaves",
+        WMP: "Worm Magic Pellets",
+        WMB: "Worm Magic Tea",
+      };
+
+      function printName(item) {
+        const sku = item.sku || item.id || "";
+        if (PRINT_NAMES[sku]) return PRINT_NAMES[sku];
+        let n = (item.name || "").split("(")[0].trim();
+        n = n.replace(/\s+(Boosted|Concentrated|Super Concentrate|Premium).*$/i, "");
+        n = n.replace(/\s+Liquid Fertiliser.*$/i, "");
+        n = n.replace(/\s+&\s+Inoculant.*$/i, "");
+        return n || sku || "Product";
+      }
+
+      function printHowOften(text) {
+        return (text || "")
+          .replace(" · about half as often in winter (Jun–Aug)", ", half in winter")
+          .replace(" · pause in winter", ", pause in winter");
+      }
+
+      function printDayLabel(iso) {
+        const d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString("en-AU", { weekday: "short", day: "numeric" });
+      }
+
+      function printDayAction(events) {
+        const roleOrder = { soil_structure: 0, soil_chemistry: 1, biology: 2, uptake: 3, nutrition: 4, visual: 5 };
+        const byRole = (a, b) => (roleOrder[a.role] ?? 9) - (roleOrder[b.role] ?? 9);
+        const mix = events.filter((e) => e.tank_mix).sort(byRole);
+        const other = events.filter((e) => !e.tank_mix).sort(byRole);
+        const bits = [];
+        if (mix.length >= 2) bits.push("Mix " + mix.map(printName).join(", "));
+        else if (mix.length === 1) bits.push(printName(mix[0]));
+        for (const e of other) {
+          const verb = e.method === "spread" ? "Spread" : e.method === "hose-on" ? "Hose-on" : "Apply";
+          bits.push(`${verb} ${printName(e)}`);
+        }
+        return bits.join("  ·  ");
+      }
+
+      function printKeyHtml(data) {
+        const rows = (data.products || []).map((p) => {
+          const rate = p.amount_label || p.rate_label || "—";
+          return `<tr>
+            <td>${esc(printName(p))}</td>
+            <td>${esc(rate)}</td>
+            <td>${esc(printHowOften(p.how_often))}</td>
+          </tr>`;
+        }).join("");
+        return `<table class="print-table">
+          <thead><tr><th>Product</th><th>Rate</th><th>How often</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+      }
+
+      function printJobsHtml(data) {
+        const start = new Date((data.start_date || "") + "T00:00:00");
+        const byDay = {};
+        for (const e of data.events || []) {
+          (byDay[e.date] ||= []).push(e);
+        }
+        let monthsHtml = "";
+        for (let i = 0; i < 12; i++) {
+          const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+          const title = d.toLocaleDateString("en-AU", { month: "long", year: "numeric" });
+          const y = d.getFullYear();
+          const m = d.getMonth();
+          const days = Object.keys(byDay).filter((iso) => {
+            const dt = new Date(iso + "T00:00:00");
+            return dt.getFullYear() === y && dt.getMonth() === m;
+          }).sort();
+          if (!days.length) continue;
+          const rows = days.map((iso) => `
+            <tr>
+              <th>${esc(printDayLabel(iso))}</th>
+              <td>${esc(printDayAction(byDay[iso]))}</td>
+            </tr>`).join("");
+          monthsHtml += `<section class="print-month"><h2>${esc(title)}</h2>
+            <table class="print-jobs"><tbody>${rows}</tbody></table></section>`;
+        }
+        return monthsHtml || `<p class="muted">No applications in this year.</p>`;
+      }
+
+      function printNotesHtml(data) {
+        const notes = data.notes || [];
+        const lines = [];
+        if (notes.some((n) => /winter/i.test(n))) {
+          lines.push("Winter (Jun–Aug): year-round sprays about half as often; growing-season feeds pause.");
+        }
+        if (notes.some((n) => /mix these/i.test(n))) {
+          lines.push("Where it says Mix, put those concentrates in one sprayer. Do not add iron to that tank.");
+        }
+        if (notes.some((n) => /liquid iron/i.test(n))) {
+          lines.push("Liquid iron is on a different day from seaweed, humic, wetter, and Activ8.");
+        }
+        if (!lines.length) return "";
+        return `<p class="print-note">${lines.map(esc).join("<br/>")}</p>`;
+      }
+
+      function renderPrintSchedule(data) {
+        const where = data.lawn ? "Lawn" : "Garden";
+        return `
+          <div class="print-only print-schedule">
+            <h1>Plant Doctor application calendar</h1>
+            <p class="muted">${esc(where)} · ${esc(fmtDate(data.start_date))}</p>
+            ${printKeyHtml(data)}
+            ${printNotesHtml(data)}
+            ${printJobsHtml(data)}
+          </div>`;
+      }
+
+      const PRINT_PAGE_CSS = `
+        body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color: #111; background: #fff; }
+        .wrap { width: min(720px, 92vw); margin: 0 auto; padding: 28px 0 56px; }
+        h1 { font-size: 20px; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.02em; }
+        h2 { font-size: 13px; font-weight: 700; margin: 22px 0 6px; color: #14532d; text-transform: uppercase; letter-spacing: 0.06em; }
+        .muted { color: #6b7280; font-size: 12px; margin: 0 0 16px; }
+        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 20px; }
+        button { padding: 9px 14px; border: 0; border-radius: 8px; background: #22b14c; color: #fff; font-weight: 600; cursor: pointer; }
+        button.secondary { background: #fff; color: #111; border: 1px solid #e5e7eb; font-weight: 500; }
+        .print-table, .print-jobs { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .print-table th, .print-table td, .print-jobs th, .print-jobs td {
+          text-align: left; vertical-align: top; padding: 6px 10px 6px 0; border-bottom: 1px solid #eee;
+        }
+        .print-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; font-weight: 700; }
+        .print-jobs th { width: 72px; white-space: nowrap; font-weight: 600; color: #374151; }
+        .print-jobs td { color: #111; }
+        .print-month { break-inside: avoid; }
+        .print-note { font-size: 12px; color: #4b5563; line-height: 1.45; margin: 12px 0 8px; }
+        @media print { .toolbar { display: none !important; } }
+      `;
+
+      function buildPrintPage(data) {
+        const where = data.lawn ? "Lawn" : "Garden";
+        return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plant Doctor application calendar</title>
+  <style>${PRINT_PAGE_CSS}</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button type="button" onclick="window.print()">Print</button>
+      <button type="button" class="secondary" onclick="window.close()">Close</button>
+    </div>
+    <h1>Plant Doctor application calendar</h1>
+    <p class="muted">${esc(where)} · ${esc(fmtDate(data.start_date))} · temperate / southern Australia</p>
+    ${printKeyHtml(data)}
+    ${printNotesHtml(data)}
+    ${printJobsHtml(data)}
+  </div>
+</body>
+</html>`;
+      }
+
+      function openPrintView() {
+        if (!lastPlan) return;
+        const html = buildPrintPage(lastPlan);
+        const blob = new Blob([html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const w = window.open(url, "_blank");
+        if (!w) {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "plant-doctor-calendar.html";
+          a.click();
+        }
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      }
+
       function renderEventList(events) {
         if (!events.length) return `<p class="muted">No applications on this day.</p>`;
         const mix = events.filter((e) => e.tank_mix);
@@ -700,27 +913,30 @@
             <button type="button" class="secondary" id="printPlan">Print</button>
           </div>
           <p class="kicker">${data.path === "pick" ? "Products you selected" : "Products on this plan"}</p>
-          <div class="legend use-legend">
+          <div class="legend use-legend screen-only">
             ${USAGE_META.map((u) => `<span>${usageMark(u.key)} ${esc(u.label)}</span>`).join("")}
           </div>
           <div class="stack-list">${products}</div>
           ${notes ? `<div class="tip">${notes}</div>` : ""}
-          <p class="kicker" style="margin-top:18px;">Year view</p>
-          <div class="legend">
-            <span><i class="dot soil_structure"></i> Soil</span>
-            <span><i class="dot soil_chemistry"></i> pH</span>
-            <span><i class="dot biology"></i> Soil life</span>
-            <span><i class="dot uptake"></i> Uptake</span>
-            <span><i class="dot nutrition"></i> Feed</span>
-            <span><i class="dot visual"></i> Colour</span>
+          <div class="screen-only">
+            <p class="kicker" style="margin-top:18px;">Year view</p>
+            <div class="legend">
+              <span><i class="dot soil_structure"></i> Soil</span>
+              <span><i class="dot soil_chemistry"></i> pH</span>
+              <span><i class="dot biology"></i> Soil life</span>
+              <span><i class="dot uptake"></i> Uptake</span>
+              <span><i class="dot nutrition"></i> Feed</span>
+              <span><i class="dot visual"></i> Colour</span>
+            </div>
+            <div class="year">${months}</div>
+            <p class="kicker" style="margin-top:18px;">Applications</p>
+            <div id="dayList" class="stack-list">${renderEventList(eventsOn(selectedDate))}</div>
+            ${why ? `<details class="fold"><summary>${data.path === "pick" ? "How this schedule works" : "Why we chose these"}</summary><ul class="why-list">${why}</ul></details>` : ""}
           </div>
-          <div class="year">${months}</div>
-          <p class="kicker" style="margin-top:18px;">Applications</p>
-          <div id="dayList" class="stack-list">${renderEventList(eventsOn(selectedDate))}</div>
-          ${why ? `<details class="fold"><summary>${data.path === "pick" ? "How this schedule works" : "Why we chose these"}</summary><ul class="why-list">${why}</ul></details>` : ""}
+          ${renderPrintSchedule(data)}
         `;
         document.getElementById("downloadIcs").addEventListener("click", downloadIcs);
-        document.getElementById("printPlan").addEventListener("click", () => window.print());
+        document.getElementById("printPlan").addEventListener("click", openPrintView);
         document.querySelectorAll(".day.has").forEach((el) => {
           el.addEventListener("click", () => {
             selectedDate = el.getAttribute("data-date");
