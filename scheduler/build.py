@@ -6,11 +6,12 @@ from typing import Any
 from pd_engine.types import Product, RoleType
 
 from .climate import CLIMATE_LABEL, in_growing_season, in_summer, season_for
-from .intervals import Interval, IntervalTable
+from .intervals import Interval, IntervalTable, usage_labels
 from .rates import RateBook
 
 LIME_WAIT_DAYS = 42
 IRON_GAP_DAYS = 3
+MIX_SNAP_DAYS = 7
 HORIZON_DAYS = 365
 MAX_EVENTS = 180
 
@@ -99,18 +100,45 @@ def _date_allowed(day: date, interval: Interval, product: Product, *, fungal: bo
     return True
 
 
-def _start_offset(product: Product, interval: Interval, others: list[Product]) -> int:
+def _is_tank_mix(interval: Interval) -> bool:
+    """Liquids the usage guide says can be mixed together as concentrates."""
+    if interval.tank_group in {"iron", "granular"}:
+        return False
+    method = (interval.method or "").lower().replace("_", "-")
+    if method in {"spread", "hose-on"}:
+        return False
+    return bool((interval.usage or {}).get("mix_together"))
+
+
+def _product_blocks_iron(product: Product, interval: Interval) -> bool:
+    if product.is_iron_based or interval.tank_group == "iron":
+        return False
+    if (interval.usage or {}).get("mix_with_iron"):
+        return False
+    return (
+        product.is_incompatible_with_iron
+        or interval.tank_group == "no_iron_mix"
+        or _is_tank_mix(interval)
+    )
+
+
+def _start_offset(
+    product: Product,
+    interval: Interval,
+    others: list[Product],
+    *,
+    others_block_iron: bool,
+) -> int:
     has_lime = any(p.is_lime_based for p in others) or product.is_lime_based
-    has_iron = any(p.is_iron_based for p in others) or product.is_iron_based
     if product.is_lime_based or product.role_type in (RoleType.SOIL_STRUCTURE, RoleType.SOIL_CHEMISTRY):
         return 0
-    if product.is_iron_based:
-        wait = IRON_GAP_DAYS if any(p.is_incompatible_with_iron for p in others) else 0
+    if _is_tank_mix(interval):
+        return 0
+    if product.is_iron_based or interval.tank_group == "iron":
+        wait = IRON_GAP_DAYS if others_block_iron else 0
         if has_lime:
             wait = max(wait, LIME_WAIT_DAYS)
         return wait
-    if interval.tank_group == "no_iron_mix" and has_iron:
-        return IRON_GAP_DAYS
     return 0
 
 
@@ -146,6 +174,42 @@ def _place_dates(
             day = resumed
         out.append(day)
     return out
+
+
+def _coalesce_tank_mix(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Put mix-as-concentrate sprays on the same visit as the main spray cadence."""
+    mix = [e for e in events if e.get("tank_mix")]
+    rest = [e for e in events if not e.get("tank_mix")]
+    if len({e["sku"] for e in mix}) < 2:
+        return events
+
+    sku_counts: dict[str, int] = {}
+    for e in mix:
+        sku_counts[e["sku"]] = sku_counts.get(e["sku"], 0) + 1
+    anchor_sku = max(sku_counts, key=lambda s: sku_counts[s])
+    anchors = sorted({date.fromisoformat(e["date"]) for e in mix if e["sku"] == anchor_sku})
+    if not anchors:
+        return events
+
+    def snap_to_anchor(d: date) -> date:
+        nearby = [a for a in anchors if abs((a - d).days) <= MIX_SNAP_DAYS]
+        if nearby:
+            return min(nearby, key=lambda a: (abs((a - d).days), a))
+        later = [a for a in anchors if a >= d]
+        if later:
+            return later[0]
+        return anchors[-1]
+
+    merged: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for ev in mix:
+        target = snap_to_anchor(date.fromisoformat(ev["date"])).isoformat()
+        key = (ev["sku"], target)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append({**ev, "date": target})
+    return rest + merged
 
 
 def _resolve_same_day(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -201,13 +265,21 @@ def build_calendar(
 ) -> dict[str, Any]:
     ids = [p.id for p in products]
     others_for = {p.id: [x for x in products if x.id != p.id] for p in products}
+    interval_for = {p.id: intervals.for_product(p.id, p.role_type.value) for p in products}
+    others_block_iron = any(_product_blocks_iron(p, interval_for[p.id]) for p in products)
 
     events: list[dict[str, Any]] = []
     product_cards: list[dict[str, Any]] = []
 
     for product in products:
-        interval = intervals.for_product(product.id, product.role_type.value)
-        offset = _start_offset(product, interval, others_for[product.id])
+        interval = interval_for[product.id]
+        tank_mix = _is_tank_mix(interval)
+        offset = _start_offset(
+            product,
+            interval,
+            others_for[product.id],
+            others_block_iron=others_block_iron,
+        )
         dates = _place_dates(start, interval, product, fungal=fungal, offset=offset)
         rate = rates.for_sku(product.id, lawn=lawn, area_m2=area_m2)
         rate_label = (rate.per_100m2 if rate else "") or ""
@@ -219,6 +291,9 @@ def build_calendar(
                 "how_often": interval.how_often,
                 "method": interval.method,
                 "tank_group": interval.tank_group,
+                "tank_mix": tank_mix,
+                "usage": dict(interval.usage),
+                "usage_labels": usage_labels(interval.usage),
                 "rate_label": rate_label,
                 "amount_label": amount_label,
                 "schedule_notes": interval.notes,
@@ -251,16 +326,37 @@ def build_calendar(
                     "image_url": product.image_url,
                     "method": interval.method,
                     "tank_group": interval.tank_group,
+                    "tank_mix": tank_mix,
+                    "usage": dict(interval.usage),
+                    "usage_labels": usage_labels(interval.usage),
                     "blocks_iron": blocks_iron,
                 }
             )
 
+    events = _coalesce_tank_mix(events)
     events = _resolve_same_day(events)
+    counts: dict[str, int] = {}
+    for ev in events:
+        counts[ev["sku"]] = counts.get(ev["sku"], 0) + 1
+    for card in product_cards:
+        card["applications"] = counts.get(card["id"], 0)
 
     all_notes = list(extra_notes or []) + place_warnings(products, lawn=lawn)
+    mix_names = []
+    seen_mix: set[str] = set()
+    for ev in events:
+        if ev.get("tank_mix") and ev["sku"] not in seen_mix:
+            seen_mix.add(ev["sku"])
+            mix_names.append(ev["name"])
+    if len(mix_names) >= 2:
+        all_notes.append(
+            "Mix these as concentrates in one sprayer on the same day: "
+            + ", ".join(mix_names)
+            + ". Jar test if it is a new combination."
+        )
     if any(e["tank_group"] == "iron" for e in events) and any(e.get("blocks_iron") for e in events):
         all_notes.append(
-            "Liquid iron is on a different day from seaweed, humic, wetter, and Activ8 — do not mix them in the same sprayer. Stimulizer can tank-mix with iron."
+            "Liquid iron is on a different day from seaweed, humic, wetter, and Activ8 — do not mix them in the same sprayer. Stimulizer can tank-mix with iron, but is kept with the other concentrates so you only spray once."
         )
 
     return {

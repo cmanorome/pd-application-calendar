@@ -157,6 +157,31 @@
       .dot.soil_chemistry { background: #7c3aed; }
       .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 4px; }
       .legend span { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #374151; }
+      .use-row { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0 2px; }
+      .use-chip {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: 11px; color: #374151; background: #f8faf9;
+        border: 1px solid var(--line); border-radius: 99px; padding: 2px 8px 2px 6px;
+      }
+      .use-dot, .use-mix {
+        width: 9px; height: 9px; border-radius: 99px; flex: 0 0 auto;
+      }
+      .use-mix { position: relative; width: 14px; }
+      .use-mix i {
+        position: absolute; top: 0; width: 9px; height: 9px; border-radius: 99px;
+        border: 1px solid #fff;
+      }
+      .use-mix i:first-child { left: 0; background: #0c783c; }
+      .use-mix i:last-child { left: 5px; background: #e4a818; }
+      .use-dot.independent { background: #e4a818; }
+      .use-dot.water_in { background: #3c6cb4; }
+      .use-dot.soil_drench { background: #cc5424; }
+      .use-dot.foliar { background: #0c783c; }
+      .use-dot.fertigation { background: #183c9c; }
+      .use-dot.hydroponic { background: #18a8a8; }
+      .use-dot.hose_on { background: #60b43c; }
+      .use-dot.mix_with_iron { background: #e4a818; }
+      .use-legend { margin: 10px 0 14px; }
       .event-card {
         border: 1px solid var(--line);
         border-radius: 12px;
@@ -566,6 +591,28 @@
         const d = new Date(iso + "T00:00:00");
         return d.toLocaleDateString("en-AU", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
       }
+      const USAGE_META = [
+        { key: "mix_together", label: "Mix as concentrates" },
+        { key: "independent", label: "Apply independently" },
+        { key: "water_in", label: "Water in" },
+        { key: "soil_drench", label: "Soil drench" },
+        { key: "foliar", label: "Foliar" },
+        { key: "fertigation", label: "Fertigation" },
+        { key: "hydroponic", label: "Hydroponic" },
+        { key: "hose_on", label: "Hose on" },
+        { key: "mix_with_iron", label: "Can mix with iron" },
+      ];
+      function usageMark(key) {
+        if (key === "mix_together") return `<span class="use-mix" aria-hidden="true"><i></i><i></i></span>`;
+        return `<i class="use-dot ${esc(key)}" aria-hidden="true"></i>`;
+      }
+      function renderUsage(usage) {
+        const flags = usage || {};
+        const chips = USAGE_META.filter((u) => flags[u.key]).map((u) =>
+          `<span class="use-chip">${usageMark(u.key)}${esc(u.label)}</span>`
+        );
+        return chips.length ? `<div class="use-row">${chips.join("")}</div>` : "";
+      }
 
       let lastPlan = null;
       let selectedDate = null;
@@ -596,11 +643,16 @@
 
       function renderEventList(events) {
         if (!events.length) return `<p class="muted">No applications on this day.</p>`;
-        return events.map((e) => `
+        const mix = events.filter((e) => e.tank_mix);
+        const mixTip = mix.length >= 2
+          ? `<p class="tip">Mix in one sprayer today: ${mix.map((e) => esc(e.name)).join(", ")}. Jar test if this combo is new. Do not add iron to this tank.</p>`
+          : "";
+        return mixTip + events.map((e) => `
           <article class="event-card">
             <p class="event-date">${esc(fmtDate(e.date))}</p>
             <div class="prod-name">${esc(e.name)}</div>
             <div class="role-tag">${esc(roleLabel(e.role))} · ${esc(e.method || "")}</div>
+            ${renderUsage(e.usage)}
             <p class="muted" style="margin:6px 0;">${esc(e.how_often || "")}${e.amount_label ? " · " + esc(e.amount_label) : e.rate_label ? " · " + esc(e.rate_label) : ""}</p>
             <p class="muted">${esc(e.notes || "")}</p>
             ${e.product_url ? `<a class="link" href="${esc(e.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
@@ -633,6 +685,7 @@
             <div>
               <div class="role-tag">${esc(roleLabel(p.role_type))} · ${esc(p.applications || 0)} applications</div>
               <div class="prod-name">${esc(p.name)}</div>
+              ${renderUsage(p.usage)}
               <p class="muted" style="margin:4px 0;">${esc(p.how_often || "")}${p.amount_label ? " · " + esc(p.amount_label) : p.rate_label ? " · " + esc(p.rate_label) : ""}</p>
               ${p.product_url ? `<a class="link" href="${esc(p.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
             </div>
@@ -647,6 +700,9 @@
             <button type="button" class="secondary" id="printPlan">Print</button>
           </div>
           <p class="kicker">${data.path === "pick" ? "Products you selected" : "Products on this plan"}</p>
+          <div class="legend use-legend">
+            ${USAGE_META.map((u) => `<span>${usageMark(u.key)} ${esc(u.label)}</span>`).join("")}
+          </div>
           <div class="stack-list">${products}</div>
           ${notes ? `<div class="tip">${notes}</div>` : ""}
           <p class="kicker" style="margin-top:18px;">Year view</p>

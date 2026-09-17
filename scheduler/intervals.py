@@ -1,8 +1,49 @@
 from __future__ import annotations
 
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+
+
+USAGE_KEYS = (
+    "mix_together",
+    "independent",
+    "water_in",
+    "soil_drench",
+    "foliar",
+    "fertigation",
+    "hydroponic",
+    "hose_on",
+    "mix_with_iron",
+)
+
+USAGE_LABELS = {
+    "mix_together": "Can mix as concentrates",
+    "independent": "Apply independently",
+    "water_in": "Water in",
+    "soil_drench": "Soil drench",
+    "foliar": "Foliar",
+    "fertigation": "Fertigation",
+    "hydroponic": "Hydroponic",
+    "hose_on": "Hose on",
+    "mix_with_iron": "Can mix with iron",
+}
+
+
+def _flag(raw: dict[str, str], key: str, default: bool = False) -> bool:
+    val = (raw.get(key) or "").strip().lower()
+    if not val:
+        return default
+    return val in {"1", "true", "yes", "y"}
+
+
+def _usage_from_row(raw: dict[str, str]) -> dict[str, bool]:
+    return {key: _flag(raw, key) for key in USAGE_KEYS}
+
+
+def usage_labels(usage: dict[str, bool] | None) -> list[str]:
+    flags = usage or {}
+    return [USAGE_LABELS[key] for key in USAGE_KEYS if flags.get(key)]
 
 
 @dataclass(frozen=True)
@@ -16,6 +57,7 @@ class Interval:
     method: str
     how_often: str
     notes: str
+    usage: dict[str, bool] = field(default_factory=dict)
 
 
 _ROLE_FALLBACK: dict[str, tuple[int, bool, str, int, str, str, str]] = {
@@ -41,6 +83,9 @@ class IntervalTable:
                 sku = (raw.get("sku") or "").strip()
                 if not sku:
                     continue
+                usage = _usage_from_row(raw)
+                if sku.upper() == "STM":
+                    usage["mix_with_iron"] = True
                 rows[sku.upper()] = Interval(
                     sku=sku.upper(),
                     cadence_days=int(raw.get("cadence_days") or 28),
@@ -51,6 +96,7 @@ class IntervalTable:
                     method=(raw.get("method") or "spray").strip(),
                     how_often=(raw.get("how_often") or "").strip(),
                     notes=(raw.get("notes") or "").strip(),
+                    usage=usage,
                 )
         return cls(rows)
 
@@ -69,4 +115,5 @@ class IntervalTable:
             method=fb[5],
             how_often=fb[6],
             notes="Typical Plant Doctor cadence for this product type.",
+            usage={},
         )

@@ -114,6 +114,75 @@ def test_lawn_picker_includes_uptake_products():
     assert not lawn["721"]
 
 
+def test_usage_guide_dots():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-17",
+            "skus": ["SWS", "STM", "LIR", "LEN", "886"],
+        }
+    )
+    usage = {p["id"]: p.get("usage") or {} for p in plan["products"]}
+    assert usage["SWS"]["mix_together"]
+    assert usage["STM"]["mix_together"]
+    assert usage["STM"]["hydroponic"]
+    assert usage["LIR"]["independent"]
+    assert not usage["LIR"]["mix_together"]
+    assert usage["LEN"]["independent"]
+    assert usage["LEN"]["hose_on"]
+    assert usage["886"]["water_in"]
+    assert usage["886"]["independent"]
+    len_events = [e for e in plan["events"] if e["sku"] == "LEN"]
+    sws_dates = {e["date"] for e in plan["events"] if e["sku"] == "SWS"}
+    assert len_events
+    assert all(e["tank_group"] == "iron" for e in len_events)
+    assert not any(e["date"] in sws_dates for e in len_events)
+
+
+def test_mixable_concentrates_share_spray_days():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-17",
+            "area_m2": 100,
+            "skus": ["SWS", "A8X", "STM", "29800", "NSWL", "LIR"],
+        }
+    )
+    mix = [e for e in plan["events"] if e.get("tank_mix")]
+    iron = [e for e in plan["events"] if e["tank_group"] == "iron"]
+    assert {e["sku"] for e in mix} >= {"SWS", "A8X", "STM", "29800", "NSWL"}
+    first = {}
+    for e in mix:
+        first.setdefault(e["sku"], e["date"])
+    assert first["SWS"] == first["A8X"] == first["STM"] == first["29800"] == first["NSWL"]
+    mix_dates = {e["date"] for e in mix}
+    assert not any(e["date"] in mix_dates for e in iron)
+    first_iron = min(e["date"] for e in iron)
+    assert (date.fromisoformat(first_iron) - date.fromisoformat(first["SWS"])).days >= 3
+    sws_dates = {e["date"] for e in mix if e["sku"] == "SWS"}
+    for sku in ("A8X", "STM", "29800", "NSWL"):
+        sku_dates = {e["date"] for e in mix if e["sku"] == sku}
+        assert sku_dates
+        assert sku_dates <= sws_dates, f"{sku} sprayed on extra days {sku_dates - sws_dates}"
+
+
+def test_usage_guide_export_joins_on_sku():
+    import csv
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    rows = list(csv.DictReader((root / "data" / "product_usage_guide.csv").open(encoding="utf-8-sig")))
+    by_sku = {r["sku"]: r for r in rows}
+    assert by_sku["STM"]["mix_with_iron"] == "1"
+    assert by_sku["SWS"]["mix_together"] == "1"
+    assert by_sku["LIR"]["independent"] == "1"
+    assert by_sku["NSO"]["in_catalog"] == "0"
+    rate_rows = list(csv.DictReader((root / "data" / "product_usage_guide_rates.csv").open(encoding="utf-8-sig")))
+    assert any(r["sku"] == "STM" and "3 mL" in r["amount_text"] for r in rate_rows)
+
+
 if __name__ == "__main__":
     test_lawn_calendar_has_events()
     test_iron_not_same_day_as_seaweed()
@@ -122,4 +191,7 @@ if __name__ == "__main__":
     test_picked_products_only_those_skus()
     test_pick_requires_a_product()
     test_lawn_picker_includes_uptake_products()
+    test_usage_guide_dots()
+    test_mixable_concentrates_share_spray_days()
+    test_usage_guide_export_joins_on_sku()
     print("ok")

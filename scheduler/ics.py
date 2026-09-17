@@ -37,8 +37,10 @@ def to_ics(events: list[dict[str, Any]], *, calendar_name: str = "Plant Doctor a
     for i, ev in enumerate(events):
         day = date.fromisoformat(ev["date"])
         end = day + timedelta(days=1)
+        usage = ev.get("usage_labels") or []
         desc_parts = [
             ev.get("how_often") or "",
+            ", ".join(usage) if usage else "",
             ev.get("amount_label") or ev.get("rate_label") or "",
             ev.get("notes") or "",
             ev.get("product_url") or "",

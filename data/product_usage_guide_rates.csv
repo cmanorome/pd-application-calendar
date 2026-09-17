@@ -1,0 +1,80 @@
+﻿sku,guide_name,use_case,method,amount_text,notes
+A8X,Activ8EXTRA,lawn_garden,spray,75–100 mL / 100 m²,Minimum dilution 1:100
+A8M,Activ8mate,lawn_garden,spray,100 mL / 100 m²,Minimum dilution 1:100
+886,Champion Lawn & Fairway 2-4mm granular fertiliser,lawn_growing_season,spread,20–40 g/m² (2–4 kg/100 m²),
+886,Champion Lawn & Fairway 2-4mm granular fertiliser,autumn_winter,spread,half rate,1/2 the growing-season rate
+892,Champion Lawn & Greens Mini-Prill Fertiliser,fine_turf_growing_season,spread,20–40 g/m² (2–4 kg/100 m²),
+892,Champion Lawn & Greens Mini-Prill Fertiliser,autumn_winter,spread,half rate,
+DOL,Dolomite Granules,soil_amendment,spread,5 kg / 100 m²,Adjust to pH and magnesium test
+575,"Flowers, Fruits & Roots - Granular",general,spread,2–5.5 kg / 100 m²,
+575,"Flowers, Fruits & Roots - Granular",roses,spread,70 g/m²,
+575,"Flowers, Fruits & Roots - Granular",fruit_trees,spread,20–40 g per tree,
+575,"Flowers, Fruits & Roots - Granular",pots,spread,2 g per litre of potting mix,
+575,"Flowers, Fruits & Roots - Granular",turf,spread,20–40 g/m²,"Guide lists turf rate; catalog treats this SKU as garden flower/fruit, not a lawn fertiliser."
+721,"Flowers, Fruits & Roots - Liquid",general,spray,80–120 mL / 100 m²,
+721,"Flowers, Fruits & Roots - Liquid",ornamentals,spray,10–20 mL per 8 L water,
+721,"Flowers, Fruits & Roots - Liquid",vegetables,spray,10–20 mL per 8 L water,Fortnightly when producing
+721,"Flowers, Fruits & Roots - Liquid",trees_fruit_vines,spray,100–170 mL / 100 m²,Every 6–8 weeks
+414,Fulvic Acid Liquid,home_garden,watering_can,15 mL per watering can,
+414,Fulvic Acid Liquid,hydroponics,hydroponic,1800 mL per 1000 L water,
+414,Fulvic Acid Liquid,foliar_turf,foliar,1450 mL per 1000 L water,
+414,Fulvic Acid Liquid,broadacre,spray,3900 mL per 1000 L water/ha,
+29814,Fulvic Acid Powder >92%,fertigation,fertigation,500 g–1 kg/ha,
+29814,Fulvic Acid Powder >92%,foliar,foliar,300–500 g/ha,
+29814,Fulvic Acid Powder >92%,broadacre,spray,80–150 g/ha,
+29814,Fulvic Acid Powder >92%,hydroponics,hydroponic,5–10 g per 10 L water,
+1075,Gypsum Granules 1–2mm Mini Prill,soil_amendment,spread,100 g/m² (10 kg/100 m²),Confirm with soil test where possible
+513,Humate / Humic Acid Granules (45–50%),lawns_turf,spread,2–5 kg / 100 m²,
+513,Humate / Humic Acid Granules (45–50%),gardens,spread,2–5 kg / 100 m² or a handful per plant/pot,
+513,Humate / Humic Acid Granules (45–50%),potting_mix,incorporate,2.5–10% inclusion rate,
+526,Humic acid 80% (Humate) Powder - 99% Soluble,foliar,foliar,1–3 kg per 1000 L water,
+526,Humic acid 80% (Humate) Powder - 99% Soluble,soil_fertigation,fertigation,5–10 kg per 1000 L water,
+526,Humic acid 80% (Humate) Powder - 99% Soluble,home_garden,drench,10–30 g per 10 L water,
+526,Humic acid 80% (Humate) Powder - 99% Soluble,new_plants,drench,2 g per litre of water,
+547,Iron Chelate Microgranules,flowers_vegetables,drench,10 g per 10 L water,Covers 10 m²
+547,Iron Chelate Microgranules,fruit_trees,drench,35 g per 10 L water,Root zone
+547,Iron Chelate Microgranules,roses_shrubs,drench,25 g per 10 L water per plant,
+547,Iron Chelate Microgranules,lawn_drench,drench,25 g per 5 L water,
+547,Iron Chelate Microgranules,lawn_foliar,foliar,5 g per 5 L water,
+846,Iron Sulphate Heptahydrate Powder,iron_deficiency,spread,20–30 g/m²,
+846,Iron Sulphate Heptahydrate Powder,soil_ph_adjustment,spread,25–35 g/m²,
+846,Iron Sulphate Heptahydrate Powder,moss_control,spread,10–20 g/m²,
+LEN,Lawn Envy,hose_on,hose-on,2 L covers up to 200 m²,
+LEN,Lawn Envy,concentrate,hose-on,1 L concentrate into 2 L hose-on bottle or EZFLO,
+LIMEGr,Lime Granules 1-2mm Slow Release,sandy,spread,50–75 g/m²,
+LIMEGr,Lime Granules 1-2mm Slow Release,loam,spread,75–100 g/m²,
+LIMEGr,Lime Granules 1-2mm Slow Release,clay,spread,100–150 g/m²,To raise pH by ~1 unit
+LIR,Liquid Iron Fertiliser - 7% Iron 3% Sulphur,general,spray,150–400 mL / 100 m²,Minimum dilution 1:50
+LIR,Liquid Iron Fertiliser - 7% Iron 3% Sulphur,vegetables_trees_ornamentals,spray,150–300 mL / 100 m² or 10–25 mL per 10 L water,
+MG,MaxGreen Hi-N & Iron liquid fertiliser,hose_on,hose-on,2 L covers 200 m²,
+MG,MaxGreen Hi-N & Iron liquid fertiliser,concentrate,spray,140–400 mL / 100 m²,
+MG,MaxGreen Hi-N & Iron liquid fertiliser,vegetables_trees_ornamentals,spray,140–300 mL / 100 m² or 10–25 mL per 9 L water,
+636,Micronised Gypsum Liquid,home_garden,drench,45 mL per 9 L water,Apply at 1 L/m²
+636,Micronised Gypsum Liquid,soil_amelioration_fertigation,fertigation,10–50 L/ha,
+636,Micronised Gypsum Liquid,foliar,foliar,1 L per 100 L water,Rate varies by crop
+NSWL,Nature's Soil Wetter - Liquid,lawn_garden,spray,100 mL / 100 m²,Do not shake
+664,Nature's Soil Wetter granules,lawns_gardens,spread,1.5–2 kg / 100 m² every 3–6 months,
+664,Nature's Soil Wetter granules,golf_greens,spread,1.5 kg / 100 m² every 1–2 months,
+664,Nature's Soil Wetter granules,fairways_sports,spread,2 kg / 100 m² every 2–3 months,
+664,Nature's Soil Wetter granules,crops_vegetables,spread,1.5–2 kg / 100 m²,
+758,Neem Fertiliser Slow Release Granules,soil_amendment,spread,50–100 g/m²,
+NSO,Neem Seed Oil - 100% Cold Pressed virgin oil,garden,foliar,30 mL per 1 L water + a few drops biodegradable detergent,
+NSO,Neem Seed Oil - 100% Cold Pressed virgin oil,agriculture,spray,1 L neem oil per 200 L water,Apply 2–3 L prepared spray per hectare
+29800,Quantum H,home_garden,spray,100 mL / 100 m²,
+29782,Rescue Remedy,general,spray,10 g / 10 L water or 10 g / 100 m²,
+1156,"Roots, Shoots & Leaves - Granular",lawn,spread,20–40 g/m²,
+1156,"Roots, Shoots & Leaves - Granular",pots,incorporate,4 g per litre of potting mix,
+1156,"Roots, Shoots & Leaves - Granular",plants_gardens,spread,varies with plant type and size,
+SWS,Seaweed Secrets,home_garden,spray,100 mL / 100 m²,
+STM,Stimulizer,home_garden_area,spray,3 mL / 100 m²,
+STM,Stimulizer,watering_can,drench,2 mL per 9 L watering can,
+557,VolcaMin – Premium Clinoptilolite Zeolite,lawn_garden,spread,25–100 g/m²,
+557,VolcaMin – Premium Clinoptilolite Zeolite,potting_mix,incorporate,5% by volume (~50 L per m³),
+557,VolcaMin – Premium Clinoptilolite Zeolite,soil_amendment,spread,1–5 tonnes/ha,
+557,VolcaMin – Premium Clinoptilolite Zeolite,tree_planting,incorporate,5–10 kg per planting hole or 3–5 kg per tree for trenching,
+WMP,Worm Magic Casting Pellets,lawns_gardens,spread,20–40 g/m²,
+WMP,Worm Magic Casting Pellets,pots,incorporate,2 tablespoons per 5 L potting mix,Every 4–6 weeks
+WMP,Worm Magic Casting Pellets,agriculture,spread,100–1000 kg/ha,Varies by crop
+WMB,Worm Magic Liquid Compost Tea,garden_beds_small_lawns,drench,50–100 mL per 9 L water,
+WMB,Worm Magic Liquid Compost Tea,pots,drench,10–20 mL per litre water,
+WMB,Worm Magic Liquid Compost Tea,fruit_trees_shrubs,drench,100–150 mL per 9 L water,
