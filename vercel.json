@@ -1,3 +1,8 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/app.py" }]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "app.py": {
+      "excludeFiles": "{tests/**,scripts/**,Product Usage Guide.pdf,Product Usage Guide.xlsx,data/product_usage_guide.xlsx}"
+    }
+  }
 }

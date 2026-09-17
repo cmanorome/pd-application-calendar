@@ -38,3 +38,7 @@ Returns products, dated events, and an `ics` string.
 - `data/product_usage_guide.csv` — Product Usage Guide extract (join on `sku`; 0/1 mix and method flags). Excel copy: `Product Usage Guide.xlsx`
 
 Typical program only. Follow the product label and adjust to growth.
+
+## Deploy on Vercel
+
+Connect the GitHub repo as a **FastAPI / Python** project. Leave the build command and output directory empty — Vercel should detect `app.py`. Do not add a rewrite to `/app.py`; that sends every URL to a path FastAPI does not serve.
