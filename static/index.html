@@ -101,17 +101,29 @@
         font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
         color: var(--muted); font-weight: 700; margin: 0 0 8px;
       }
+      .prod-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 10px;
+      }
       .prod-row {
-        display: flex; gap: 12px; align-items: flex-start;
-        background: white; border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+        display: flex; flex-direction: column; gap: 6px;
+        background: white; border: 1px solid var(--line); border-radius: 12px;
+        padding: 10px 12px; min-width: 0; height: 100%;
       }
+      .prod-head {
+        display: flex; gap: 10px; align-items: flex-start; min-width: 0;
+      }
+      .prod-head > div { min-width: 0; flex: 1; }
       .prod-row img {
-        width: 52px; height: 52px; object-fit: cover; border-radius: 10px;
-        border: 1px solid var(--line); background: #fff;
+        width: 44px; height: 44px; object-fit: cover; border-radius: 8px;
+        border: 1px solid var(--line); background: #fff; flex: 0 0 44px;
       }
-      .prod-name { font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+      .prod-row .use-row { margin: 2px 0 0; }
+      .prod-row .muted { margin: 0; }
+      .prod-name { font-size: 14px; font-weight: 700; margin: 0 0 2px; line-height: 1.3; }
       .role-tag { font-size: 11px; color: var(--muted); font-weight: 600; }
-      .link { color: var(--green); font-weight: 600; font-size: 13px; text-decoration: none; }
+      .link { color: var(--green); font-weight: 600; font-size: 12px; text-decoration: none; }
       .stack-list { display: flex; flex-direction: column; gap: 8px; }
       .year {
         display: grid;
@@ -894,14 +906,16 @@
         }
         const products = (data.products || []).map((p) => `
           <div class="prod-row">
-            ${p.image_url ? `<img src="${esc(p.image_url)}" alt="" />` : ""}
-            <div>
-              <div class="role-tag">${esc(roleLabel(p.role_type))} · ${esc(p.applications || 0)} applications</div>
-              <div class="prod-name">${esc(p.name)}</div>
-              ${renderUsage(p.usage)}
-              <p class="muted" style="margin:4px 0;">${esc(p.how_often || "")}${p.amount_label ? " · " + esc(p.amount_label) : p.rate_label ? " · " + esc(p.rate_label) : ""}</p>
-              ${p.product_url ? `<a class="link" href="${esc(p.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
+            <div class="prod-head">
+              ${p.image_url ? `<img src="${esc(p.image_url)}" alt="" />` : ""}
+              <div>
+                <div class="role-tag">${esc(roleLabel(p.role_type))} · ${esc(p.applications || 0)} applications</div>
+                <div class="prod-name">${esc(p.name)}</div>
+              </div>
             </div>
+            ${renderUsage(p.usage)}
+            <p class="muted">${esc(p.how_often || "")}${p.amount_label ? " · " + esc(p.amount_label) : p.rate_label ? " · " + esc(p.rate_label) : ""}</p>
+            ${p.product_url ? `<a class="link" href="${esc(p.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
           </div>
         `).join("");
         const notes = (data.notes || []).map(esc).join("<br/>");
@@ -916,7 +930,7 @@
           <div class="legend use-legend screen-only">
             ${USAGE_META.map((u) => `<span>${usageMark(u.key)} ${esc(u.label)}</span>`).join("")}
           </div>
-          <div class="stack-list">${products}</div>
+          <div class="prod-grid">${products}</div>
           ${notes ? `<div class="tip">${notes}</div>` : ""}
           <div class="screen-only">
             <p class="kicker" style="margin-top:18px;">Year view</p>
