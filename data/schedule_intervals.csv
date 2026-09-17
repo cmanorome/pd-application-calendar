@@ -1,0 +1,31 @@
+sku,cadence_days,one_off,window,max_per_year,tank_group,method,how_often,notes
+A8X,21,0,growing_season,12,no_iron_mix,spray,Every 3 weeks in the growing season,Skip high-N applications in summer if fungal issues are present. Do not tank-mix with iron.
+A8M,21,0,year_round,16,no_iron_mix,spray,Every 3 weeks,Year-round; lighter and more often in warm months. Do not tank-mix with iron.
+886,70,0,growing_season,5,granular,spread,Every 8–10 weeks during active growth,Slow-release turf feed. Water in lightly after spreading.
+892,84,0,growing_season,4,granular,spread,Every 8–12 weeks during active growth,Greens Grade for low-cut turf. Water in lightly after spreading.
+575,120,0,growing_season,3,granular,spread,Every 4 months in the growing season,Garden flower/fruit granular. Not for lawns.
+721,28,0,growing_season,10,mixable,spray,Every 4 weeks in the growing season,Garden flower/fruit liquid. Fortnightly on veg if you want a harder program.
+LEN,28,0,growing_season,8,mixable,spray,Every 4 weeks during active growth,Hose-on tonic. Offset ~2 weeks if alternating with MaxGreen.
+LIR,28,0,growing_season,8,iron,spray,Every 4 weeks in the growing season,Apply on a different day from seaweed; humic; wetter; Activ8. May stain paths.
+MG,28,0,growing_season,8,iron,spray,Monthly in the growing season,High-N plus iron. Skip summer if fungal issues. Do not tank-mix with seaweed or humic.
+758,90,0,year_round,4,granular,spread,Every 3 months,Neem granules — pest/disease programs.
+1156,70,0,growing_season,5,granular,spread,Every 8–10 weeks in the growing season,Garden base granular feed.
+414,14,0,year_round,24,no_iron_mix,spray,Every 2 weeks,Fulvic. Do not tank-mix with iron.
+1075,365,1,year_round,1,granular,spread,Once at the start of the plan (repeat yearly),Gypsum for clay or compaction. Water in after spreading.
+513,90,0,year_round,4,granular,spread,Every 3 months,Humic granules. Do not tank-mix with iron (spread separately from liquid iron).
+LIMEGr,365,1,year_round,1,granular,spread,Once at the start of the plan,Lime on acidic soil only. Wait 6 weeks before iron.
+664,90,0,growing_season,4,granular,spread,Every 3 months in the growing season,Granular wetter. Reapply if water still beads.
+NSWL,28,0,growing_season,8,no_iron_mix,spray,Every 4 weeks in the growing season,Liquid wetter. Do not tank-mix with iron.
+526,28,0,year_round,12,no_iron_mix,spray,Every 4 weeks,Soluble humic. Do not tank-mix with iron.
+29800,14,0,year_round,20,no_iron_mix,spray,Every 2 weeks,Quantum H. Do not tank-mix with iron.
+29782,14,0,year_round,20,mixable,spray,Every 2 weeks,Soluble seaweed. More often during rescue.
+SWS,14,0,year_round,24,mixable,spray,Every 2 weeks,Core biology layer. Can tank-mix with Stimulizer and most non-iron feeds.
+STM,14,0,year_round,24,mixable,spray,Every 2 weeks,Can tank-mix with iron. Use at very low rates.
+557,365,1,year_round,1,granular,spread,Once at the start of the plan (repeat yearly),Zeolite — sandy or low organic-matter soils.
+DOL,365,1,year_round,1,granular,spread,Once at the start of the plan,Dolomite on acidic soil. Wait 6 weeks before iron.
+846,28,0,growing_season,4,iron,spray,Every 4 weeks while correcting yellowing,Iron sulphate. Corrective; not an all-year tonic. Do not combine with lime.
+547,28,0,growing_season,6,iron,spray,Every 4 weeks while correcting yellowing,Chelated iron — preferred on alkaline soils.
+636,90,0,growing_season,4,no_iron_mix,spray,Every 3 months in the growing season,Liquid gypsum for clay. Do not tank-mix with iron.
+29814,14,0,year_round,20,no_iron_mix,spray,Every 2 weeks,Fulvic powder. Do not tank-mix with iron.
+WMP,42,0,year_round,10,granular,spread,Every 4–6 weeks,Pelletised worm castings. Water in after spreading. Safe with fertiliser and seaweed.
+WMB,21,0,year_round,16,no_iron_mix,spray,Every 2–4 weeks,Worm casting tea. Foliar or soil drench. Do not tank-mix with iron (humic/fulvic).

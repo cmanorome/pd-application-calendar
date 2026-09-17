@@ -1,0 +1,369 @@
+,,,,,,,PROBLEMS (0-5),,,,,,,,USE CASE (0-1),,,,,SOIL TAGS (1-3),,,,,,Seasonal Relevance (0-3),,,,Application Method (0-1),,,,,Compatibility (0-1),,,,,,,,,,,,GOALS - LAWNS,,,,,GOALS - GARDENS,,,,,GOALS - FARMS,,,,
+Product Name,SKU,VISUAL CODE,Category,Primary Function,Role Type,Priority Score,Yellowing Leaves,Slow Growth,Compacted Soil,Poor Water Retention,Nutrient Lockout,Patchy Lawn,Fungal Issues,Weak Roots,Lawn,Garden Beds,Indoor Plants,Pots,Farms,Sandy Soil,Clay Soil,Acidic Soil,Alkaline Soil,Low Organic Matter,Hydrophobic Soil,Spring,Summer,Autumn,Winter,Liquid Spray,Hose-On,Granular,Fertigation Compatible,Soil Drench,Pairs with Seaweed,Pairs with Humic,Pairs with Fertiliser,Safe for Regular Use,Needs Spacing,Intensity (1-3),Short Recommendation Reason,Problem Explanation,Why This Works,NOTES,App Logic considerations,App positioning,Deep green colour,Thickening and density,Fast recovery from stress,Weed suppression through dominance,Low maintenance resilience,Strong flowering and fruiting performance,Improved soil fertility over time,Root development and transplant success,Pest and disease resilience,Consistent growth across seasons,Yield increase,Soil efficiency,Water efficiency,Crop uniformity,Reduced input dependency over time
+Activ8EXTRA Boosted Liquid Fertiliser & Inoculant,A8X,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/A8X01L.jpg?20240315123638"" alt=""Activ8EXTRA Boosted Liquid Fertiliser"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/activ8mate-liquid-fertiliser-inoculant-for-use-on"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Activ8EXTRA Boosted Liquid Fertiliser
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Fast-acting nutrition combined with biological inputs to feed plants and soil.
+    </p>
+  </div>",Liquid fertiliser; Biostimulant,Growth; Soil biology activation,Base fertiliser (with biostimulant support),9,4,5,2,4,2,4,2,4,1,1,1,1,1,3,3,2,2,5,2,3,3,2,2,1,1,0,1,1,1,1,1,1,1,3,Fast-acting liquid fertiliser that drives strong green growth while rebuilding soil health,"Plants struggle when nutrients are locked in the soil or biology is weak, leading to slow growth, yellowing, and poor recovery","Combines high nitrogen with organic inputs and fulvic acid to improve nutrient uptake, activate microbes, and enhance soil structure for sustained growth",,,,3,3,4,3,3,3,4,4,3,4,5,4,3,4,3
+CHAMPION Lawn & Fairway Fertiliser,886," <div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;"">
+    <img alt=""CHAMPION Fertiliser"" src=""https://www.plantdoctor.com.au/assets/full/886_888.jpg?20200710030233"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+    <div style=""font-size: 18px; font-weight: bold; margin-top: 10px;"">
+      <a href=""https://www.plantdoctor.com.au/champion-mineral-lawn-fairway-fertiliser-new"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">CHAMPION – Sustained Release Fertiliser</a>
+    </div>
+    <div style=""font-size: 14px; color: #555;"">A premium fertiliser with slow-release nutrients for up to 3 months.</div>
+  </div>",Granular fertiliser (slow-release mineral),Sustained growth;  turf resilience,Base Fertiliser,9,4,4,3,2,2,4,3,5,1,0,0,0,0,3,3,2,2,3,2,3,3,3,1,0,0,1,0,0,1,1,0,1,1,2,Long-lasting granular fertiliser that feeds your lawn for up to 3 months while improving strength and resilience,"Frequent fertilising leads to nutrient loss, inconsistent growth, and weak turf that struggles under stress","Uses slow-release mineral nutrition with zeolite technology to hold and release nutrients over time, improving efficiency, strengthening plant cells with silica, and supporting consistent turf performance",,,,5,5,4,4,5,1,1,1,1,1,2,2,2,2,2
+CHAMPION Mineral Low Cut Lawn Fertiliser (Greens Grade),892,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/892_894.jpg?20210728105445"" alt=""Champion Mineral Low Cut Lawn Fertiliser"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/champion-mineral-low-cut-lawn-fertiliser-new"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Champion Mineral Low Cut Lawn Fertiliser
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Specialised fertiliser designed for low cut lawns, delivering balanced nutrition to support dense, healthy turf and consistent colour.
+    </p>
+</div>","Granular fertiliser (slow-release mineral, mini-prill)",Sustained growth;  fine turf performance,Base fertiliser,8,4,4,2,2,2,4,3,5,1,0,0,0,0,3,3,2,2,3,2,3,3,3,1,0,0,1,0,0,1,1,0,1,1,2,"Precision slow-release fertiliser designed for low-cut lawns, delivering consistent colour, density, and turf performance","Low-cut lawns lose nutrients quickly and struggle to maintain density, colour, and resilience under frequent mowing and stress","Mini-prill technology ensures even distribution in short turf while zeolite holds and releases nutrients over time, improving efficiency, strengthening plant cells with silica, and supporting consistent high-performance turf",,,,5,5,4,4,5,1,1,1,1,1,2,2,2,2,2
+"Flowers, Fruits & Roots Granular Fertiliser (8-2-20 + T/E)",575,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/alt_2/575.jpg?20260217113730"" alt=""Flowers, Fruits & Roots Granular Fertiliser"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/flowers-fruits-roots-granular-fertiliser-8-2-20-np"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Flowers, Fruits & Roots Granular Fertiliser
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      High-potassium, slow-release fertiliser designed to boost flowering, fruiting, and root development while improving long-term soil health.
+    </p>
+</div>",Granular fertiliser (slow-release mineral),"Flowering, fruiting;  root development",Booster fertiliser (reproductive stage),8,3,3,2,3,2,0,1,5,0,1,1,1,1,3,3,2,2,4,3,3,3,2,1,0,0,1,0,0,1,1,0,1,1,2,"High-potassium fertiliser designed to boost flowering, fruit production, and root strength","Plants often produce weak flowers, poor fruit yield, or bland produce when potassium and trace minerals are lacking during key growth stages","Delivers slow-release potassium with essential minerals and trace elements to improve flowering, fruit fill, sugar production, and root development while enhancing soil biology and structure",,,,1,1,1,1,1,5,4,2,4,4,5,4,4,4,4
+"Flowers, Fruits & Roots Liquid Fertiliser (9-7-19 + T/E)",721,"<div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;""><img alt=""Flowers, Fruits and Roots Fertiliser"" src=""https://www.plantdoctor.com.au/assets/full/721_722.jpg?20200710030236"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+<div style=""font-size: 18px; font-weight: bold; margin-top: 10px;""><a href=""https://www.plantdoctor.com.au/flowers-fruits-and-roots-liquid-fertiliser"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Flowers, Fruits & Roots</a></div>
+
+<div style=""font-size: 14px; color: #555;"">A custom blend liquid fertiliser, stabilised and buffered with complex organic compounds for added support during budding, flowering & fruiting.</div>
+</div>",Liquid fertiliser (high potassium + humic),"Flowering, fruiting;  root development",Booster fertiliser (reproductive stage),9,3,4,2,4,2,0,1,5,0,1,1,1,1,3,2,2,2,4,2,3,3,2,1,1,1,0,1,1,1,1,0,1,1,2,"Fast-acting liquid fertiliser that boosts flowering, fruit yield, and root strength when plants need it most","Plants often fail to flower or fruit properly due to low potassium, poor nutrient uptake, or weak root systems during critical growth stages","Delivers high potassium with balanced NPK and trace elements, enhanced by humic acid and wetting agents to improve nutrient absorption, soil moisture movement, and plant energy for flowering and fruit production",,,,1,1,1,1,1,5,4,2,4,4,5,4,4,4,4
+Lawn Envy Hose-On Liquid Lawn & Garden Tonic,LEN,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;""><img alt=""Lawn Envy"" src=""https://www.plantdoctor.com.au/assets/full/LEN02L.jpg?20240315122929"" style=""width: 60%; border-radius: 8px;"" /> <a href=""https://www.plantdoctor.com.au/lawn-envy"" style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"" target=""_blank'"">Lawn Envy</a>
+
+<p style=""font-size: 14px; color: #555; margin-top: 8px;"">Quick Easy All-round Lawn Food - Suitable for all grass.</p>
+</div>",All-in-one liquid fertiliser;  soil conditioner,Lawn greening;  soil restoration;  stress recovery,All-in-one system (foundation + booster hybrid),10,5,5,2,5,2,4,3,5,1,1,1,1,0,3,4,2,3,3,3,3,3,3,3,1,1,0,1,1,1,1,0,1,0,3,"All-in-one lawn treatment that greens turf, improves soil health, and fixes water and nutrient issues in a single application","Most lawn problems come from a combination of nutrient deficiency, poor soil biology, and water repellency, meaning single-ingredient fertilisers only fix part of the issue","Combines NPK fertiliser, iron chelate, seaweed extract, humic and fulvic acids, and wetting agents to simultaneously feed the plant, stimulate soil biology, improve nutrient uptake, and correct water penetration issues for faster, more consistent lawn recover",,,,5,4,5,3,4,4,5,5,4,5,2,3,3,2,3
+Liquid Iron Fertiliser (7% Iron + 3% Sulphur + Fulvic Acid),LIR,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/LIR01L.jpg?20240314104207"" alt=""Liquid Iron Fertiliser"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/plant-doctor-7-iron-3-sulphur-liquid-fertiliser"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Liquid Iron – 7% Iron & 3% Sulphur
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Corrects iron deficiency and promotes deep green, healthy growth.
+    </p>
+  </div>",Liquid micronutrient fertiliser (iron corrective),Rapid greening;  iron deficiency correction (chlorosis recovery),Corrective treatment (micronutrient + colour enhancer),9,5,3,2,2,3,4,1,3,1,1,1,1,1,3,3,2,5,3,2,3,3,2,3,1,0,0,0,1,1,1,1,1,1,3,Fast-acting iron fertiliser that restores deep green colour and corrects yellowing caused by iron deficiency or nutrient lockout,"Plants often appear yellow or pale even when fertilised due to iron being locked in the soil, especially in high pH or alkaline conditions where uptake is restricted","Delivers highly available iron (7%) combined with sulphur (3%) and fulvic acid, which improves nutrient chelation and uptake efficiency, rapidly restoring chlorophyll production and improving plant colour and vigour","Do NOT mix with other products (especially dark liquids)
+Apply separately to avoid reactions and nozzle issues",,,5,4,3,2,2,2,2,2,2,3,3,3,1,3,1
+MaxGreen Hi-Nitrogen + Iron Liquid Fertiliser,MG,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;""><img alt=""Max Green"" src=""https://www.plantdoctor.com.au/assets/full/MG02L.jpg?20240315122009"" style=""width: 60%; border-radius: 8px;"" /> <a href=""https://www.plantdoctor.com.au/maxgreen-hi-n-iron-liquid-fertiliser-growth-plus-g"" style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"" target=""_blank""> Max Green</a>
+
+<p style=""font-size: 14px; color: #555; margin-top: 8px;"">Liquid Iron with Nitrogen Fertiliser For greening and growth 8% Nitrogen; 2.5% Iron (Fe); 1% Sulphur (S)</p>
+</div>",Liquid fertiliser (high nitrogen + iron + fulvic acid),Rapid greening; growth surge;  chlorophyll recovery,Booster fertiliser (fast growth + colour correction hybrid),10,5,5,2,3,3,4,1,4,1,1,1,1,0,3,3,2,5,3,2,3,3,2,3,1,1,0,1,1,1,0,1,1,1,3,Fast-acting nitrogen and iron blend that rapidly greens lawns while driving strong growth and correcting nutrient deficiencies,"Lawns often appear yellow, weak, or patchy due to iron lockout, nitrogen deficiency, or poor nutrient uptake in high pH or compacted soils","Combines readily available nitrogen (for growth), iron (for chlorophyll production), and fulvic acid (for enhanced nutrient transport), delivering fast uptake and visible greening response while improving overall plant vigour","Do NOT mix with humic acids or dark liquid products
+Apply separately to avoid reactions and clogging",,,5,4,4,3,3,3,3,3,3,4,4,4,2,4,2
+Neem Slow Release Granules (1–2mm),758,"<div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;"">
+    <img alt=""Neem Granules"" src=""https://www.plantdoctor.com.au/assets/alt_5/758.jpg?20210211071632"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+    <div style=""font-size: 18px; font-weight: bold; margin-top: 10px;"">
+      <a href=""https://www.plantdoctor.com.au/neem-granules-fertiliser"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Neem Granules – Fertiliser</a>
+    </div>
+    <div style=""font-size: 14px; color: #555;"">A slow-release fertiliser with neem oil for soil and plant health.</div>
+  </div>",Organic slow-release granular fertiliser; soil conditioner,Soil health restoration; pest resistance; slow nutrition release,Soil conditioner (dual-purpose: nutrition + biological support),8,3,3,4,5,4,2,3,5,1,1,1,1,1,3,3,2,2,5,5,3,3,3,3,0,0,1,0,0,1,1,1,1,0,1,"Slow-release soil conditioner that improves soil structure, boosts nutrient efficiency, and supports long-term plant health","Many gardens and lawns suffer from poor soil structure, low biological activity, and water repellency, which leads to weak root systems and inefficient fertiliser use","Combines neem-derived organic compounds with zeolite mineral technology and soil wetting agents to improve nutrient retention, water infiltration, and soil microbial conditions, creating a stronger long-term growing environment rather than forcing rapid top growth",,,,2,3,3,4,5,4,5,5,5,5,4,5,5,4,5
+"Roots, Shoots & Leaves Granular Fertiliser (16-2-10 NPK + T/E)",1156,"<div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;""><img alt=""Roots, Shoots and Leaves Granular Fertiliser"" src=""https://www.plantdoctor.com.au/assets/alt_3/1156.png?20260402145816"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+<div style=""font-size: 18px; font-weight: bold; margin-top: 10px;""><a href=""https://www.plantdoctor.com.au/roots-shoots-leaves-granular-fertiliser-16-2-10-np"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Roots, Shoots and Leaves Granular Fertiliser </a></div>
+
+<div style=""font-size: 14px; color: #555;"">A mineral based granular fertiliser custom made to suit Australian conditions.</div>
+</div>",Controlled-release granular fertiliser (mineral + trace elements),Balanced growth (leaf + root + general plant vigour),Base fertiliser (all-purpose foundation feed),9,4,5,3,3,2,4,3,4,0,1,1,1,1,3,3,2,2,5,2,3,3,3,2,0,0,1,0,0,1,1,0,1,1,2,"Balanced slow-release fertiliser that promotes strong green growth, healthy roots, and overall plant resilience across lawns and gardens","Many plants struggle due to general nutrient deficiency rather than a single issue, leading to weak growth, pale colour, and poor recovery after stress","Delivers a complete NPK profile (16-2-10) with trace elements, silica, sulphur, and zeolite to support chlorophyll production, root development, and long-term soil nutrient efficiency while reducing leaching and improving microbial activity",,,,5,5,4,4,4,2,4,5,4,5,5,5,4,5,5
+Activ8Mate Liquid Fertiliser & Inoculant (8-1-4 NPK + T/E),A8M,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/A8M10L.jpg?20240315115025"" alt=""Activ8mate Liquid Fertiliser"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/activ8mate-liquid-fertiliser-inoculant-for-use-on"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Activ8mate – Liquid Fertiliser & Inoculant
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Stabilises nutrients in the soil for long-term availability and balanced plant growth.
+    </p>
+  </div>",Liquid fertiliser + soil inoculant (biostimulant blend),General plant growth; soil biology activation; recovery support,All-purpose base;  biological enhancer (hybrid system product),10,4,5,2,5,3,4,3,5,1,1,1,1,1,5,4,2,3,5,5,3,3,3,3,1,1,0,1,1,1,1,1,1,1,2,"All-in-one liquid fertiliser that feeds plants while rebuilding soil biology for stronger growth, improved resilience, and better nutrient uptake","Most plant issues stem from poor soil biology and nutrient inefficiency, not just lack of fertiliser. This leads to weak growth, poor colour, and reduced recovery after stress","Combines balanced NPK nutrition with fish hydrolysate, seaweed extracts, humic and fulvic acids, and organic nutrients to stimulate microbial activity, improve soil structure, enhance nutrient availability, and support long-term plant and lawn health",,,,3,3,4,3,4,4,5,5,4,5,4,5,4,4,5
+Fulvic Acid Liquid Bio-Stimulant,414,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;""><img alt=""Fulvic Acid"" src=""https://www.plantdoctor.com.au/assets/full/414_415.jpg?20211129090207"" style=""max-width: 60%; height: auto;"" />
+<div style=""font-size: 18px; font-weight: bold; margin-top: 10px;""><a href=""https://www.plantdoctor.com.au/fulvic-acid-liquid-a-powerful-bio-stimulant"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Fulvic Acid Liquid</a></div>
+
+<div style=""font-size: 14px; color: #555;"">A cost-effective, premium fulvic acid formula trusted by hydroponic and professional growers across Victoria, Queensland, and NSW.</div>
+</div>",Soil conditioner; nutrient chelator;  biostimulant,Nutrient uptake enhancement; soil detox; root stimulation,Soil biology amplifier (support product / force multiplier),9,2,4,4,4,4,3,2,5,0,1,1,1,1,5,4,2,5,5,4,3,3,3,3,1,1,0,1,1,1,1,1,1,0,1,"Powerful bio-stimulant that unlocks nutrients in the soil, improves uptake efficiency, and strengthens root and microbial activity","Many plant problems are not caused by lack of fertiliser, but by nutrients being locked in the soil or unavailable to roots, leading to poor growth and weak recovery","Fulvic acid acts as a natural chelating agent, breaking down and mobilising nutrients so plants can absorb them more efficiently. It also improves root development, stimulates soil biology, enhances water efficiency, and helps detoxify soils by binding unwanted residues",,,,2,2,2,2,3,2,3,3,2,2,3,4,3,2,3
+Gypsum Granules (1–2mm Mini Prill),1075,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1075_1078.jpg?20200826114424"" alt=""Gypsum Granules 1-2mm Mini Prill"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/gypsum-granules-1-2mm-mini-prill"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Gypsum Granules 1–2mm Mini Prill
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Slow-release calcium sulphate designed to break up clay soils, reduce compaction, and improve soil structure for healthier root growth.
+    </p>
+</div>",Soil conditioner (calcium sulphate mineral amendment),Soil structure improvement; calcium/sulphur replenishment,Soil correction (structure + compaction relief),8,1,3,5,3,4,2,2,5,1,1,0,0,1,2,5,2,2,3,1,3,2,3,2,0,0,1,0,0,1,1,1,1,0,1,"Soil conditioner that breaks up compacted clay, improves drainage, and restores calcium levels for stronger root development","Many lawns and gardens fail not because of lack of fertiliser, but because compacted or sodic soils prevent water, air, and nutrients from reaching the root zone","Delivers calcium and sulphur in a slow-release mineral form that improves soil aggregation, displaces sodium in problematic soils, and enhances pore space for better water infiltration, root penetration, and fertiliser efficiency over time",,,,2,3,3,2,4,2,5,5,3,4,3,5,4,4,5
+"Humate / Humic Acid Granules (45–50% Humic, 2–4mm)",513,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/513_516.jpg?20200825134409"" alt=""Humate Humic Acid Granules 45-50%"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/humate-humic-acid-45-50-granules-2-4mm-cert.-organ"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Humate / Humic Acid Granules (45–50%)
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Certified organic soil conditioner that improves nutrient availability, supports root growth, and enhances soil structure while boosting fertiliser efficiency.
+    </p>
+</div>",Soil conditioner (humic substance / organic carbon amendment),Soil detox; nutrient unlock; microbial stimulation,Soil biology amplifier (foundation conditioner),9,3,4,4,5,5,3,3,5,0,1,1,1,1,5,5,2,4,5,4,3,3,3,3,0,0,1,0,0,1,0,1,1,0,1,"Soil conditioning granule that unlocks nutrients, improves soil structure, and enhances fertiliser efficiency over time","Many soils contain nutrients that are present but unavailable to plants due to binding, poor microbial activity, or poor soil structure, leading to weak growth even when fertiliser is applied","Humic substances act as natural chelators and carbon-rich soil conditioners that bind nutrients, reduce leaching, stimulate microbial life, improve soil aggregation, and increase water retention, creating a more efficient and biologically active root zone where plants can access more of what is already in the soil",,,,2,2,3,3,5,2,5,5,4,5,4,5,4,4,5
+Lime Granules (1–2mm Slow Release Calcium Carbonate),LIMEGr,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/LIME_20.png?20260217144228"" alt=""Lime Granules 1-2mm Slow Release"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/lime-granules-1-2mm-slow-release"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Lime Granules 1–2mm Slow Release
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Slow-release calcium carbonate designed to raise soil pH, reduce acidity, and improve nutrient availability for stronger, healthier plant growth.
+    </p>
+</div>",Soil amendment (agricultural lime / pH correction),Soil pH correction; calcium supplementation; nutrient availability unlock,Soil chemistry corrector (pH regulator / foundational amendment),8,3,4,3,2,5,2,2,4,1,1,0,0,1,3,2,5,0,3,2,3,2,3,2,0,0,1,0,0,1,1,1,1,1,1,"Soil pH correction granule that reduces acidity and improves nutrient availability for stronger, healthier plant growth","Many lawns and gardens suffer not from lack of fertiliser, but from acidic soils that lock nutrients away, causing yellowing, weak growth, and poor response to feeding","Calcium carbonate neutralises excess soil acidity, raising pH toward the optimal range where nutrients like nitrogen, phosphorus, and potassium become more available. It also adds calcium and improves microbial activity, creating a healthier soil environment that supports stronger root development and more efficient fertiliser use over time","Do NOT apply at same time as iron products (can reduce availability)
+Best applied separately before nutrient programs begin",,,1,2,1,2,3,2,5,3,2,4,2,5,3,4,5
+Nature’s Soil Wetter Granular (Plant-Derived Wetting Agent),664,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/alt_2/664.jpg?20200710030217"" alt=""Nature's Soil Wetter Granular Wetting Agent"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/Plant-Doctor-Natures-Soil-Wetter-Natural-GRANULAR-wetting-agent"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Nature’s Soil Wetter – Granular Wetting Agent
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Natural granular soil wetter designed to fix hydrophobic soils, improve water penetration, and boost nutrient efficiency for healthier roots and stronger plant growth.
+    </p>
+</div>",Soil wetter;  soil conditioner (surfactant-based soil hydrology system),Water penetration; hydrophobic soil correction; nutrient efficiency improvement,Soil function enhancer (water management + system unlock product),9,2,4,4,5,2,2,2,4,1,1,1,1,1,5,4,2,3,5,5,3,3,3,2,0,0,1,0,0,1,1,1,1,0,1,"Soil wetting granule that fixes water-repellent soils, improves moisture distribution, and increases fertiliser efficiency","Many lawns and gardens fail not because of lack of fertiliser, but because water cannot properly penetrate soil, leading to dry patches, uneven growth, and wasted nutrients","Plant-derived surfactants reduce water’s surface tension, allowing moisture to penetrate hydrophobic soils and spread evenly through the root zone. This improves hydration, nutrient movement, microbial activity, and overall soil function, making all other inputs (fertilisers, soil conditioners, and biostimulants) significantly more effective",,,,2,3,4,3,5,3,5,4,3,4,3,5,5,4,5
+Nature’s Soil Wetter Liquid (Super Concentrated Plant-Based Wetting Agent),NSWL,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/NSW01L.jpg?20240315121825"" alt=""Nature’s Soil Wetter"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/natures-soil-wetter-liquid-super-concentrated-plan"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Nature’s Soil Wetter – Super Concentrated
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Improves water penetration and reduces dry patch for better moisture retention.
+    </p>
+  </div>",Liquid soil wetter; surfactant; soil hydrology enhancer,Water penetration; hydrophobic soil correction; nutrient delivery efficiency,Soil function unlocker (liquid fast-acting hydration system),9,2,4,4,5,2,2,2,4,1,1,1,1,1,5,4,2,3,5,5,3,3,3,2,1,1,0,1,1,1,1,1,1,0,1,"Super-concentrated liquid soil wetter that restores water penetration, fixes dry patches, and improves fertiliser uptake efficiency","Many lawns and gardens suffer from hydrophobic soils where water runs off or only partially penetrates, leading to dry patches, uneven growth, and wasted fertiliser applications","Plant-based surfactants reduce water’s surface tension, allowing moisture to rapidly infiltrate soil profiles and distribute evenly through the root zone. This improves hydration consistency, enhances nutrient movement, reduces runoff, and increases the effectiveness of all soil-applied inputs including fertilisers and biostimulants",,,,2,3,4,3,5,3,5,4,3,4,3,5,5,4,5
+Humic Acid 80% Powder (99% Soluble),526,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/526_528.jpg?20200825132422"" alt=""Humic Acid 80% Humate Powder 99% Soluble"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/plant-doctor-humic-acid-80-humate-powder-99-solubl"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Humic Acid 80% (Humate) Powder – 99% Soluble
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Highly concentrated, water-soluble humate that improves nutrient availability, detoxifies soil, and boosts microbial activity for stronger roots and better fertiliser efficiency.
+    </p>
+</div>",High-concentration soil conditioner (humic substance biostimulant),Soil detox; nutrient chelation; fertiliser efficiency amplifier; microbial activation,Soil biology; chemistry backbone (high-performance enhancer layer),10,2,5,4,5,4,2,3,5,0,1,1,1,1,5,5,2,5,5,4,3,3,3,3,1,0,0,1,1,1,0,1,1,0,1,"Highly concentrated humic acid powder that unlocks nutrients, detoxifies soil, and dramatically improves fertiliser efficiency and soil biology","Many soils contain sufficient nutrients, but plants cannot access them due to binding, poor microbial activity, salinity issues, or degraded soil structure, resulting in poor growth despite fertiliser use","Humic acids act as powerful natural chelators that bind nutrients and convert them into plant-available forms, while also improving microbial activity, reducing salt stress, detoxifying residues, and enhancing soil structure and water retention. The 80% soluble form provides rapid system-wide activation, making fertilisers more effective and improving overall plant resilience and root development",,,,2,2,2,2,2,2,3,3,4,5,4,5,4,4,5
+Quantum H Premium Humic Acid Solution (Liquid Soil Conditioner),29800,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/29800_1.jpg?20220117083141"" alt=""Quantum H"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/quantum-h-premium-humic-acid-solution"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Quantum H – Premium Humic Acid Solution
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Improves soil structure and nutrient cycling while detoxifying residues.
+    </p>
+  </div>",Liquid humic acid; fulvic acid soil conditioner,Soil regeneration; nutrient unlocking; detoxification; fertiliser efficiency enhancement,Soil system reset; biological efficiency amplifier (high-performance liquid humate),10,4,5,4,5,5,4,3,5,1,1,1,1,1,5,5,2,5,5,4,3,3,3,3,1,1,0,1,1,1,0,1,1,0,1,"High-performance liquid humic acid solution that unlocks nutrients, detoxifies soil, and dramatically improves fertiliser efficiency and root development","Many soils contain nutrients that plants cannot access due to binding, salinity stress, poor microbial activity, or degraded soil structure, leading to poor growth even when fertiliser is applied","Quantum H uses short-chain humic and fulvic acids derived from leonardite to improve cation exchange capacity, chelate nutrients, stimulate microbial activity, and detoxify soil contaminants. This converts unavailable nutrients into plant-usable forms while improving soil structure, moisture retention, and root development, resulting in a more efficient and biologically active soil system where fertilisers perform significantly better",,,,2,2,4,3,5,2,5,5,4,5,4,5,5,4,5
+Rescue Remedy Soluble Seaweed (Ascophyllum nodosum) Powder / Flakes,29782,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/29782_1.jpg?20201117143223"" alt=""Rescue Remedy Soluble Seaweed Kelp Powder Flakes"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/rescue-remedy-soluble-seaweed-kelp-powder-flakes-a"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Rescue Remedy – Soluble Seaweed (Kelp) Powder / Flakes
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Highly concentrated, fully soluble seaweed biostimulant that boosts root growth, improves stress tolerance, and enhances flowering, fruiting, and overall plant health.
+    </p>
+</div>",Seaweed biostimulant (organic soluble kelp extract),Stress recovery; root stimulation; plant resilience; biological activation,Biostimulant (emergency support + ongoing resilience enhancer),10,4,5,3,3,3,3,3,5,1,1,1,1,1,4,4,2,2,4,3,3,3,3,3,1,1,0,1,1,0,1,1,1,0,1,"Powerful seaweed biostimulant that helps plants recover from stress, stimulates root growth, and improves overall resilience and nutrient uptake","Plants often struggle not because of missing fertiliser, but due to stress, weak roots, transplant shock, or environmental pressure that limits their ability to absorb and use nutrients effectively","Derived from Ascophyllum nodosum kelp, this soluble seaweed provides natural plant hormones (auxins, cytokinins, gibberellins), trace minerals, amino acids, and complex carbohydrates that stimulate root development, enhance microbial activity, improve stress tolerance, and increase nutrient efficiency. This creates stronger, more resilient plants capable of recovering faster and performing better under environmental stress",,,,3,4,5,3,5,4,5,5,5,5,4,5,5,4,5
+Seaweed Secrets Concentrated Liquid Seaweed (Ascophyllum nodosum + Humic + Fulvic),SWS,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/alt_2/SWS.jpg?20240315121114"" alt=""Seaweed Secrets"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/seaweed-secrets-concentrated-liquid-seaweed-kelp-s"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Seaweed Secrets – Concentrated Liquid Kelp
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Reduces stress while improving nutrient uptake and supporting soil biology.
+    </p>
+  </div>",Liquid biostimulant (seaweed + humic + fulvic soil conditioner blend),Stress recovery; root stimulation; soil biology activation; nutrient uptake enhancement,Core biostimulant (universal plant health + recovery + system enhancer),10,4,5,3,4,4,3,3,5,1,1,1,1,1,5,4,2,3,5,4,3,3,3,3,1,1,0,1,1,0,1,1,1,0,1,"Triple-action seaweed biostimulant that improves root growth, reduces stress, and enhances nutrient uptake and soil biology","Plants often struggle not because of lack of fertiliser, but due to stress, poor soil biology, and inefficient nutrient uptake that limits growth and recovery","Combines Ascophyllum nodosum kelp (plant hormones for growth and stress resistance), humic acids (soil conditioning and nutrient retention), and fulvic acids (rapid nutrient transport) into a single system that improves root development, microbial activity, water efficiency, and fertiliser performance across all soil types and plant systems",,,,3,4,5,3,5,4,5,5,5,5,4,5,5,4,5
+Stimulizer Super Concentrate Bio-Stimulant (Fulvic + Humic + Mineral Chelator Blend),STM,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/STM04L.jpg?20240315124636"" alt=""Stimulizer Bio-Stimulant"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/stimulizer-super-concentrate-bio-stimulant-natural"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Stimulizer – Super Concentrate Bio-Stimulant
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Enhances nutrient uptake, microbial activity and overall plant performance.
+    </p>
+  </div>",Ultra-concentrated biostimulant (fulvic acid + humic extracts + trace minerals),Nutrient uptake acceleration; root stimulation; microbial activation; soil detoxification,Bio-activation amplifier (high-efficiency “performance catalyst” layer),10,4,5,3,4,5,3,3,5,1,1,1,1,1,5,4,2,5,5,4,3,3,3,3,1,1,0,1,1,1,1,1,1,0,1,"Ultra-concentrated bio-stimulant that accelerates nutrient uptake, boosts root growth, and improves fertiliser efficiency across all plant systems","Many plants appear unresponsive to fertiliser due to locked nutrients, poor root function, or low microbial activity in the soil, resulting in slow growth and weak recovery","Stimulizer contains a highly bioavailable fulvic acid complex combined with humic extracts and trace minerals that act as natural chelators. This improves nutrient mobility, enhances root development, increases microbial activity, and accelerates plant metabolic processes, allowing fertilisers and soil inputs to work faster and more efficiently across all soil and environmental conditions",,,,2,2,5,3,5,2,5,5,5,5,5,5,5,4,5
+VolcaMin Clinoptilolite Zeolite (Mineral Conditioner),557," <div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;"">
+    <img alt=""VolcaMin Nutrient Efficiency System"" src=""https://www.plantdoctor.com.au/assets/full/557.jpg?20200710030239"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+    <div style=""font-size: 18px; font-weight: bold; margin-top: 10px;"">
+      <a href=""https://www.plantdoctor.com.au/volcamin-clinoptilolite-zeolite"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">VolcaMin – Nutrient Efficiency System</a>
+    </div>
+    <div style=""font-size: 14px; color: #555;"">Improves nutrient retention and soil structure for better plant growth.</div>
+  </div>",Permanent soil mineral amendment (zeolite / cation exchange enhancer),Nutrient retention; water holding; fertiliser efficiency; soil buffering,Soil “nutrient battery”;  long-term efficiency infrastructure layer,10,3,4,4,4,5,4,2,5,1,1,1,1,1,5,4,3,4,4,3,3,3,3,3,0,0,1,0,0,1,1,1,1,0,1,"Permanent soil mineral that locks in nutrients, improves water retention, and dramatically increases fertiliser efficiency over time","Many soils lose fertiliser too quickly through leaching or poor retention, meaning plants never fully access the nutrients applied, resulting in wasted inputs and inconsistent growth","Clinoptilolite zeolite has a highly porous crystalline structure with strong cation exchange capacity, allowing it to attract and hold positively charged nutrients like ammonium, potassium, calcium, and magnesium in the root zone. These nutrients are then slowly released in response to plant demand, improving fertiliser efficiency, reducing nutrient loss, enhancing soil structure, and creating a long-term reservoir of plant-available nutrition",,,,1,2,3,2,5,3,5,5,3,4,4,5,4,4,5
+Dolomite Granules 1–2mm Mini Prill (Calcium Magnesium Carbonate Soil Conditioner),DOL,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/DOL20.png?20260217144119"" alt=""Dolomite Granules 1-2mm Mini Prill"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/dolomite-granules-1-2mm-mini-prill-granular-slow-r"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Dolomite Granules 1–2mm Mini Prill
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Slow-release soil conditioner that raises pH, supplies calcium and magnesium, and improves soil structure for stronger roots and healthier plant growth.
+    </p>
+</div>",Soil amendment (pH buffer + calcium + magnesium mineral conditioner),Soil pH balancing; calcium & magnesium supply; nutrient availability improvement,Soil chemistry stabiliser (pH + mineral balance foundation layer),9,3,4,3,2,5,3,2,4,1,1,0,0,1,4,2,5,0,3,2,3,2,3,2,0,0,1,0,0,1,1,1,1,1,1,Soil conditioner that corrects acidity while supplying calcium and magnesium to improve nutrient uptake and plant health,"Many lawns and gardens suffer from hidden magnesium and calcium deficiencies alongside acidic soils, leading to yellowing leaves, weak growth, and poor response to fertilisers","Dolomite (calcium magnesium carbonate) neutralises soil acidity while supplying two essential secondary nutrients: calcium, which supports root structure and soil aggregation, and magnesium, which is critical for chlorophyll production and photosynthesis. This dual-action correction improves soil pH balance, enhances nutrient availability, and restores plant metabolic efficiency over time",,,,2,3,2,4,4,3,5,4,3,4,3,5,3,4,5
+Iron Sulphate (Ferrous Sulphate Heptahydrate) Soluble Slow Release Powder,846,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/846_848.png?20260311153401"" alt=""Iron Sulphate Soluble Slow Release Powder"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/iron-sulphate-soluble-slow-release-powder"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Iron (Ferrous) Sulphate – Soluble Slow Release Powder
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Slow-release iron source that delivers deep green colour, helps control moss, and improves nutrient availability while gradually lowering soil pH for healthier plant growth.
+    </p>
+</div>",Micronutrient fertiliser; soil conditioner (iron + sulphur amendment),Iron correction; deep greening; chlorophyll synthesis support; mild soil acidification,Micronutrient correction layer (fast visible response + soil chemistry modifier),10,5,3,2,1,3,3,2,3,1,1,0,1,1,4,3,2,5,3,1,3,3,3,2,1,0,1,1,1,1,1,1,0,1,2,"Fast-acting iron source that corrects yellowing leaves, boosts chlorophyll production, and restores deep green colour in lawns and plants","Plants growing in alkaline or nutrient-imbalanced soils often cannot access iron, even when it is present in the soil, leading to yellowing leaves, weak photosynthesis, and poor overall plant performance","Iron sulphate supplies bioavailable ferrous iron (Fe²⁺), which is essential for chlorophyll synthesis and photosynthesis. It also provides sulphur, which supports enzyme function and protein formation, while gently lowering soil pH to improve nutrient availability. This combination restores green colour, improves plant energy production, and enhances overall growth response, especially in alkaline soils where iron is locked out",,,,5,3,3,2,2,2,3,2,3,3,3,3,1,3,2
+Kendon Iron Chelate (130g/kg Fe as EDTA complex),547,"<div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;"">
+    <img alt=""Iron Chelate"" src=""https://www.plantdoctor.com.au/assets/full/Iche_4.5.png?20260311152258"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+    <div style=""font-size: 18px; font-weight: bold; margin-top: 10px;"">
+      <a href=""https://www.plantdoctor.com.au/iron-chelate-fertiliser"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Iron Chelate – Fertiliser</a>
+    </div>
+    <div style=""font-size: 14px; color: #555;"">Corrects iron deficiencies in plants and lawns for healthier growth.</div>
+  </div>",Micronutrient fertiliser (chelated iron source),Iron deficiency correction; chlorophyll synthesis; rapid greening response,Micronutrient correction layer (fast visual response + precision nutrient injector),10,5,3,2,1,3,3,1,3,1,1,1,1,1,4,3,2,5,3,1,3,3,3,2,1,0,1,1,1,1,1,1,0,1,2,"Fast-acting chelated iron that corrects yellowing leaves, restores chlorophyll production, and delivers deep green colour in lawns and plants","Plants growing in alkaline or nutrient-imbalanced soils often suffer from iron lockout, where iron is present in the soil but unavailable for uptake, leading to yellowing leaves and reduced photosynthesis","EDTA chelation binds iron in a stable form that remains available for plant uptake across a wider pH range than iron sulphate. This allows iron to be efficiently absorbed through leaves or roots, restoring chlorophyll production, improving photosynthesis, and rapidly correcting visible yellowing symptoms. It is especially effective in alkaline soils where iron would otherwise be immobilised",,,,5,3,3,2,2,2,2,2,2,3,3,3,1,3,2
+Garden Soil Enhancer Bundle (Fulvic Acid + Stimulizer + Quantum H),1318,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1318_1319.png?20250211124854"" alt=""Garden Soil Enhancer Bundle"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/garden-soil-enhancer-bundle"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Garden Soil Enhancer Bundle
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Complete soil health system combining fulvic acid, humic acid, and bio-stimulants to unlock nutrients, improve soil biology, and restore long-term garden fertility.
+    </p>
+</div>",Soil regeneration bundle (liquid humic + fulvic + biostimulant system),Soil restoration; nutrient unlocking; root stimulation; microbial activation,Full soil system reset kit (entry-level ecosystem builder),10,4,5,4,5,5,5,3,5,0,1,1,1,1,5,5,3,5,5,4,3,3,3,3,1,1,0,1,1,1,0,1,1,0,1,"Complete soil restoration bundle that unlocks nutrients, rebuilds soil biology, and improves root growth and fertiliser efficiency","Many soils fail not due to lack of fertiliser, but because of poor soil biology, compaction, nutrient lockout, and low organic function, meaning plants cannot access or use available nutrients effectively","This bundle combines fulvic acid (rapid nutrient transport and chelation), Quantum H humic acid (soil detoxification, structure improvement, and nutrient retention), and Stimulizer (biological activation and root stimulation). Together, they restore soil function, improve microbial activity, enhance nutrient cycling, and dramatically increase fertiliser efficiency, creating a living soil system capable of sustaining strong, consistent plant growth",,,,2,2,2,2,2,5,5,5,4,5,5,5,5,4,5
+Gardener’s Choice Bundle (Seaweed Secrets + Activ8Mate + Quantum H + Nature’s Soil Wetter + Stimulizer),1176,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1176_City.jpg?20230704151209"" alt=""Gardener's Choice Bundle"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/gardeners-choice-bundle"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Gardener’s Choice Bundle
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      All-in-one soil and plant health system combining liquid bio-stimulants, wetting agents, and soil conditioners to improve nutrient uptake, boost resilience, and restore long-term soil fertility for lawns and gardens.
+    </p>
+</div>",Complete garden soil; plant system bundle (multi-input biological + soil restoration kit),Full soil regeneration; nutrient unlocking; stress protection; plant performance optimisation,Core ecosystem starter system (advanced “all-in-one garden operating system”),10,5,5,5,5,5,5,4,5,0,1,1,1,1,5,5,5,5,5,5,3,3,3,3,1,1,0,1,1,0,0,1,1,0,1,"Complete soil and plant system bundle that restores soil health, unlocks nutrients, improves water movement, and boosts overall plant performance","Most garden issues are not caused by a lack of fertiliser, but by multiple hidden soil limitations including compaction, poor microbial activity, water repellency, and nutrient lockout, which prevent plants from accessing available nutrients","This bundle combines five synergistic biological and soil-conditioning systems that work across different soil and plant functions: seaweed for stress resilience, humic and fulvic systems for nutrient unlocking, wetting agents for water infiltration, and biostimulants for uptake acceleration. Together, they restore soil biology, improve nutrient cycling, increase fertiliser efficiency, and create a self-sustaining soil ecosystem that supports long-term plant health and growth consistency",,,,2,2,2,2,2,5,5,5,5,5,5,5,5,5,5
+Just Been Laid Turf Starter Pack (Soil Conditioner + Seaweed + Inoculant + Wetting Agent System),1243,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1243_1.jpg?20230710143955"" alt=""Just Been Laid Turf Starter Pack"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/just-been-laid-turf-starter-pack"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Just Been Laid Turf Starter Pack
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Complete turf establishment system designed to reduce transplant shock, improve water penetration, and support rapid root development for newly laid lawns.
+    </p>
+</div>",Turf establishment bundle (new lawn root establishment + soil conditioning system),Root establishment; transplant shock reduction; water infiltration; soil biology activation,Turf foundation system (critical “day 0–30 lawn survival + establishment stack”),10,3,5,4,5,4,5,3,5,1,0,0,0,0,5,5,3,4,5,5,3,3,3,2,1,1,0,1,1,0,1,1,1,0,2,"Complete turf establishment system that reduces transplant shock, improves water penetration, and accelerates root development in newly laid lawns","Newly laid turf often fails not due to lack of fertiliser, but because roots are not yet established, soil is water-repellent or compacted, and plants are under severe transplant shock, limiting nutrient uptake and survival","This bundle combines seaweed biostimulants to reduce transplant shock and stimulate root hormones, microbial inoculants to kickstart soil biology, fertiliser inputs to support early growth, and wetting agents to ensure water penetrates directly into the root zone. Together, these components create optimal conditions for rapid root establishment, improved soil contact, and faster turf integration into the underlying soil system",,,,4,5,5,4,5,2,2,2,2,2,4,5,5,4,5
+Lawn Lovers Pro Pack (Seaweed Secrets + Activ8EXTRA + Quantum H + Liquid Iron + Stimulizer),1231,"<div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;"">
+    <img alt=""Lawn Lovers Pro Pack"" src=""https://www.plantdoctor.com.au/assets/full/1231_1.jpg?20230710141337"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+    <div style=""font-size: 18px; font-weight: bold; margin-top: 10px;"">
+      <a href=""https://www.plantdoctor.com.au/lawn-lovers-pro-pack"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Lawn Lovers Pro Pack</a>
+    </div>
+    <div style=""font-size: 14px; color: #555;"">A complete lawn care solution for year-round health and vitality.</div>
+  </div>",Complete lawn care system bundle (nutrition + soil + colour + biology + uptake stack),Full lawn transformation (colour + growth + soil health + stress resistance + nutrient efficiency),Advanced turf performance system (all-in-one lawn optimisation + renovation kit),10,5,5,5,5,5,5,4,5,1,0,0,0,0,5,5,5,5,5,5,3,3,3,3,1,1,0,1,1,0,0,1,1,0,2,"Complete lawn system that improves colour, density, soil health, and root strength while fixing nutrient and water limitations","Most lawn issues are caused by multiple overlapping limitations including poor soil structure, nutrient lockout, weak microbial activity, and micronutrient deficiencies, meaning single fertilisers alone cannot fully restore performance","This bundle combines nitrogen-based fertiliser inputs (Activ8EXTRA), iron supplementation for chlorophyll production (Liquid Iron), humic-based soil conditioning (Quantum H), seaweed biostimulation for stress resilience (Seaweed Secrets), and fulvic-driven uptake acceleration (Stimulizer). Together, these inputs restore soil function, increase nutrient availability, improve water efficiency, and dramatically enhance turf colour, density, and resilience",,,,5,5,5,4,5,2,2,2,2,2,5,5,5,5,5
+Lawn Lovers Starter Bundle (Seaweed Secrets + Activ8Extra + Nature’s Soil Wetter),1235,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1235_1.jpg?20230710142004"" alt=""Lawn Lovers Starter Bundle"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/lawn-lovers-starter-bundle"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Lawn Lovers Starter Bundle
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      All-in-one lawn care system combining fertiliser, biostimulants, and soil conditioners to improve root development, enhance nutrient uptake, and build long-term soil health for stronger, greener turf.
+    </p>
+</div>",Lawn starter system bundle (soil health + nutrition + water infiltration),Lawn maintenance; soil conditioning; stress reduction; nutrient delivery,Entry-level turf care system (foundation lawn health + maintenance bundle),9,4,4,3,5,3,4,3,4,1,0,0,0,0,5,4,3,3,4,5,3,3,3,2,1,1,0,1,1,0,1,1,1,0,1,"Simple lawn care bundle that improves soil health, boosts nutrient uptake, and helps lawns stay greener, stronger, and more resilient year-round","Many lawns struggle due to poor soil moisture retention, inconsistent feeding, and weak soil biology, leading to patchy growth, dull colour, and slow recovery after stress","This bundle combines seaweed biostimulants to improve stress tolerance and root development, balanced fertiliser inputs to support steady growth, and wetting agents to ensure water penetrates effectively into the root zone. Together, they improve soil function, enhance nutrient availability, and create a more resilient lawn system with consistent performance across seasons",,,,5,5,5,4,5,2,2,2,2,2,5,5,5,5,5
+Pro Soil Enhancer Bundle (Activ8Mate + Quantum H + Stimulizer),1247,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1247_city.jpg?20230710145622"" alt=""Pro Soil Enhancer Bundle"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/pro-soil-enhancer-bundle"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Pro Soil Enhancer Bundle
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Advanced soil restoration bundle combining humic acids, bio-stimulants, and microbial enhancers to detoxify soil, improve nutrient efficiency, and drive stronger root and plant growth across lawns, gardens, and farms.
+    </p>
+</div>",Soil regeneration bundle (nutrient cycling + humic system + biostimulant stack),Soil detoxification; nutrient availability improvement; microbial activation; root stimulation,Core soil rebuilding system (mid-tier “full soil function restoration” kit),10,4,5,4,5,5,4,3,5,0,1,1,1,1,5,5,4,4,5,4,3,3,3,3,1,1,0,1,1,1,0,1,1,0,1,"Complete soil improvement system that restores nutrient availability, boosts microbial activity, and improves root growth and fertiliser efficiency","Most soil problems are not caused by lack of fertiliser, but by poor soil structure, low microbial activity, and nutrient lockout, which prevent plants from accessing and using available nutrients effectively","This bundle combines humic acid (Quantum H) to improve soil structure and nutrient retention, Activ8Mate to supply balanced nutrition and feed soil biology, and Stimulizer to accelerate nutrient uptake and plant response. Together, they restore soil function, increase microbial activity, improve nutrient cycling, and significantly enhance plant growth consistency and resilience across a wide range of soil conditions",,,,2,2,2,2,2,4,5,5,5,5,5,5,5,4,5
+Value Combo Bundle (Champion Green Grade Fertiliser + Nature’s Soil Wetter),1239,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1239.jpg?20230704155209"" alt=""Value Combo Bundle"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/value-combo"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Value Combo
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Easy all-in-one lawn care bundle combining a premium slow-release fertiliser and natural soil wetter to deliver greener grass, stronger roots, and improved water efficiency across all lawn types.
+    </p>
+</div>",Entry-level lawn nutrition; soil moisture bundle (basic feeding + water efficiency system),Lawn greening; root support; water penetration; nutrient efficiency improvement,Budget-friendly foundation lawn system (simple “feed + fix dry soil” combo),9,4,4,3,5,3,4,2,3,1,1,0,1,0,5,4,3,3,4,5,3,3,3,2,0,1,1,0,1,1,1,0,1,0,1,"Simple lawn care bundle that feeds grass and improves water penetration for greener, healthier lawns with minimal effort","Many lawns struggle due to basic nutrient deficiency and poor water absorption, leading to dull colour, patchiness, and dry soil conditions that limit growth and recovery","This bundle combines a balanced NPK fertiliser that supports steady grass growth and greening with a wetting agent that improves water infiltration and reduces dry patch formation. Together, they enhance nutrient availability, improve soil moisture efficiency, and support consistent lawn health without requiring complex soil management programs",,,,5,4,5,4,5,2,2,2,2,2,4,5,5,4,5
+2L Hose-On Bundle (Lawn Envy + MaxGreen Lawn System),1253,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/1253.jpg?20230718125606"" alt=""2L Hose-On Bundle Lawn Envy MaxGreen"" style=""width: 60%; border-radius: 8px;"" />
+    
+    <a href=""https://www.plantdoctor.com.au/2l-hose-on-bundle-lawn-envy-max-green"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      2L Hose-On Bundle – Lawn Envy & MaxGreen
+    </a>
+    
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      High-performance lawn care bundle combining Lawn Envy and MaxGreen to deliver rapid green-up, improved nutrient uptake, and balanced growth for healthier, more resilient turf year-round.
+    </p>
+</div>",Liquid lawn performance bundle (green-up + balanced nutrition + iron correction system),Rapid greening; nutrient delivery; iron correction; overall turf health improvement,Fast-response lawn enhancement system (visual results + maintenance boost stack),10,5,5,2,3,3,4,2,3,1,0,0,0,0,4,3,2,3,3,3,3,3,3,2,1,1,0,0,0,1,1,0,1,0,2,"Fast-acting lawn bundle that delivers deep green colour, improves growth, and quickly corrects nutrient deficiencies for visible results","Many lawns appear dull, patchy, or yellow due to nitrogen deficiency, iron lockout, or general nutrient imbalance, and require fast-acting inputs to restore colour and vitality","This bundle combines Lawn Envy’s balanced nutrient and soil-support system with MaxGreen’s high-availability nitrogen and iron formulation. Together they rapidly stimulate chlorophyll production, improve leaf colour, and support short-term turf growth response. The inclusion of iron and fulvic compounds enhances nutrient uptake efficiency, delivering fast visible greening while supporting overall lawn health in the short term",,,,5,5,5,4,5,2,2,2,2,2,5,5,5,5,5
+Micronised Gypsum Liquid (Organic Certified Clay Buster – Calcium + Sulphur Soil Conditioner),636," <div style=""border: 1px solid #ccc; padding: 20px; width: 200px; max-width: 100%; margin-bottom: 20px; box-sizing: border-box;"">
+    <img alt=""Micronised Gypsum"" src=""https://www.plantdoctor.com.au/assets/full/636_637.jpg?20211129092636"" style=""width: 100%; height: auto; border-radius: 8px;"" />
+    <div style=""font-size: 18px; font-weight: bold; margin-top: 10px;"">
+      <a href=""https://www.plantdoctor.com.au/micronised-gypsum-liquid-clay-buster"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Micronised Gypsum – Liquid Clay Buster</a>
+    </div>
+    <div style=""font-size: 14px; color: #555;"">Improves soil structure and provides calcium for healthier plants.</div>
+  </div>",Soil structure conditioner (calcium + sulphur amendment for clay breakup + sodic soil remediation),Clay soil conditioning; improved water infiltration; calcium/sulphur replenishment; sodium displacement,Soil structure correction layer (physical soil architecture improvement system),10,1,4,5,2,3,2,2,5,1,1,0,0,1,2,5,2,3,4,1,3,3,3,2,1,1,0,1,1,1,1,1,1,1,2,"Liquid gypsum soil conditioner that breaks up clay, improves drainage, and restores calcium balance for healthier root growth and soil structure","Clay and sodic soils often become compacted and water-repellent, restricting root movement, reducing oxygen availability, and causing poor plant performance even when fertiliser is applied","Micronised gypsum supplies highly available calcium and sulphur in a fine liquid form that rapidly interacts with clay particles. Calcium replaces excess sodium and magnesium on soil exchange sites, causing clay particles to flocculate and form stable aggregates. This improves soil structure, increases pore space, enhances water infiltration, and allows roots to penetrate deeper into the soil profile, creating a healthier root environment and improving long-term plant performance",,,,2,3,3,2,4,2,5,5,3,4,3,5,4,4,5
+Fulvic Acid Powder 92% Premium Concentrated Soluble (Potassium Fulvate),29814,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;""><img alt=""Fulvic Acid"" src=""https://www.plantdoctor.com.au/assets/full/29814_2.jpg"" style=""max-width: 60%; height: auto;"" />
+<div style=""font-size: 18px; font-weight: bold; margin-top: 10px;""><a href=""https://www.plantdoctor.com.au/fulvic-acid-powder-92-premium-concentrated-soluble"" style=""text-decoration: none; color: #007bff; font-weight: bold;"" target=""_blank"">Fulvic Acid Powder </a></div>
+
+<div style=""font-size: 14px; color: #555;"">This soluble Fulvic Acid Powder serves multiple purposes: as a sticker, wetter, chelator, penetrator, and turbo booster when mixed with fertilisers.</div>
+</div>",Organic soil bio-stimulant (fulvic acid chelation + nutrient transport + microbial activation system),Nutrient unlocking; enhanced fertiliser efficiency; root stimulation; soil detoxification; plant uptake acceleration,Cellular-level nutrient delivery system (high-efficiency “nutrient transport engine”),10,2,5,3,3,4,2,3,5,0,1,1,1,1,5,5,2,4,5,4,3,3,3,3,1,0,0,1,1,1,1,1,1,0,1,"Highly concentrated fulvic acid that improves nutrient uptake, unlocks locked minerals, and dramatically increases fertiliser efficiency across all soil and plant systems","Many soils contain nutrients that are present but unavailable to plants due to chemical lockout, poor microbial activity, or low transport efficiency within the plant system, leading to poor growth even when fertilisers are applied","Fulvic acid acts as a natural chelating agent with extremely small molecular structure, allowing it to bind nutrients and transport them directly into plant cells. It improves cation exchange capacity, enhances microbial activity, detoxifies harmful residues, and increases the efficiency of all applied fertilisers. This results in improved nutrient uptake, stronger root development, enhanced photosynthesis, and better overall plant resilience and growth performance",,,,2,2,2,2,2,2,3,3,2,2,3,4,3,2,4
+Worm Magic Casting Pellets,WMP,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/WMP.png?20260407091134"" alt=""Worm Magic Casting Pellets"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/worm-magic-casting-pellets"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Worm Magic Casting Pellets
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Slow-release worm castings that rebuild soil biology, structure, and long-term fertility.
+    </p>
+  </div>",Organic slow-release fertiliser; soil conditioner (pelletised worm castings),Soil biology activation; organic matter; slow nutrition; structure and water holding,Soil biology + organic fertility layer (living soil builder),8,2,4,4,4,3,3,2,5,1,1,1,1,1,5,3,3,3,5,3,3,3,3,3,0,0,1,0,0,1,1,1,1,0,1,"Pelletised worm castings that rebuild living soil, hold moisture, and feed plants slowly without burn","Tired soils with low organic matter and weak biology cannot hold water or unlock nutrients, so plants stay slow even when fertiliser is applied","Worm Magic pellets deliver worm castings packed with microbes, enzymes, humic and fulvic compounds, and a gentle ~5-2-2 nutrient profile. They slowly release nutrition, add carbon, improve soil structure and water holding, and help roots access nutrients already in the soil",,Dual-use lawn and garden. Biology role; not Lawn Lovers core so seaweed stays the default biology pick.,Organic soil-life builder for depleted or sandy soils; picker product alongside seaweed,2,3,3,2,4,3,5,5,3,4,4,5,4,3,5
+Worm Magic Liquid Compost Tea (Brewed from Worm Castings),WMB,"<div style=""border-radius: 8px; border: 1px solid #ccc; padding: 20px; flex: 1 1 230px; box-sizing: border-box;"">
+    <img src=""https://www.plantdoctor.com.au/assets/full/830_831.jpg?20200710030147"" alt=""Worm Magic Liquid Compost Tea"" style=""width: 60%; border-radius: 8px;"" />
+    <a href=""https://www.plantdoctor.com.au/worm-magic-brewed-from-worm-castings"" target=""_blank""
+       style=""display: block; font-size: 18px; font-weight: bold; margin-top: 10px; text-decoration: none; color: #007bff;"">
+      Worm Magic Liquid Compost Tea
+    </a>
+    <p style=""font-size: 14px; color: #555; margin-top: 8px;"">
+      Living compost tea brewed from worm castings, with humic and fulvic acids, to feed soil microbes and roots.
+    </p>
+  </div>",Liquid compost tea; microbial soil tonic (worm casting extract + humic/fulvic),Soil biology inoculation; root support; nutrient cycling; stress and transplant recovery,Liquid biology layer (living microbial tea),8,2,4,3,3,4,3,3,5,1,1,1,1,1,4,3,3,3,5,3,3,3,3,2,1,0,0,1,1,1,1,1,1,0,1,"Living compost tea that inoculates soil microbes, strengthens roots, and helps plants handle stress and transplanting","Soils with poor biological activity cycle nutrients slowly, so plants stay weak, transplant poorly, and do not respond well to fertiliser","Brewed from worm castings and supercharged with humic and fulvic acids, Worm Magic tea delivers bacteria, fungi, protozoa and enzymes plus a light mineral profile. Microbes unlock nutrients, improve soil function, and support roots, flowering, and recovery from stress",Contains humic and fulvic acids — do not tank-mix with iron.,Dual-use. Biology role; not core range. Treat as iron-incompatible because of humic/fulvic.,"Liquid soil-life tonic for lawns, gardens, pots, and farms; picker alternative to seaweed",2,3,4,2,4,4,5,5,4,4,4,5,3,3,4

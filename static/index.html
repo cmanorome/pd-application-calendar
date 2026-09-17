@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plant Doctor Application Calendar</title>
+    <style>
+      :root {
+        --green: #22b14c;
+        --green-dark: #14532d;
+        --ink: #111827;
+        --muted: #6b7280;
+        --line: #e5e7eb;
+        --bg: #f6f7f8;
+        --white: #fff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      .header {
+        background: var(--green);
+        color: #f0fdfa;
+        padding: 32px 0 24px;
+        margin-bottom: 22px;
+      }
+      .container { width: min(1080px, 92vw); margin: 0 auto; }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 11px;
+        margin: 0 0 8px;
+        opacity: 0.95;
+      }
+      h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 34px); }
+      .subtitle { margin: 0; color: #dcfce7; max-width: 720px; }
+      h3 { font-size: 16px; margin: 22px 0 10px; }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: var(--white);
+      }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+      label { display: block; font-size: 12px; color: #374151; margin-bottom: 4px; }
+      input, select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+      }
+      .check { display: flex; gap: 10px; align-items: flex-start; }
+      .check input { width: auto; margin-top: 3px; }
+      .check .title { font-weight: 600; font-size: 14px; }
+      .check .desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+      button {
+        padding: 10px 16px;
+        border: 0;
+        border-radius: 10px;
+        background: var(--green);
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button.secondary {
+        background: white;
+        color: var(--ink);
+        border: 1px solid var(--line);
+        font-weight: 500;
+      }
+      button:disabled { opacity: 0.65; cursor: default; }
+      .muted { color: var(--muted); font-size: 13px; line-height: 1.45; }
+      .hidden { display: none !important; }
+      .mode-row { display: flex; flex-wrap: wrap; gap: 10px; }
+      .mode-row label {
+        display: flex; gap: 8px; align-items: center; cursor: pointer;
+        font-size: 14px; flex: 1 1 220px; margin: 0;
+        padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fafafa;
+      }
+      .mode-row label:has(input:checked) { border-color: var(--green); background: #f0faf3; }
+      .mode-row label input[type="radio"] { width: auto; margin: 0; }
+      .actions {
+        display: flex; gap: 8px; margin: 18px 0 8px; flex-wrap: wrap;
+        position: sticky; bottom: 12px; background: var(--bg); padding: 8px 0; z-index: 2;
+      }
+      .tip {
+        font-size: 13px; color: #374151; background: #f0faf3;
+        border-radius: 10px; padding: 10px 12px; line-height: 1.45; margin: 10px 0;
+      }
+      details.fold {
+        border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+        background: white; margin-top: 14px;
+      }
+      details.fold > summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+      .why-list { margin: 8px 0 0; padding-left: 18px; }
+      .why-list li { margin: 0 0 8px; font-size: 13px; line-height: 1.45; color: #374151; }
+      .kicker {
+        font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
+        color: var(--muted); font-weight: 700; margin: 0 0 8px;
+      }
+      .prod-row {
+        display: flex; gap: 12px; align-items: flex-start;
+        background: white; border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+      }
+      .prod-row img {
+        width: 52px; height: 52px; object-fit: cover; border-radius: 10px;
+        border: 1px solid var(--line); background: #fff;
+      }
+      .prod-name { font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+      .role-tag { font-size: 11px; color: var(--muted); font-weight: 600; }
+      .link { color: var(--green); font-weight: 600; font-size: 13px; text-decoration: none; }
+      .stack-list { display: flex; flex-direction: column; gap: 8px; }
+      .year {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .month {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 10px 12px 12px;
+      }
+      .month h4 { margin: 0 0 8px; font-size: 14px; color: var(--green-dark); }
+      .dow, .days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+        text-align: center;
+      }
+      .dow span { font-size: 10px; color: var(--muted); font-weight: 600; padding: 2px 0; }
+      .day {
+        min-height: 34px;
+        border-radius: 8px;
+        padding: 2px 0 4px;
+        font-size: 11px;
+        color: #374151;
+      }
+      .day.empty { background: transparent; }
+      .day.has {
+        background: #f0faf3;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .day.has:hover, .day.selected { outline: 2px solid var(--green); }
+      .dots { display: flex; justify-content: center; gap: 2px; flex-wrap: wrap; min-height: 6px; }
+      .dot { width: 6px; height: 6px; border-radius: 99px; }
+      .dot.biology { background: #16a34a; }
+      .dot.uptake { background: #0f766e; }
+      .dot.nutrition { background: #ca8a04; }
+      .dot.visual { background: #ea580c; }
+      .dot.soil_structure { background: #78716c; }
+      .dot.soil_chemistry { background: #7c3aed; }
+      .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 4px; }
+      .legend span { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #374151; }
+      .event-card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        background: white;
+      }
+      .event-date { font-size: 12px; font-weight: 700; color: var(--green-dark); margin: 0 0 4px; }
+      .pick-card { padding: 10px 12px; }
+      .pick-card.is-on { border-color: var(--green); background: #f0faf3; }
+      .pick-card.mismatch { opacity: 0.78; }
+      .pick-row { display: flex; gap: 10px; align-items: flex-start; }
+      .pick-row > label { margin: 0; cursor: pointer; }
+      .pick-check { display: flex; margin: 0; padding-top: 14px; cursor: pointer; }
+      .pick-check input { width: auto; margin: 0; }
+      .pick-copy { min-width: 0; flex: 1; }
+      .pick-card .title {
+        display: block; font-weight: 600; font-size: 14px; line-height: 1.3;
+        margin: 0; cursor: pointer; color: inherit;
+      }
+      .pick-thumb {
+        width: 44px; height: 44px; object-fit: cover; border-radius: 8px;
+        border: 1px solid var(--line); background: #fff; flex: 0 0 44px;
+        margin-top: 2px;
+      }
+      .pick-info {
+        margin: 4px 0 0; border: 0; padding: 0; background: transparent;
+      }
+      .pick-info > summary {
+        cursor: pointer; font-size: 12px; font-weight: 500; color: var(--muted);
+        list-style: none;
+      }
+      .pick-info > summary::-webkit-details-marker { display: none; }
+      .pick-info > summary::after { content: " +"; font-weight: 700; }
+      .pick-info[open] > summary::after { content: " –"; }
+      .pick-info .desc { margin-top: 6px; }
+      #pick_count { font-weight: 600; color: var(--green-dark); }
+      .footer { padding: 28px 0 40px; }
+      .empty { color: var(--muted); font-size: 14px; padding: 16px 0; }
+      @media print {
+        .header, .no-print, .actions { display: none !important; }
+        body { background: white; }
+        .container { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header no-print">
+      <div class="container">
+        <p class="eyebrow">Plant Doctor</p>
+        <h1>Application Calendar</h1>
+        <p class="subtitle">
+          Generate a 12-month lawn or garden schedule. Pick the products you are buying, or let us choose if you are not sure.
+        </p>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="no-print">
+        <p class="muted">
+          Typical program only — follow the label and ease off if plants are stressed. Measure area in the
+          <a class="link" href="https://pd-rates-calculator.vercel.app/" target="_blank" rel="noopener">rates calculator</a>
+          if you want pack sizes later.
+        </p>
+
+        <div class="card" style="margin-bottom:14px;">
+          <label style="margin-bottom:8px;">How should we build your calendar?</label>
+          <div class="mode-row">
+            <label><input type="radio" name="path" value="recommend" checked /><span>I don’t know what to buy — choose for me</span></label>
+            <label><input type="radio" name="path" value="pick" /><span>I know what I’m buying — I’ll pick products</span></label>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <label for="use_case">Where are you using it?</label>
+            <select id="use_case">
+              <option value="lawn" selected>Lawn</option>
+              <option value="garden_beds">Garden (beds, veg, flowers, pots)</option>
+            </select>
+          </div>
+          <div class="card">
+            <label for="start_date">Start date</label>
+            <input id="start_date" type="date" />
+          </div>
+          <div class="card">
+            <label for="area_m2">Area (m², optional)</label>
+            <input id="area_m2" type="number" min="1" step="1" placeholder="e.g. 250" />
+          </div>
+          <div class="card" id="card_intent">
+            <label for="intent">Stage</label>
+            <select id="intent">
+              <option value="establishment_mode">Just planting / establishing</option>
+              <option value="maintenance_mode" selected>Keep it healthy</option>
+              <option value="performance_mode">Push for best results</option>
+            </select>
+          </div>
+          <div class="card" id="card_confidence">
+            <label for="confidence_level">How sure are you?</label>
+            <select id="confidence_level">
+              <option value="not_sure">Not sure</option>
+              <option value="somewhat_sure" selected>Somewhat sure</option>
+              <option value="very_sure">Very sure</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="section_pick" class="hidden">
+          <h3>Which products are you using?</h3>
+          <p class="muted">Tick what you have or are buying. We’ll space iron, lime, and seaweed so they don’t clash. <span id="pick_count">0 selected</span></p>
+          <div class="card" style="margin-bottom:12px;">
+            <label for="pick_search">Search</label>
+            <input id="pick_search" type="search" placeholder="e.g. seaweed, Champion, iron" />
+          </div>
+          <div id="pick_list"></div>
+        </div>
+
+        <div id="section_help">
+        <div class="card" style="margin-bottom:14px;">
+          <label style="margin-bottom:8px;">I want to</label>
+          <div class="mode-row">
+            <label><input type="radio" name="rec_mode" value="goals" checked /><span>Keep it healthy / improve results</span></label>
+            <label><input type="radio" name="rec_mode" value="problems" /><span>Fix a problem first</span></label>
+          </div>
+        </div>
+
+        <div id="section_goals">
+          <h3>What do you want?</h3>
+          <p class="muted">Tick one or more. These change with lawn vs garden.</p>
+          <div id="goal_panel_lawn" class="grid">
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="thickening_and_density" checked/><div><div class="title">Thickening and density</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="deep_green_colour"/><div><div class="title">Deep green colour</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="fast_recovery_from_stress"/><div><div class="title">Fast recovery from stress</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="weed_suppression_through_dominance"/><div><div class="title">Weed suppression through dominance</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="low_maintenance_resilience"/><div><div class="title">Low maintenance resilience</div></div></div></div>
+          </div>
+          <div id="goal_panel_garden" class="grid hidden">
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="improved_soil_fertility"/><div><div class="title">Richer soil over time</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="root_development_transplant"/><div><div class="title">Stronger roots and transplanting</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="strong_flowering_and_fruiting"/><div><div class="title">More flowers, fruit and veg</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="pest_and_disease_resilience"/><div><div class="title">Pest and disease resilience</div></div></div></div>
+            <div class="card"><div class="check"><input class="goal-cb" type="checkbox" data-goal-key="consistent_growth_across_seasons"/><div><div class="title">Steady growth through the year</div></div></div></div>
+          </div>
+        </div>
+
+        <div id="section_symptoms" class="hidden">
+          <h3>What’s wrong?</h3>
+          <div class="grid">
+            <div class="card"><div class="check"><input id="yellowing" type="checkbox"/><div><div class="title" id="yellowing_title">Yellowing</div><div class="desc" id="yellowing_desc">Pale or yellow turf.</div></div></div></div>
+            <div class="card"><div class="check"><input id="slow_growth" type="checkbox"/><div><div class="title" id="slow_growth_title">Slow growth</div><div class="desc" id="slow_growth_desc">Not thickening up.</div></div></div></div>
+            <div class="card"><div class="check"><input id="weak_roots" type="checkbox"/><div><div class="title" id="weak_roots_title">Weak roots</div><div class="desc" id="weak_roots_desc">Pulls up easily or struggles in heat.</div></div></div></div>
+            <div class="card"><div class="check"><input id="nutrient_lockout" type="checkbox"/><div><div class="title">Nutrient lockout</div><div class="desc">Fertilised but no response.</div></div></div></div>
+            <div class="card" id="card_patchy_lawn"><div class="check"><input id="patchy_lawn" type="checkbox"/><div><div class="title">Patchy lawn</div><div class="desc">Uneven growth, thin areas.</div></div></div></div>
+            <div class="card hidden" id="card_poor_flowering"><div class="check"><input id="poor_flowering" type="checkbox"/><div><div class="title">Poor flowering or fruiting</div><div class="desc">Few blooms or plants that won’t crop.</div></div></div></div>
+            <div class="card"><div class="check"><input id="compaction" type="checkbox"/><div><div class="title">Compaction</div><div class="desc">Hard ground, poor drainage.</div></div></div></div>
+            <div class="card"><div class="check"><input id="poor_water_retention" type="checkbox"/><div><div class="title">Poor water retention</div><div class="desc">Dries quickly, water beads.</div></div></div></div>
+            <div class="card"><div class="check"><input id="fungal_issues" type="checkbox"/><div><div class="title" id="fungal_title">Fungal issues</div><div class="desc" id="fungal_desc">Circular patches or disease pressure.</div></div></div></div>
+          </div>
+        </div>
+
+        <h3>Soil</h3>
+        <div class="grid">
+          <div class="card"><div class="check"><input id="sandy" type="checkbox"/><div><div class="title">Sandy</div><div class="desc">Drains fast, nutrients leach.</div></div></div></div>
+          <div class="card"><div class="check"><input id="clay" type="checkbox"/><div><div class="title">Clay</div><div class="desc">Heavy, holds water, compacts.</div></div></div></div>
+          <div class="card"><div class="check"><input id="acidic" type="checkbox"/><div><div class="title">Acidic</div><div class="desc">Low pH. Skip if you enter a measured pH.</div></div></div></div>
+          <div class="card"><div class="check"><input id="alkaline" type="checkbox"/><div><div class="title">Alkaline</div><div class="desc">High pH. Skip if you enter a measured pH.</div></div></div></div>
+          <div class="card"><div class="check"><input id="low_organic_matter" type="checkbox"/><div><div class="title">Low organic matter</div><div class="desc">Poor soil life.</div></div></div></div>
+          <div class="card"><div class="check"><input id="hydrophobic" type="checkbox"/><div><div class="title">Hydrophobic</div><div class="desc">Water beads or runs off.</div></div></div></div>
+        </div>
+
+        <details class="fold" id="section_soil_test">
+          <summary>I have a soil test (optional)</summary>
+          <p class="muted">pH is the most useful number. Home kits are usually water pH; Australian labs are often CaCl₂.</p>
+          <div class="grid">
+            <div>
+              <label for="soil_ph">Soil pH</label>
+              <input id="soil_ph" type="number" min="3.5" max="10.5" step="0.1" placeholder="e.g. 6.2" />
+            </div>
+            <div>
+              <label for="soil_ph_method">Measured in</label>
+              <select id="soil_ph_method">
+                <option value="water" selected>Water (home kit)</option>
+                <option value="cacl2">CaCl₂ (lab report)</option>
+              </select>
+            </div>
+            <div>
+              <label for="organic_matter_pct">Organic matter %</label>
+              <input id="organic_matter_pct" type="number" min="0" max="20" step="0.1" placeholder="e.g. 1.8" />
+            </div>
+          </div>
+        </details>
+        </div>
+
+        <div class="actions">
+          <button id="run" type="button">Build my calendar</button>
+          <button id="reset" class="secondary" type="button">Reset</button>
+        </div>
+      </div>
+
+      <h3 id="results_heading">Your 12-month plan</h3>
+      <div id="results"><div class="empty">Fill in the form and tap Build my calendar.</div></div>
+    </main>
+
+    <footer class="footer container">
+      <p class="muted">Plant Doctor application calendar · temperate / southern Australia</p>
+    </footer>
+
+    <script>
+      const startEl = document.getElementById("start_date");
+      startEl.value = new Date().toISOString().slice(0, 10);
+      let catalog = { products: [], roles: [] };
+      const picked = new Set();
+
+      function verticalFromUseCase(uc) {
+        return uc === "garden_beds" ? "garden" : "lawn";
+      }
+      function setTxt(id, text) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      }
+      function currentPath() {
+        const el = document.querySelector('input[name="path"]:checked');
+        return el ? el.value : "recommend";
+      }
+      function syncPathUI() {
+        const pick = currentPath() === "pick";
+        document.getElementById("section_pick").classList.toggle("hidden", !pick);
+        document.getElementById("section_help").classList.toggle("hidden", pick);
+        document.getElementById("card_intent").classList.toggle("hidden", pick);
+        document.getElementById("card_confidence").classList.toggle("hidden", pick);
+        if (pick) renderPicker();
+        else syncPlaceUI();
+      }
+      function syncPlaceUI() {
+        const pick = currentPath() === "pick";
+        if (pick) {
+          document.getElementById("card_intent").classList.add("hidden");
+          document.getElementById("card_confidence").classList.add("hidden");
+          return;
+        }
+        const mode = document.querySelector('input[name="rec_mode"]:checked').value;
+        const uc = document.getElementById("use_case").value;
+        const garden = uc === "garden_beds";
+        const v = verticalFromUseCase(uc);
+        document.getElementById("section_symptoms").classList.toggle("hidden", mode === "goals");
+        document.getElementById("section_goals").classList.toggle("hidden", mode === "problems");
+        document.getElementById("card_intent").classList.toggle("hidden", mode === "problems");
+        document.getElementById("card_confidence").classList.remove("hidden");
+        document.getElementById("goal_panel_lawn").classList.toggle("hidden", v !== "lawn");
+        document.getElementById("goal_panel_garden").classList.toggle("hidden", v !== "garden");
+        document.getElementById("card_patchy_lawn").classList.toggle("hidden", garden);
+        document.getElementById("card_poor_flowering").classList.toggle("hidden", !garden);
+        if (garden) {
+          document.getElementById("patchy_lawn").checked = false;
+          setTxt("yellowing_title", "Yellowing leaves");
+          setTxt("yellowing_desc", "Pale leaves on veg, flowers, shrubs, or pots.");
+          setTxt("slow_growth_title", "Slow or weak growth");
+          setTxt("slow_growth_desc", "Not putting on leaves, looking tired.");
+          setTxt("weak_roots_title", "Weak roots or transplant shock");
+          setTxt("weak_roots_desc", "Wilts easily, or struggles after planting.");
+          setTxt("fungal_title", "Disease or fungus");
+          setTxt("fungal_desc", "Spots, mildew, or rotting leaves.");
+        } else {
+          document.getElementById("poor_flowering").checked = false;
+          setTxt("yellowing_title", "Yellowing");
+          setTxt("yellowing_desc", "Pale or yellow turf, chlorosis.");
+          setTxt("slow_growth_title", "Slow growth");
+          setTxt("slow_growth_desc", "Not thickening up or growing out.");
+          setTxt("weak_roots_title", "Weak roots");
+          setTxt("weak_roots_desc", "Pulls up easily, struggles in heat or dry.");
+          setTxt("fungal_title", "Fungal issues");
+          setTxt("fungal_desc", "Circular patches or disease pressure.");
+        }
+      }
+      document.querySelectorAll('input[name="rec_mode"]').forEach((r) => r.addEventListener("change", syncPlaceUI));
+      document.querySelectorAll('input[name="path"]').forEach((r) => r.addEventListener("change", syncPathUI));
+      document.getElementById("use_case").addEventListener("change", () => {
+        syncPlaceUI();
+        loadCatalog();
+      });
+      document.getElementById("pick_search").addEventListener("input", renderPicker);
+      loadCatalog();
+      syncPathUI();
+
+      function selectedSkus() {
+        return Array.from(picked);
+      }
+      async function loadCatalog() {
+        const uc = document.getElementById("use_case").value;
+        try {
+          const res = await fetch("/api/catalog?use_case=" + encodeURIComponent(uc));
+          catalog = await res.json();
+        } catch (err) {
+          catalog = { products: [], roles: [] };
+        }
+        renderPicker();
+      }
+      function renderPicker() {
+        const list = document.getElementById("pick_list");
+        if (!list) return;
+        const q = (document.getElementById("pick_search").value || "").toLowerCase().trim();
+        const lawn = document.getElementById("use_case").value === "lawn";
+        const match = (p) => {
+          if (!q) return true;
+          return (p.name + " " + (p.full_name || "") + " " + (p.short_reason || "")).toLowerCase().includes(q);
+        };
+        const card = (p, mismatch) => {
+          const on = picked.has(p.id);
+          const hint = mismatch ? (lawn ? "Usually for gardens" : "Usually for lawns") : "";
+          const cid = "pick-" + p.id.replace(/[^A-Za-z0-9_-]/g, "");
+          const about = p.short_reason
+            ? `<details class="pick-info"><summary>About</summary><div class="desc">${esc(p.short_reason)}</div></details>`
+            : "";
+          return `<div class="card pick-card ${on ? "is-on" : ""} ${mismatch ? "mismatch" : ""}" data-sku="${esc(p.id)}">
+            <div class="pick-row">
+              <label class="pick-check" for="${esc(cid)}">
+                <input id="${esc(cid)}" type="checkbox" class="pick-cb" value="${esc(p.id)}" ${on ? "checked" : ""} />
+              </label>
+              ${p.image_url ? `<label for="${esc(cid)}"><img class="pick-thumb" src="${esc(p.image_url)}" alt="" /></label>` : ""}
+              <div class="pick-copy">
+                <label class="title" for="${esc(cid)}">${esc(p.name)}</label>
+                ${hint ? `<div class="role-tag">${esc(hint)}</div>` : ""}
+                ${about}
+              </div>
+            </div>
+          </div>`;
+        };
+        let html = "";
+        (catalog.roles || []).forEach((role) => {
+          const rows = (catalog.products || []).filter((p) => p.fit && p.role_type === role.id && match(p));
+          if (!rows.length) return;
+          html += `<h3 style="margin-top:16px;">${esc(role.label)}</h3><div class="grid">${rows.map((p) => card(p, false)).join("")}</div>`;
+        });
+        const others = (catalog.products || []).filter((p) => !p.fit && match(p));
+        if (others.length) {
+          html += `<details class="fold"><summary>Other Plant Doctor products</summary>
+            <p class="muted">These are a better fit for ${lawn ? "gardens" : "lawns"}.</p>
+            <div class="grid">${others.map((p) => card(p, true)).join("")}</div></details>`;
+        }
+        list.innerHTML = html || `<p class="muted">Loading products…</p>`;
+        document.getElementById("pick_count").textContent = picked.size + " selected";
+        list.querySelectorAll(".pick-cb").forEach((cb) => {
+          cb.addEventListener("change", () => {
+            if (cb.checked) picked.add(cb.value);
+            else picked.delete(cb.value);
+            const cardEl = cb.closest(".pick-card");
+            if (cardEl) cardEl.classList.toggle("is-on", cb.checked);
+            document.getElementById("pick_count").textContent = picked.size + " selected";
+          });
+        });
+        list.querySelectorAll(".pick-info").forEach((el) => {
+          el.addEventListener("click", (ev) => ev.stopPropagation());
+        });
+      }
+
+      function payload() {
+        const path = currentPath();
+        const p = {
+          path,
+          start_date: document.getElementById("start_date").value,
+          area_m2: document.getElementById("area_m2").value,
+          use_case: document.getElementById("use_case").value,
+        };
+        if (path === "pick") {
+          p.skus = selectedSkus();
+          return p;
+        }
+        const mode = document.querySelector('input[name="rec_mode"]:checked').value;
+        p.recommendation_mode = mode;
+        p.confidence_level = document.getElementById("confidence_level").value;
+        p.intent = document.getElementById("intent").value;
+        [
+          "yellowing","slow_growth","weak_roots","nutrient_lockout","patchy_lawn","poor_flowering",
+          "compaction","poor_water_retention","fungal_issues",
+          "sandy","clay","acidic","alkaline","low_organic_matter","hydrophobic"
+        ].forEach((id) => { p[id] = document.getElementById(id).checked; });
+        const ph = document.getElementById("soil_ph").value;
+        const om = document.getElementById("organic_matter_pct").value;
+        if (ph) p.soil_ph = ph;
+        p.soil_ph_method = document.getElementById("soil_ph_method").value;
+        if (om) p.organic_matter_pct = om;
+        if (mode === "goals") {
+          const gv = verticalFromUseCase(p.use_case);
+          p.goal_vertical = gv;
+          p.goal_weights = {};
+          const panel = document.getElementById("goal_panel_" + gv);
+          panel.querySelectorAll(".goal-cb:checked").forEach((cb) => {
+            p.goal_weights[cb.getAttribute("data-goal-key")] = 1.0;
+          });
+        }
+        return p;
+      }
+
+      function esc(s) {
+        return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+      }
+      function roleLabel(role) {
+        return ({
+          biology: "Soil life",
+          uptake: "Uptake",
+          nutrition: "Feed",
+          visual: "Colour",
+          soil_structure: "Soil",
+          soil_chemistry: "Soil pH",
+        })[role] || role;
+      }
+      function fmtDate(iso) {
+        const d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString("en-AU", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+      }
+
+      let lastPlan = null;
+      let selectedDate = null;
+
+      function eventsOn(iso) {
+        return (lastPlan.events || []).filter((e) => e.date === iso);
+      }
+
+      function renderMonth(year, month) {
+        const first = new Date(year, month, 1);
+        const startPad = first.getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const title = first.toLocaleDateString("en-AU", { month: "long", year: "numeric" });
+        let cells = "";
+        for (let i = 0; i < startPad; i++) cells += `<div class="day empty"></div>`;
+        for (let d = 1; d <= daysInMonth; d++) {
+          const iso = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+          const evs = eventsOn(iso);
+          const dots = evs.map((e) => `<i class="dot ${esc(e.role)}"></i>`).join("");
+          const sel = selectedDate === iso ? " selected" : "";
+          const has = evs.length ? " has" : "";
+          cells += `<div class="day${has}${sel}" data-date="${iso}" title="${esc(iso)}"><div>${d}</div><div class="dots">${dots}</div></div>`;
+        }
+        return `<section class="month"><h4>${esc(title)}</h4>
+          <div class="dow">${["S","M","T","W","T","F","S"].map((d) => `<span>${d}</span>`).join("")}</div>
+          <div class="days">${cells}</div></section>`;
+      }
+
+      function renderEventList(events) {
+        if (!events.length) return `<p class="muted">No applications on this day.</p>`;
+        return events.map((e) => `
+          <article class="event-card">
+            <p class="event-date">${esc(fmtDate(e.date))}</p>
+            <div class="prod-name">${esc(e.name)}</div>
+            <div class="role-tag">${esc(roleLabel(e.role))} · ${esc(e.method || "")}</div>
+            <p class="muted" style="margin:6px 0;">${esc(e.how_often || "")}${e.amount_label ? " · " + esc(e.amount_label) : e.rate_label ? " · " + esc(e.rate_label) : ""}</p>
+            <p class="muted">${esc(e.notes || "")}</p>
+            ${e.product_url ? `<a class="link" href="${esc(e.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
+          </article>
+        `).join("");
+      }
+
+      function downloadIcs() {
+        if (!lastPlan || !lastPlan.ics) return;
+        const blob = new Blob([lastPlan.ics], { type: "text/calendar" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "plant-doctor-calendar.ics";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      function renderPlan(data) {
+        lastPlan = data;
+        selectedDate = (data.events[0] && data.events[0].date) || data.start_date;
+        const start = new Date((data.start_date || "") + "T00:00:00");
+        let months = "";
+        for (let i = 0; i < 12; i++) {
+          const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+          months += renderMonth(d.getFullYear(), d.getMonth());
+        }
+        const products = (data.products || []).map((p) => `
+          <div class="prod-row">
+            ${p.image_url ? `<img src="${esc(p.image_url)}" alt="" />` : ""}
+            <div>
+              <div class="role-tag">${esc(roleLabel(p.role_type))} · ${esc(p.applications || 0)} applications</div>
+              <div class="prod-name">${esc(p.name)}</div>
+              <p class="muted" style="margin:4px 0;">${esc(p.how_often || "")}${p.amount_label ? " · " + esc(p.amount_label) : p.rate_label ? " · " + esc(p.rate_label) : ""}</p>
+              ${p.product_url ? `<a class="link" href="${esc(p.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
+            </div>
+          </div>
+        `).join("");
+        const notes = (data.notes || []).map(esc).join("<br/>");
+        const why = (data.choice_summary || []).map((l) => `<li>${esc(l)}</li>`).join("");
+        document.getElementById("results").innerHTML = `
+          <p class="tip">${esc(data.disclaimer || "")}</p>
+          <div class="no-print" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+            <button type="button" id="downloadIcs">Add to calendar (.ics)</button>
+            <button type="button" class="secondary" id="printPlan">Print</button>
+          </div>
+          <p class="kicker">${data.path === "pick" ? "Products you selected" : "Products on this plan"}</p>
+          <div class="stack-list">${products}</div>
+          ${notes ? `<div class="tip">${notes}</div>` : ""}
+          <p class="kicker" style="margin-top:18px;">Year view</p>
+          <div class="legend">
+            <span><i class="dot soil_structure"></i> Soil</span>
+            <span><i class="dot soil_chemistry"></i> pH</span>
+            <span><i class="dot biology"></i> Soil life</span>
+            <span><i class="dot uptake"></i> Uptake</span>
+            <span><i class="dot nutrition"></i> Feed</span>
+            <span><i class="dot visual"></i> Colour</span>
+          </div>
+          <div class="year">${months}</div>
+          <p class="kicker" style="margin-top:18px;">Applications</p>
+          <div id="dayList" class="stack-list">${renderEventList(eventsOn(selectedDate))}</div>
+          ${why ? `<details class="fold"><summary>${data.path === "pick" ? "How this schedule works" : "Why we chose these"}</summary><ul class="why-list">${why}</ul></details>` : ""}
+        `;
+        document.getElementById("downloadIcs").addEventListener("click", downloadIcs);
+        document.getElementById("printPlan").addEventListener("click", () => window.print());
+        document.querySelectorAll(".day.has").forEach((el) => {
+          el.addEventListener("click", () => {
+            selectedDate = el.getAttribute("data-date");
+            document.querySelectorAll(".day.selected").forEach((d) => d.classList.remove("selected"));
+            el.classList.add("selected");
+            document.getElementById("dayList").innerHTML = renderEventList(eventsOn(selectedDate));
+          });
+        });
+      }
+
+      document.getElementById("run").addEventListener("click", async () => {
+        const btn = document.getElementById("run");
+        btn.disabled = true;
+        btn.textContent = "Building…";
+        try {
+          const res = await fetch("/api/calendar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload()),
+          });
+          const data = await res.json();
+          if (data.error) {
+            document.getElementById("results").innerHTML = `<div class="empty">${esc(data.error)}</div>`;
+            return;
+          }
+          renderPlan(data);
+          document.getElementById("results_heading").scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (err) {
+          document.getElementById("results").innerHTML = `<div class="empty">Couldn’t build a calendar. Try again.</div>`;
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Build my calendar";
+        }
+      });
+
+      document.getElementById("reset").addEventListener("click", () => {
+        document.querySelector('input[name="path"][value="recommend"]').checked = true;
+        document.querySelector('input[name="rec_mode"][value="goals"]').checked = true;
+        document.getElementById("use_case").value = "lawn";
+        document.getElementById("intent").value = "maintenance_mode";
+        document.getElementById("start_date").value = new Date().toISOString().slice(0, 10);
+        document.getElementById("area_m2").value = "";
+        document.getElementById("confidence_level").value = "somewhat_sure";
+        document.getElementById("soil_ph").value = "";
+        document.getElementById("soil_ph_method").value = "water";
+        document.getElementById("organic_matter_pct").value = "";
+        document.querySelectorAll(".goal-cb").forEach((cb) => { cb.checked = false; });
+        const density = document.querySelector('.goal-cb[data-goal-key="thickening_and_density"]');
+        if (density) density.checked = true;
+        picked.clear();
+        document.getElementById("pick_search").value = "";
+        [
+          "yellowing","slow_growth","weak_roots","nutrient_lockout","patchy_lawn","poor_flowering",
+          "compaction","poor_water_retention","fungal_issues",
+          "sandy","clay","acidic","alkaline","low_organic_matter","hydrophobic"
+        ].forEach((id) => { document.getElementById(id).checked = false; });
+        syncPathUI();
+        lastPlan = null;
+        document.getElementById("results").innerHTML = `<div class="empty">Fill in the form and tap Build my calendar.</div>`;
+      });
+    </script>
+  </body>
+</html>
