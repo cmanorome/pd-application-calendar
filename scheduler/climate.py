@@ -7,8 +7,10 @@ Climate = Literal["temperate"]
 
 CLIMATE_LABEL = "Temperate / southern Australia"
 
-# Warm-season turf growing window used for Champion, MaxGreen, Lawn Envy, etc.
+# Warm-season turf growing window used for products that still skip the cool months.
 GROWING_MONTHS = frozenset({9, 10, 11, 12, 1, 2, 3, 4})
+# Calendar proxy for winter. Copy tells people the real cue is nights below 10°C —
+# that stretch is shorter or missing in northern Australia.
 WINTER_MONTHS = frozenset({6, 7, 8})
 SUMMER_MONTHS = frozenset({12, 1, 2})
 

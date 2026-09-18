@@ -72,6 +72,66 @@ def test_garden_uses_garden_products():
     names = " ".join(p["name"].lower() for p in plan["products"])
     assert "champion" not in names
     assert plan["events"]
+    skus = {p["id"] for p in plan["products"]}
+    assert "721" in skus
+    assert "A8M" in skus or "A8X" in skus
+
+
+def test_garden_ffr_alternates_with_activ8():
+    plan = _calendar_payload(
+        {
+            "recommendation_mode": "goals",
+            "use_case": "garden_beds",
+            "intent": "maintenance_mode",
+            "start_date": "2026-09-17",
+            "goal_weights": {"strong_flowering_and_fruiting": 1.0},
+        }
+    )
+    skus = {p["id"] for p in plan["products"]}
+    assert "721" in skus
+    a8 = "A8M" if "A8M" in skus else "A8X"
+    assert a8 in skus
+    ffr_dates = {e["date"] for e in plan["events"] if e["sku"] == "721"}
+    a8_dates = {e["date"] for e in plan["events"] if e["sku"] == a8}
+    assert ffr_dates
+    assert a8_dates
+    assert not (ffr_dates & a8_dates), "FFR and Activ8 should alternate, not share a spray day"
+    growing = sorted(
+        date.fromisoformat(d)
+        for d in (ffr_dates | a8_dates)
+        if d[5:7] in {"09", "10", "11", "12", "01", "02", "03", "04"}
+    )
+    for a, b in zip(growing, growing[1:]):
+        gap = (b - a).days
+        if gap > 40:
+            continue
+        assert 10 <= gap <= 18, f"garden feeds should stay about fortnightly: {a} -> {b}"
+    note = " ".join(plan["notes"]).lower()
+    assert "alternate" in note
+    card = next(p for p in plan["products"] if p["id"] == "721")
+    assert "flowering/fruiting" in card["how_often"]
+    assert "active growth" not in card["how_often"]
+    a8_card = next(p for p in plan["products"] if p["id"] == a8)
+    assert "alternating" in a8_card["how_often"].lower()
+
+
+def test_picked_ffr_and_activ8_alternate():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "garden_beds",
+            "start_date": "2026-09-17",
+            "skus": ["721", "A8M", "SWS"],
+        }
+    )
+    ffr_dates = {e["date"] for e in plan["events"] if e["sku"] == "721"}
+    a8_dates = {e["date"] for e in plan["events"] if e["sku"] == "A8M"}
+    assert ffr_dates and a8_dates
+    assert not (ffr_dates & a8_dates)
+    sws_dates = {e["date"] for e in plan["events"] if e["sku"] == "SWS"}
+    assert ffr_dates <= sws_dates
+    assert a8_dates <= sws_dates
+    assert "alternate" in " ".join(plan["notes"]).lower()
 
 
 def test_picked_products_only_those_skus():
@@ -120,7 +180,7 @@ def test_usage_guide_dots():
             "path": "pick",
             "use_case": "lawn",
             "start_date": "2026-09-17",
-            "skus": ["SWS", "STM", "LIR", "LEN", "886"],
+            "skus": ["SWS", "STM", "LIR", "LEN", "886", "557"],
         }
     )
     usage = {p["id"]: p.get("usage") or {} for p in plan["products"]}
@@ -133,6 +193,11 @@ def test_usage_guide_dots():
     assert usage["LEN"]["hose_on"]
     assert usage["886"]["water_in"]
     assert usage["886"]["independent"]
+    assert not any(usage["557"].get(k) for k in (
+        "mix_together", "independent", "water_in", "soil_drench",
+        "foliar", "fertigation", "hydroponic", "hose_on", "mix_with_iron",
+    ))
+    assert not next(p.get("usage_labels") for p in plan["products"] if p["id"] == "557")
     len_events = [e for e in plan["events"] if e["sku"] == "LEN"]
     sws_dates = {e["date"] for e in plan["events"] if e["sku"] == "SWS"}
     assert len_events
@@ -178,6 +243,14 @@ def test_usage_guide_export_joins_on_sku():
     assert by_sku["STM"]["mix_with_iron"] == "1"
     assert by_sku["SWS"]["mix_together"] == "1"
     assert by_sku["LIR"]["independent"] == "1"
+    assert by_sku["557"]["mix_together"] == "0"
+    assert by_sku["557"]["independent"] == "0"
+    assert by_sku["557"]["water_in"] == "0"
+    assert by_sku["513"]["water_in"] == "0"
+    assert "top layer of soil" in by_sku["513"]["application_notes"]
+    assert by_sku["557"]["soil_drench"] == "0"
+    assert by_sku["557"]["foliar"] == "0"
+    assert by_sku["557"]["fertigation"] == "0"
     assert by_sku["NSO"]["in_catalog"] == "0"
     rate_rows = list(csv.DictReader((root / "data" / "product_usage_guide_rates.csv").open(encoding="utf-8-sig")))
     assert any(r["sku"] == "STM" and "3 mL" in r["amount_text"] for r in rate_rows)
@@ -196,7 +269,7 @@ def test_year_round_fills_twelfth_month():
     august = [e for e in plan["events"] if e["date"].startswith("2027-08")]
     assert any(e["sku"] == "SWS" for e in august), "year-round seaweed should still run in August"
     assert any(e["sku"] == "STM" for e in august)
-    assert not any(e["sku"] == "A8X" for e in august), "Activ8EXTRA is growing-season only"
+    assert any(e["sku"] == "A8X" for e in august), "Activ8EXTRA should still run monthly in August"
     assert max(e["date"] for e in plan["events"] if e["sku"] == "SWS") < "2027-09-01"
 
 
@@ -223,7 +296,97 @@ def test_winter_eases_year_round_cadence():
     for a, b in zip(winter, winter[1:]):
         assert (b - a).days >= 21, f"winter gap too tight: {a} -> {b}"
     assert len(winter) < len(growing) / 2
-    assert not any(e["sku"] == "A8X" and e["date"][5:7] in {"06", "07", "08"} for e in plan["events"])
+    a8x_winter = sorted(
+        date.fromisoformat(e["date"])
+        for e in plan["events"]
+        if e["sku"] == "A8X" and e["date"][5:7] in {"06", "07", "08"}
+    )
+    assert a8x_winter, "Activ8EXTRA should keep going in winter, about monthly"
+    for a, b in zip(a8x_winter, a8x_winter[1:]):
+        assert (b - a).days >= 21, f"A8X winter gap too tight: {a} -> {b}"
+    winter_note = " ".join(plan["notes"])
+    assert "10°C" in winter_note or "10°c" in winter_note.lower()
+    assert "pause until spring" not in winter_note.lower()
+
+
+def test_fert_granules_every_three_months():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-01",
+            "skus": ["886"],
+        }
+    )
+    dates = sorted(date.fromisoformat(e["date"]) for e in plan["events"] if e["sku"] == "886")
+    assert dates
+    for a, b in zip(dates, dates[1:]):
+        assert 80 <= (b - a).days <= 100, f"Champion gap should be ~3 months: {a} -> {b}"
+    assert any(d.month in {6, 7, 8} for d in dates), "granular fertiliser should still land in winter"
+    card = next(p for p in plan["products"] if p["id"] == "886")
+    assert "Every 3 months" in card["how_often"]
+
+
+def test_lawn_deep_green_includes_iron():
+    plan = _calendar_payload(
+        {
+            "recommendation_mode": "goals",
+            "use_case": "lawn",
+            "intent": "maintenance_mode",
+            "start_date": "2026-09-17",
+            "goal_weights": {"deep_green_colour": 1.0},
+        }
+    )
+    skus = {p["id"] for p in plan["products"]}
+    assert "LIR" in skus or "LEN" in skus or "547" in skus or "846" in skus, skus
+    density = _calendar_payload(
+        {
+            "recommendation_mode": "goals",
+            "use_case": "lawn",
+            "intent": "maintenance_mode",
+            "start_date": "2026-09-17",
+            "goal_weights": {"thickening_and_density": 1.0},
+        }
+    )
+    density_skus = {p["id"] for p in density["products"]}
+    assert "LIR" not in density_skus
+
+
+def test_humate_granules_not_watered_in():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "garden_beds",
+            "start_date": "2026-09-17",
+            "skus": ["513"],
+        }
+    )
+    card = next(p for p in plan["products"] if p["id"] == "513")
+    assert not (card.get("usage") or {}).get("water_in")
+    assert "Water in" not in (card.get("usage_labels") or [])
+    notes = " ".join(plan["notes"]).lower()
+    assert "top layer of soil" in notes
+    assert "do not need to be watered in" in notes
+    event = next(e for e in plan["events"] if e["sku"] == "513")
+    assert "does not need to be watered in" in (event.get("notes") or "").lower()
+
+
+def test_plan_notes_are_tidy():
+    plan = _calendar_payload(
+        _lawn_payload(goal_weights={"deep_green_colour": 1.0, "thickening_and_density": 1.0})
+    )
+    notes = plan["notes"]
+    iron_notes = [n for n in notes if "different day" in n.lower() and "iron" in n.lower()]
+    assert len(iron_notes) == 1, notes
+    blob = " ".join(notes)
+    assert "Boosted Liquid Fertiliser" not in blob
+    assert "Concentrated Liquid Seaweed" not in blob
+    assert "Super Concentrate Bio-Stimulant" not in blob
+    mix = next((n for n in notes if n.startswith("Mix these")), "")
+    assert mix
+    assert "Activ8EXTRA" in mix
+    assert "Seaweed Secrets" in mix
+    assert "Stimulizer" in mix
 
 
 if __name__ == "__main__":
@@ -231,6 +394,8 @@ if __name__ == "__main__":
     test_iron_not_same_day_as_seaweed()
     test_lime_before_iron()
     test_garden_uses_garden_products()
+    test_garden_ffr_alternates_with_activ8()
+    test_picked_ffr_and_activ8_alternate()
     test_picked_products_only_those_skus()
     test_pick_requires_a_product()
     test_lawn_picker_includes_uptake_products()
@@ -239,4 +404,8 @@ if __name__ == "__main__":
     test_usage_guide_export_joins_on_sku()
     test_year_round_fills_twelfth_month()
     test_winter_eases_year_round_cadence()
+    test_fert_granules_every_three_months()
+    test_lawn_deep_green_includes_iron()
+    test_humate_granules_not_watered_in()
+    test_plan_notes_are_tidy()
     print("ok")

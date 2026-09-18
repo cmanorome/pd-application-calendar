@@ -344,8 +344,20 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
     else:
         wants_lime = acidic
 
+    gw = engine_input.get("goal_weights") or {}
+    problems = engine_input.get("problems") or {}
+    flowering = (
+        float(gw.get("strong_flowering_and_fruiting") or 0) >= 0.35
+        or float(problems.get("poor_flowering") or 0) >= 0.35
+    )
+    deep_green = float(gw.get("deep_green_colour") or 0) >= 0.35
     products, extra_notes = program_products_from_catalog(
-        rec, _catalog.products, wants_lime=wants_lime
+        rec,
+        _catalog.products,
+        wants_lime=wants_lime,
+        lawn=engine_input.get("use_case") == "lawn",
+        flowering=flowering,
+        deep_green=deep_green,
     )
     rec_notes = list((rec.explanations or {}).get("notes") or [])
     plan = _plan_from_products(

@@ -1,18 +1,18 @@
 sku,cadence_days,one_off,window,max_per_year,tank_group,method,mix_together,independent,water_in,soil_drench,foliar,fertigation,hydroponic,hose_on,how_often,notes
-A8X,14,0,growing_season,16,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks in spring and summer,Usage guide: fortnightly in spring/summer; ease off in cooler months. Do not tank-mix with iron.
-A8M,14,0,growing_season,16,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks in warmer months,Usage guide: fortnightly when growing; lower rate or less often in cooler months. Do not tank-mix with iron.
-886,84,0,growing_season,4,granular,spread,0,1,1,0,0,0,0,0,Every 8–12 weeks during active growth,Usage guide: spring to autumn; up to 3 months of feed. Half rate in autumn/winter. Water in lightly.
-892,84,0,growing_season,4,granular,spread,0,1,1,0,0,0,0,0,Every 8–12 weeks during active growth,Greens Grade for low-cut turf. Same 8–12 week window as Fairway. Half rate in autumn/winter.
-575,120,0,growing_season,3,granular,spread,0,0,1,0,0,0,0,0,"During active growth, flowering and fruiting",Garden flower/fruit granular. Not for lawns. Water in after spreading.
-721,28,0,growing_season,10,mixable,spray,1,0,1,1,1,1,0,0,Every 4 weeks during active growth,"Usage guide: fortnightly on vegetables; every 6–8 weeks on trees, fruit and vines."
+A8X,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks,Usage guide: fortnightly in spring/summer; once a month in cooler months. Do not tank-mix with iron.
+A8M,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks,Usage guide: fortnightly when growing; once a month in cooler months. Do not tank-mix with iron.
+886,90,0,year_round,4,granular,spread,0,1,1,0,0,0,0,0,Every 3 months,Usage guide: every 3 months year-round. Half rate in autumn and winter. Water in lightly.
+892,90,0,year_round,4,granular,spread,0,1,1,0,0,0,0,0,Every 3 months,Greens Grade for low-cut turf. Same 3-month interval as Fairway. Half rate in autumn and winter.
+575,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months,Garden flower/fruit granular. Not for lawns. Water in after spreading.
+721,28,0,growing_season,10,mixable,spray,1,0,1,1,1,1,0,0,Every 4 weeks during flowering/fruiting,"Usage guide: fortnightly on vegetables; every 6–8 weeks on trees, fruit and vines."
 LEN,28,0,year_round,12,iron,hose-on,0,1,1,0,0,0,0,1,Every 4 weeks year-round,Hose-on tonic with iron. Apply independently from other liquids. Offset ~2 weeks if alternating with MaxGreen.
 LIR,28,0,growing_season,8,iron,spray,0,1,1,0,0,0,0,0,Every 4 weeks in the growing season,"Usage guide: trees and grapevines every 6–8 weeks. Apply on a different day from seaweed, humic, wetter and Activ8. May stain paths."
 MG,28,0,growing_season,8,iron,hose-on,0,1,1,0,0,0,0,1,Monthly in the growing season,Usage guide: fortnightly on vegetables; every 6–8 weeks on trees and vines. Skip summer if fungal issues. Mixable with Stimulizer only.
 758,180,0,year_round,2,granular,spread,0,0,1,0,0,0,0,0,Once or twice a year,"Usage guide: 1–2 times per year; feeds up to 3 months. Ideal at renovation, before planting, or lawn recovery."
-1156,84,0,growing_season,4,granular,spread,0,0,1,0,0,0,0,0,Every 2–3 months,Usage guide: more often in active growth; ease off in winter. Water in after spreading.
+1156,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months,Usage guide: every 3 months year-round. Water in after spreading.
 414,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,1,0,Weekly or fortnightly as required,Usage guide: weekly or fortnightly through the growing season. Do not tank-mix with iron.
 1075,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once at the start of the plan (repeat yearly),"Usage guide: compacted, clay or sodic soils; soil prep or an ongoing soil program. Water in after spreading."
-513,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months,Matches usage guide soil-improvement program. Do not tank-mix with iron.
+513,90,0,year_round,4,granular,spread,0,0,0,0,0,0,0,0,Every 3 months,"Spread on the top layer of soil, under mulch, or dug in. Does not need to be watered in."
 LIMEGr,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once in autumn or early spring,Usage guide: when soil tests show low pH. Wait 6 weeks before iron.
 664,120,0,growing_season,3,granular,spread,0,0,1,0,0,0,0,0,Every 3–6 months on home lawns,Usage guide: 3–6 months lawns; 2–3 months sports turf; 1–2 months greens. Reapply if water still beads.
 NSWL,21,0,growing_season,12,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2–4 weeks when soils are dry or water-repellent,"Usage guide: mix gently, do not shake. Do not tank-mix with iron."
@@ -21,7 +21,7 @@ NSWL,21,0,growing_season,12,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2–4 weeks 
 29782,14,0,growing_season,16,mixable,spray,0,1,1,1,0,1,0,0,Every 2 weeks in the growing season,"Usage guide: apply independently; extra applications during drought, heat, frost or transplant stress."
 SWS,14,0,year_round,24,mixable,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Usage guide: fortnightly through the growing season; year-round for plant and soil health. Mixable with Stimulizer and most non-iron feeds.
 STM,14,0,year_round,24,mixable,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Usage guide: fortnightly year-round. Can tank-mix with iron. Use at very low rates.
-557,365,1,year_round,1,granular,spread,1,0,1,1,1,1,0,0,Once at the start of the plan (repeat yearly),"Usage guide: planting, turf install or annual amendment. Does not break down."
+557,365,1,year_round,1,granular,spread,0,0,0,0,0,0,0,0,Once at the start of the plan (repeat yearly),"Usage guide: planting, turf install or annual amendment. Does not break down."
 DOL,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once in autumn or early spring,Usage guide: test pH and magnesium first. Wait 6 weeks before iron.
 846,28,0,growing_season,4,iron,spread,0,1,1,0,0,0,0,0,Every 4 weeks while correcting yellowing,Usage guide: moss prevention every 6–8 weeks from late autumn through winter. Do not combine with lime.
 547,28,0,growing_season,6,iron,spray,0,1,0,1,1,1,0,0,Every 4 weeks from spring through autumn,Usage guide: at the start of growth or when leaves yellow. Preferred on alkaline soils. Apply independently.

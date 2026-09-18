@@ -14,6 +14,21 @@ IRON_GAP_DAYS = 3
 MIX_SNAP_DAYS = 7
 MAX_EVENTS = 500
 _PLACE_CAP = 40
+_FFR_LIQUID = "721"
+_ACTIV8 = ("A8M", "A8X")
+_NOTE_NAMES = {
+    "A8X": "Activ8EXTRA",
+    "A8M": "Activ8Mate",
+    "SWS": "Seaweed Secrets",
+    "STM": "Stimulizer",
+    "29800": "Quantum H",
+    "NSWL": "Soil Wetter Liquid",
+    "721": "Flowers, Fruits & Roots",
+    "LIR": "Liquid Iron",
+    "LEN": "Lawn Envy",
+    "886": "Champion Fairway",
+    "414": "Fulvic Acid",
+}
 
 
 def _calendar_end(start: date) -> date:
@@ -50,11 +65,31 @@ def _short_name(product: Product) -> str:
     return name or "This product"
 
 
+def _note_name(sku: str, fallback: str = "") -> str:
+    return _NOTE_NAMES.get(sku) or fallback or sku
+
+
+def _is_iron_spacing_note(text: str) -> bool:
+    blob = (text or "").lower()
+    return "iron" in blob and "different day" in blob
+
+
+def _join_names(names: list[str]) -> str:
+    if len(names) == 1:
+        return names[0]
+    if len(names) == 2:
+        return f"{names[0]} and {names[1]}"
+    return ", ".join(names[:-1]) + ", and " + names[-1]
+
+
 def program_products_from_catalog(
     rec,
     catalog_products: list[Product],
     *,
     wants_lime: bool = False,
+    lawn: bool = True,
+    flowering: bool = False,
+    deep_green: bool = False,
 ) -> tuple[list[Product], list[str]]:
     notes: list[str] = []
     by_id = {p.id: p for p in catalog_products}
@@ -80,6 +115,19 @@ def program_products_from_catalog(
         if "892" in seen and "886" in seen:
             products = [p for p in products if p.id != "892"]
             seen.discard("892")
+
+    if not lawn:
+        if flowering and _FFR_LIQUID not in seen:
+            add(by_id.get(_FFR_LIQUID))
+        has_ffr = _FFR_LIQUID in seen or "575" in seen
+        has_a8 = any(sku in seen for sku in _ACTIV8)
+        if has_ffr and not has_a8:
+            add(by_id.get("A8M") or by_id.get("A8X"))
+
+    if lawn and deep_green:
+        has_iron = any(p.is_iron_based or p.id == "LEN" for p in products)
+        if not has_iron:
+            add(by_id.get("LIR"))
 
     # The same-week stack cannot mix lime and iron. A year calendar can: lime first, iron later.
     if wants_lime and not any(p.is_lime_based for p in products):
@@ -124,6 +172,69 @@ def _is_tank_mix(interval: Interval) -> bool:
     return bool((interval.usage or {}).get("mix_together"))
 
 
+def _liquid_feed_pair(skus: set[str]) -> tuple[str, str] | None:
+    """FFR liquid + Activ8Mate or Extra — alternate these, never tank-mix them."""
+    if _FFR_LIQUID not in skus:
+        return None
+    for sku in _ACTIV8:
+        if sku in skus:
+            return _FFR_LIQUID, sku
+    return None
+
+
+def _replace_sku_dates(
+    events: list[dict[str, Any]],
+    sku: str,
+    dates: list[date],
+) -> list[dict[str, Any]]:
+    template = next((e for e in events if e["sku"] == sku), None)
+    rest = [e for e in events if e["sku"] != sku]
+    if template is None:
+        return events
+    return rest + [{**template, "date": d.isoformat()} for d in dates]
+
+
+def _alternate_ffr_activ8(
+    events: list[dict[str, Any]],
+    products: list[Product],
+    interval_for: dict[str, Interval],
+    *,
+    start: date,
+    fungal: bool,
+    pair: tuple[str, str],
+) -> list[dict[str, Any]]:
+    ffr_sku, a8_sku = pair
+    by_id = {p.id: p for p in products}
+    ffr_p = by_id.get(ffr_sku)
+    a8_p = by_id.get(a8_sku)
+    if ffr_p is None or a8_p is None:
+        return events
+    slots = _place_dates(start, interval_for[a8_sku], a8_p, fungal=fungal, offset=0)
+    ffr_dates: list[date] = []
+    a8_dates: list[date] = []
+    want_ffr = True
+    for slot in slots:
+        if want_ffr and _date_allowed(slot, interval_for[ffr_sku], ffr_p, fungal=fungal):
+            ffr_dates.append(slot)
+            want_ffr = False
+        else:
+            a8_dates.append(slot)
+            want_ffr = True
+    events = _replace_sku_dates(events, ffr_sku, ffr_dates)
+    events = _replace_sku_dates(events, a8_sku, a8_dates)
+    return events
+
+
+def _snap_to_dates(d: date, anchors: list[date]) -> date:
+    nearby = [a for a in anchors if abs((a - d).days) <= MIX_SNAP_DAYS]
+    if nearby:
+        return min(nearby, key=lambda a: (abs((a - d).days), a))
+    later = [a for a in anchors if a >= d]
+    if later:
+        return later[0]
+    return anchors[-1]
+
+
 def _product_blocks_iron(product: Product, interval: Interval) -> bool:
     if product.is_iron_based or interval.tank_group == "iron":
         return False
@@ -152,9 +263,9 @@ def _step_after(last: date, interval: Interval) -> int:
 def _how_often_label(interval: Interval) -> str:
     text = interval.how_often
     if interval.window == "year_round" and not interval.one_off and 0 < interval.cadence_days <= 42:
-        return text.rstrip(".") + " · about half as often in winter (Jun–Aug)"
-    if interval.window == "growing_season":
-        return text.rstrip(".") + " · pause in winter"
+        if interval.cadence_days <= 16:
+            return text.rstrip(".") + " · once a month when nights are below 10°C"
+        return text.rstrip(".") + " · less often when nights are below 10°C"
     return text
 
 
@@ -225,6 +336,25 @@ def _coalesce_tank_mix(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
     if len({e["sku"] for e in mix}) < 2:
         return events
 
+    pair = _liquid_feed_pair({e["sku"] for e in mix})
+    if pair:
+        feed_skus = {pair[0], pair[1]}
+        feeds = [e for e in mix if e["sku"] in feed_skus]
+        companions = [e for e in mix if e["sku"] not in feed_skus]
+        anchors = sorted({date.fromisoformat(e["date"]) for e in feeds})
+        if not companions or not anchors:
+            return rest + feeds + companions
+        snapped: list[dict[str, Any]] = []
+        seen: set[tuple[str, str]] = set()
+        for ev in companions:
+            target = _snap_to_dates(date.fromisoformat(ev["date"]), anchors).isoformat()
+            key = (ev["sku"], target)
+            if key in seen:
+                continue
+            seen.add(key)
+            snapped.append({**ev, "date": target})
+        return rest + feeds + snapped
+
     sku_counts: dict[str, int] = {}
     for e in mix:
         sku_counts[e["sku"]] = sku_counts.get(e["sku"], 0) + 1
@@ -233,19 +363,10 @@ def _coalesce_tank_mix(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
     if not anchors:
         return events
 
-    def snap_to_anchor(d: date) -> date:
-        nearby = [a for a in anchors if abs((a - d).days) <= MIX_SNAP_DAYS]
-        if nearby:
-            return min(nearby, key=lambda a: (abs((a - d).days), a))
-        later = [a for a in anchors if a >= d]
-        if later:
-            return later[0]
-        return anchors[-1]
-
     merged: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
     for ev in mix:
-        target = snap_to_anchor(date.fromisoformat(ev["date"])).isoformat()
+        target = _snap_to_dates(date.fromisoformat(ev["date"]), anchors).isoformat()
         key = (ev["sku"], target)
         if key in seen:
             continue
@@ -376,6 +497,32 @@ def build_calendar(
                 }
             )
 
+    pair = _liquid_feed_pair({p.id for p in products})
+    if pair:
+        events = _alternate_ffr_activ8(
+            events,
+            products,
+            interval_for,
+            start=start,
+            fungal=fungal,
+            pair=pair,
+        )
+        ffr_how = "Every 4 weeks during flowering/fruiting, alternating with Activ8"
+        a8_how = (
+            "Every 4 weeks, alternating with Flowers, Fruits & Roots"
+            " · once a month when nights are below 10°C"
+        )
+        for card in product_cards:
+            if card["id"] == pair[0]:
+                card["how_often"] = ffr_how
+            elif card["id"] == pair[1]:
+                card["how_often"] = a8_how
+        for ev in events:
+            if ev["sku"] == pair[0]:
+                ev["how_often"] = ffr_how
+            elif ev["sku"] == pair[1]:
+                ev["how_often"] = a8_how
+
     events = _coalesce_tank_mix(events)
     events = _resolve_same_day(events)
     counts: dict[str, int] = {}
@@ -384,30 +531,51 @@ def build_calendar(
     for card in product_cards:
         card["applications"] = counts.get(card["id"], 0)
 
-    all_notes = list(extra_notes or []) + place_warnings(products, lawn=lawn)
+    all_notes = [
+        n for n in (extra_notes or []) if n and not _is_iron_spacing_note(n)
+    ] + place_warnings(products, lawn=lawn)
+    if any(p.id == "513" for p in products):
+        all_notes.append(
+            "Spread Humate granules on the top layer of soil, under mulch, or dug in. They do not need to be watered in."
+        )
     if any(
-        (interval_for[p.id].window == "year_round" and not interval_for[p.id].one_off and interval_for[p.id].cadence_days <= 42)
-        or interval_for[p.id].window == "growing_season"
+        interval_for[p.id].window == "year_round"
+        and not interval_for[p.id].one_off
+        and interval_for[p.id].cadence_days <= 42
         for p in products
     ):
         all_notes.append(
-            "Winter is quieter on warm-season lawns: year-round sprays run about half as often in June–August, and growing-season feeds pause until spring."
+            "Keep applying through winter, just less often. Winter means nights below 10°C — usually June to August in southern Australia, and shorter or sometimes missing in the north."
         )
-    mix_names = []
+    if pair:
+        a8_label = "Activ8EXTRA" if pair[1] == "A8X" else "Activ8Mate"
+        all_notes.append(
+            f"Alternate between Flowers, Fruits & Roots and {a8_label} each feed. "
+            "FFR is for flowering/fruiting; Activ8 is the regular feed. Do not mix those two in the same sprayer."
+        )
+    mix_entries: list[tuple[str, str]] = []
     seen_mix: set[str] = set()
     for ev in events:
         if ev.get("tank_mix") and ev["sku"] not in seen_mix:
             seen_mix.add(ev["sku"])
-            mix_names.append(ev["name"])
-    if len(mix_names) >= 2:
+            mix_entries.append((ev["sku"], _note_name(ev["sku"], ev["name"])))
+    pair_skus = {pair[0], pair[1]} if pair else set()
+    mix_names = [name for sku, name in mix_entries if sku not in pair_skus]
+    if pair and mix_names:
+        all_notes.append(
+            "On each feed day, mix "
+            + _join_names(mix_names)
+            + " with that day's feed. Jar test if it is a new combination."
+        )
+    elif not pair and len(mix_names) >= 2:
         all_notes.append(
             "Mix these as concentrates in one sprayer on the same day: "
-            + ", ".join(mix_names)
-            + ". Jar test if it is a new combination."
+            + _join_names(mix_names)
+            + ". Do not add iron to that tank."
         )
     if any(e["tank_group"] == "iron" for e in events) and any(e.get("blocks_iron") for e in events):
         all_notes.append(
-            "Liquid iron is on a different day from seaweed, humic, wetter, and Activ8 — do not mix them in the same sprayer. Stimulizer can tank-mix with iron, but is kept with the other concentrates so you only spray once."
+            "Liquid iron is on a different day from seaweed, humic, wetter, and Activ8. Do not mix them in the same sprayer."
         )
 
     return {

@@ -73,6 +73,10 @@
       }
       button:disabled { opacity: 0.65; cursor: default; }
       .muted { color: var(--muted); font-size: 13px; line-height: 1.45; }
+      .kicker {
+        font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
+        color: var(--muted); font-weight: 700; margin: 0 0 8px;
+      }
       .hidden { display: none !important; }
       .mode-row { display: flex; flex-wrap: wrap; gap: 10px; }
       .mode-row label {
@@ -97,39 +101,136 @@
       details.fold > summary { cursor: pointer; font-weight: 600; font-size: 14px; }
       .why-list { margin: 8px 0 0; padding-left: 18px; }
       .why-list li { margin: 0 0 8px; font-size: 13px; line-height: 1.45; color: #374151; }
-      .kicker {
-        font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
-        color: var(--muted); font-weight: 700; margin: 0 0 8px;
+      .plan-notes {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 14px 10px;
+        margin: 0 0 12px;
       }
-      .prod-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      .plan-notes .kicker { margin: 0 0 6px; }
+      .plan-notes ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+      .plan-notes li {
+        font-size: 13px;
+        line-height: 1.45;
+        color: #374151;
+        margin: 0 0 8px;
+      }
+      .plan-notes li:last-child { margin-bottom: 2px; }
+      .prod-thumbs {
+        display: flex;
+        flex-wrap: wrap;
         gap: 10px;
+        margin: 0 0 12px;
       }
-      .prod-row {
-        display: flex; flex-direction: column; gap: 6px;
-        background: white; border: 1px solid var(--line); border-radius: 12px;
-        padding: 10px 12px; min-width: 0; height: 100%;
+      .prod-thumb {
+        display: block;
+        width: 72px;
+        height: 72px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        overflow: hidden;
+        background: #fff;
+        flex: 0 0 72px;
       }
-      .prod-head {
-        display: flex; gap: 10px; align-items: flex-start; min-width: 0;
+      .prod-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
-      .prod-head > div { min-width: 0; flex: 1; }
-      .prod-row img {
-        width: 44px; height: 44px; object-fit: cover; border-radius: 8px;
-        border: 1px solid var(--line); background: #fff; flex: 0 0 44px;
+      .prod-thumb.no-photo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: #14532d;
+        text-decoration: none;
       }
-      .prod-row .use-row { margin: 2px 0 0; }
-      .prod-row .muted { margin: 0; }
       .prod-name { font-size: 14px; font-weight: 700; margin: 0 0 2px; line-height: 1.3; }
       .role-tag { font-size: 11px; color: var(--muted); font-weight: 600; }
       .link { color: var(--green); font-weight: 600; font-size: 12px; text-decoration: none; }
       .stack-list { display: flex; flex-direction: column; gap: 8px; }
+      .view-tabs {
+        display: flex;
+        gap: 8px;
+        margin: 16px 0 10px;
+        flex-wrap: wrap;
+      }
+      .view-tab {
+        padding: 8px 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fafafa;
+        color: var(--ink);
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .view-tab.is-on {
+        border-color: var(--green);
+        background: #f0faf3;
+        color: var(--green-dark);
+      }
+      .text-view {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px 16px 20px;
+      }
+      .text-view h2 {
+        font-size: 13px;
+        font-weight: 700;
+        margin: 18px 0 6px;
+        color: var(--green-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .text-view h2:first-of-type { margin-top: 12px; }
+      .year-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+        gap: 16px;
+        align-items: start;
+        margin-top: 8px;
+      }
       .year {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: 1fr 1fr;
         gap: 12px;
-        margin-top: 8px;
+      }
+      .day-panel {
+        position: sticky;
+        top: 12px;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        min-width: 0;
+      }
+      .day-panel .kicker { margin-top: 0; }
+      .day-panel .stack-list { margin-top: 8px; }
+      @media (max-width: 820px) {
+        .year-layout {
+          grid-template-columns: minmax(0, 1.2fr) minmax(148px, 0.9fr);
+          gap: 10px;
+        }
+        .year { grid-template-columns: 1fr; }
+        .day-panel {
+          position: sticky;
+          top: 8px;
+          max-height: calc(100dvh - 16px);
+          overflow: auto;
+        }
+      }
+      @media (max-width: 430px) {
+        .year-layout { gap: 8px; }
       }
       .month {
         background: white;
@@ -200,6 +301,18 @@
         padding: 12px;
         background: white;
       }
+      @media (max-width: 820px) {
+        .month { padding: 8px; }
+        .day { min-height: 28px; font-size: 10px; }
+        .event-card { padding: 8px; }
+        .day-panel { padding: 10px; }
+      }
+      @media (max-width: 430px) {
+        .container { width: min(1080px, 96vw); }
+        .dow span { font-size: 9px; }
+        .day { min-height: 26px; padding: 1px 0 2px; }
+        .dot { width: 5px; height: 5px; }
+      }
       .event-date { font-size: 12px; font-weight: 700; color: var(--green-dark); margin: 0 0 4px; }
       .pick-card { padding: 10px 12px; }
       .pick-card.is-on { border-color: var(--green); background: #f0faf3; }
@@ -238,9 +351,10 @@
       }
       .print-jobs th { width: 72px; white-space: nowrap; }
       .print-note { font-size: 12px; color: #4b5563; line-height: 1.45; margin: 12px 0 8px; }
+      .print-only { display: none; }
       @media print {
-        .header, .no-print, .actions, .screen-only { display: none !important; }
-        .print-only { display: block !important; }
+        .header, .no-print, .actions, .screen-only, .view-tabs { display: none !important; }
+        .print-only, .text-view { display: block !important; }
         body { background: white; color: #111; }
         .container { width: 100%; max-width: none; }
         .prod-row { break-inside: avoid; }
@@ -709,8 +823,10 @@
 
       function printHowOften(text) {
         return (text || "")
+          .replace(" · once a month when nights are below 10°C", ", monthly in winter")
+          .replace(" · less often when nights are below 10°C", ", less often in winter")
           .replace(" · about half as often in winter (Jun–Aug)", ", half in winter")
-          .replace(" · pause in winter", ", pause in winter");
+          .replace(" · pause in winter", "");
       }
 
       function printDayLabel(iso) {
@@ -779,10 +895,10 @@
       function printNotesHtml(data) {
         const notes = data.notes || [];
         const lines = [];
-        if (notes.some((n) => /winter/i.test(n))) {
-          lines.push("Winter (Jun–Aug): year-round sprays about half as often; growing-season feeds pause.");
+        if (notes.some((n) => /winter|nights below 10/i.test(n))) {
+          lines.push("Winter means nights below 10°C. Keep applying, just less often — usually June to August in the south, shorter or missing in the north.");
         }
-        if (notes.some((n) => /mix these/i.test(n))) {
+        if (notes.some((n) => /mix these|on each feed day, mix/i.test(n))) {
           lines.push("Where it says Mix, put those concentrates in one sprayer. Do not add iron to that tank.");
         }
         if (notes.some((n) => /liquid iron/i.test(n))) {
@@ -790,18 +906,6 @@
         }
         if (!lines.length) return "";
         return `<p class="print-note">${lines.map(esc).join("<br/>")}</p>`;
-      }
-
-      function renderPrintSchedule(data) {
-        const where = data.lawn ? "Lawn" : "Garden";
-        return `
-          <div class="print-only print-schedule">
-            <h1>Plant Doctor application calendar</h1>
-            <p class="muted">${esc(where)} · ${esc(fmtDate(data.start_date))}</p>
-            ${printKeyHtml(data)}
-            ${printNotesHtml(data)}
-            ${printJobsHtml(data)}
-          </div>`;
       }
 
       const PRINT_PAGE_CSS = `
@@ -874,7 +978,6 @@
           : "";
         return mixTip + events.map((e) => `
           <article class="event-card">
-            <p class="event-date">${esc(fmtDate(e.date))}</p>
             <div class="prod-name">${esc(e.name)}</div>
             <div class="role-tag">${esc(roleLabel(e.role))} · ${esc(e.method || "")}</div>
             ${renderUsage(e.usage)}
@@ -904,21 +1007,22 @@
           const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
           months += renderMonth(d.getFullYear(), d.getMonth());
         }
-        const products = (data.products || []).map((p) => `
-          <div class="prod-row">
-            <div class="prod-head">
-              ${p.image_url ? `<img src="${esc(p.image_url)}" alt="" />` : ""}
-              <div>
-                <div class="role-tag">${esc(roleLabel(p.role_type))} · ${esc(p.applications || 0)} applications</div>
-                <div class="prod-name">${esc(p.name)}</div>
-              </div>
-            </div>
-            ${renderUsage(p.usage)}
-            <p class="muted">${esc(p.how_often || "")}${p.amount_label ? " · " + esc(p.amount_label) : p.rate_label ? " · " + esc(p.rate_label) : ""}</p>
-            ${p.product_url ? `<a class="link" href="${esc(p.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
-          </div>
-        `).join("");
-        const notes = (data.notes || []).map(esc).join("<br/>");
+        const products = (data.products || []).map((p) => {
+          const label = printName(p);
+          if (p.image_url) {
+            const img = `<img src="${esc(p.image_url)}" alt="${esc(label)}" />`;
+            return p.product_url
+              ? `<a class="prod-thumb" href="${esc(p.product_url)}" target="_blank" rel="noopener" title="${esc(label)}">${img}</a>`
+              : `<span class="prod-thumb" title="${esc(label)}">${img}</span>`;
+          }
+          return p.product_url
+            ? `<a class="prod-thumb no-photo" href="${esc(p.product_url)}" target="_blank" rel="noopener" title="${esc(label)}">${esc(label)}</a>`
+            : `<span class="prod-thumb no-photo" title="${esc(label)}">${esc(label)}</span>`;
+        }).join("");
+        const notes = (data.notes || []).filter(Boolean);
+        const notesHtml = notes.length
+          ? `<div class="plan-notes"><p class="kicker">Notes</p><ul>${notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></div>`
+          : "";
         const why = (data.choice_summary || []).map((l) => `<li>${esc(l)}</li>`).join("");
         document.getElementById("results").innerHTML = `
           <p class="tip">${esc(data.disclaimer || "")}</p>
@@ -927,13 +1031,13 @@
             <button type="button" class="secondary" id="printPlan">Print</button>
           </div>
           <p class="kicker">${data.path === "pick" ? "Products you selected" : "Products on this plan"}</p>
-          <div class="legend use-legend screen-only">
-            ${USAGE_META.map((u) => `<span>${usageMark(u.key)} ${esc(u.label)}</span>`).join("")}
+          <div class="prod-thumbs">${products}</div>
+          ${notesHtml}
+          <div class="view-tabs no-print" role="tablist" aria-label="Plan view">
+            <button type="button" class="view-tab is-on" role="tab" aria-selected="true" data-view="calendar">Calendar view</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" data-view="text">Text view</button>
           </div>
-          <div class="prod-grid">${products}</div>
-          ${notes ? `<div class="tip">${notes}</div>` : ""}
-          <div class="screen-only">
-            <p class="kicker" style="margin-top:18px;">Year view</p>
+          <div id="calendarView" class="screen-only">
             <div class="legend">
               <span><i class="dot soil_structure"></i> Soil</span>
               <span><i class="dot soil_chemistry"></i> pH</span>
@@ -942,22 +1046,50 @@
               <span><i class="dot nutrition"></i> Feed</span>
               <span><i class="dot visual"></i> Colour</span>
             </div>
-            <div class="year">${months}</div>
-            <p class="kicker" style="margin-top:18px;">Applications</p>
-            <div id="dayList" class="stack-list">${renderEventList(eventsOn(selectedDate))}</div>
-            ${why ? `<details class="fold"><summary>${data.path === "pick" ? "How this schedule works" : "Why we chose these"}</summary><ul class="why-list">${why}</ul></details>` : ""}
+            <div class="year-layout">
+              <div class="year">${months}</div>
+              <aside class="day-panel">
+                <p class="kicker">On this day</p>
+                <p id="dayHeading" class="event-date">${esc(fmtDate(selectedDate))}</p>
+                <p class="muted" style="margin:0 0 8px;">Tap a highlighted date to see what to apply.</p>
+                <div id="dayList" class="stack-list">${renderEventList(eventsOn(selectedDate))}</div>
+              </aside>
+            </div>
           </div>
-          ${renderPrintSchedule(data)}
+          <div id="textView" class="text-view hidden">
+            ${printKeyHtml(data)}
+            ${printNotesHtml(data)}
+            ${printJobsHtml(data)}
+          </div>
+          ${why ? `<details class="fold no-print"><summary>${data.path === "pick" ? "How this schedule works" : "Why we chose these"}</summary><ul class="why-list">${why}</ul></details>` : ""}
         `;
         document.getElementById("downloadIcs").addEventListener("click", downloadIcs);
         document.getElementById("printPlan").addEventListener("click", openPrintView);
+        document.querySelectorAll(".view-tab").forEach((tab) => {
+          tab.addEventListener("click", () => showPlanView(tab.getAttribute("data-view")));
+        });
         document.querySelectorAll(".day.has").forEach((el) => {
           el.addEventListener("click", () => {
             selectedDate = el.getAttribute("data-date");
             document.querySelectorAll(".day.selected").forEach((d) => d.classList.remove("selected"));
             el.classList.add("selected");
+            const heading = document.getElementById("dayHeading");
+            if (heading) heading.textContent = fmtDate(selectedDate);
             document.getElementById("dayList").innerHTML = renderEventList(eventsOn(selectedDate));
           });
+        });
+      }
+
+      function showPlanView(name) {
+        const calendar = document.getElementById("calendarView");
+        const text = document.getElementById("textView");
+        if (!calendar || !text) return;
+        calendar.classList.toggle("hidden", name !== "calendar");
+        text.classList.toggle("hidden", name !== "text");
+        document.querySelectorAll(".view-tab").forEach((tab) => {
+          const on = tab.getAttribute("data-view") === name;
+          tab.classList.toggle("is-on", on);
+          tab.setAttribute("aria-selected", on ? "true" : "false");
         });
       }
 

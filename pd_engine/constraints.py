@@ -194,7 +194,13 @@ def role_is_warranted(role: RoleType, user: UserInput) -> bool:
             or _on(user, user.problems, "poor_flowering")
         )
     if role == RoleType.VISUAL:
-        return _on(user, user.problems, "yellowing")
+        if _on(user, user.problems, "yellowing"):
+            return True
+        return (
+            user.recommendation_mode == "goals"
+            and is_lawnish(user)
+            and float(user.goal_weights.get("deep_green_colour", 0.0)) >= 0.35
+        )
     return True
 
 
