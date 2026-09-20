@@ -901,6 +901,9 @@
         if (notes.some((n) => /mix these|on each feed day, mix/i.test(n))) {
           lines.push("Where it says Mix, put those concentrates in one sprayer. Do not add iron to that tank.");
         }
+        if (notes.some((n) => /natives|sensitive plants/i.test(n))) {
+          lines.push("For natives and sensitive plants, use Seaweed Secrets and Activ8Mate at half strength.");
+        }
         if (notes.some((n) => /liquid iron/i.test(n))) {
           lines.push("Liquid iron is on a different day from seaweed, humic, wetter, and Activ8.");
         }

@@ -24,6 +24,7 @@ def test_lawn_calendar_has_events():
     assert plan["ics"].startswith("BEGIN:VCALENDAR")
     skus = {e["sku"] for e in plan["events"]}
     assert "SWS" in skus or any(p["role_type"] == "biology" for p in plan["products"])
+    assert "half strength" not in " ".join(plan["notes"]).lower()
 
 
 def test_iron_not_same_day_as_seaweed():
@@ -75,6 +76,11 @@ def test_garden_uses_garden_products():
     skus = {p["id"] for p in plan["products"]}
     assert "721" in skus
     assert "A8M" in skus or "A8X" in skus
+    blob = " ".join(plan["notes"]).lower()
+    assert "native" in blob
+    assert "half strength" in blob
+    assert "seaweed secrets" in blob
+    assert "activ8mate" in blob
 
 
 def test_garden_ffr_alternates_with_activ8():

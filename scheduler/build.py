@@ -534,6 +534,10 @@ def build_calendar(
     all_notes = [
         n for n in (extra_notes or []) if n and not _is_iron_spacing_note(n)
     ] + place_warnings(products, lawn=lawn)
+    if not lawn:
+        all_notes.append(
+            "For natives and other sensitive plants, use Seaweed Secrets and Activ8Mate at half strength."
+        )
     if any(p.id == "513" for p in products):
         all_notes.append(
             "Spread Humate granules on the top layer of soil, under mulch, or dug in. They do not need to be watered in."
