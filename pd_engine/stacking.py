@@ -25,6 +25,11 @@ ROLE_ORDER: list[RoleType] = [
 
 # If a Lawn Lovers core SKU is close to the role leader, prefer it.
 _CORE_PICK_RATIO = 0.85
+_FULVIC_LIQUID = "414"
+
+
+def _lockout_on(user: UserInput) -> bool:
+    return float(user.problems.get("nutrient_lockout", 0.0)) >= 0.35
 
 
 @dataclass(frozen=True)
@@ -80,6 +85,10 @@ def _pick_from_role(scored: list[ScoredProduct], role: RoleType, stack: list[Pro
     candidates = _first_eligible(scored, role, stack, user)
     if not candidates:
         return None
+    if _lockout_on(user) and role == RoleType.UPTAKE:
+        fulvic = next((sp for sp in candidates if sp.product.id == _FULVIC_LIQUID), None)
+        if fulvic is not None:
+            return fulvic.product
     core = next((sp for sp in candidates if _preferred_core(sp.product, user)), None)
     if core is not None:
         return core.product
@@ -99,6 +108,12 @@ def _finish_plan(stack: list[Product], notes: list[str]) -> StackPlan:
 
 
 def _pick_primary_from(scored: list[ScoredProduct], user: UserInput, *, skip_nutrition: bool = False) -> Product | None:
+    if _lockout_on(user):
+        for sp in scored:
+            if skip_nutrition and sp.product.role_type == RoleType.NUTRITION:
+                continue
+            if sp.product.id == _FULVIC_LIQUID and is_valid_primary(sp.product, user).ok:
+                return sp.product
     first: ScoredProduct | None = None
     core: ScoredProduct | None = None
     for sp in scored:

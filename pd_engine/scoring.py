@@ -208,12 +208,18 @@ def score_product(product: Product, user: UserInput, *, weights: Weights) -> Sco
     patchy = float(user.problems.get("patchy_lawn", 0.0))
     slow = float(user.problems.get("slow_growth", 0.0))
     weak = float(user.problems.get("weak_roots", 0.0))
+    lockout = float(user.problems.get("nutrient_lockout", 0.0))
     poor_flowering = float(user.problems.get("poor_flowering", 0.0))
     alkaline = float(user.soils.get("alkaline", 0.0))
     fungal = float(user.problems.get("fungal_issues", 0.0))
     if user.recommendation_mode == "problems":
         lawn_yellowing = yellowing >= 0.35 and lawn_context
         ironish = product.contains_iron or product.is_iron_based
+        if lockout >= 0.35:
+            if product.id == "414":
+                targeted_bonus += 2.0
+            elif product.id == "29814":
+                targeted_bonus += 0.55
         if ironish and lawn_yellowing:
             targeted_bonus += 1.15 if alkaline >= 0.35 else 0.90
         elif yellowing >= 0.5 and ironish:

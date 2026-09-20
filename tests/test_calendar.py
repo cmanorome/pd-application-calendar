@@ -389,6 +389,30 @@ def test_plan_notes_are_tidy():
     assert "Stimulizer" in mix
 
 
+def test_nutrient_lockout_leads_with_fulvic():
+    lawn = _calendar_payload(
+        {
+            "recommendation_mode": "problems",
+            "use_case": "lawn",
+            "nutrient_lockout": True,
+            "start_date": "2026-09-21",
+        }
+    )
+    lawn_ids = [p["id"] for p in lawn["products"]]
+    assert "414" in lawn_ids
+    assert lawn_ids[0] == "414"
+    garden = _calendar_payload(
+        {
+            "recommendation_mode": "problems",
+            "use_case": "garden_beds",
+            "nutrient_lockout": True,
+            "start_date": "2026-09-21",
+        }
+    )
+    garden_ids = [p["id"] for p in garden["products"]]
+    assert garden_ids[0] == "414"
+
+
 if __name__ == "__main__":
     test_lawn_calendar_has_events()
     test_iron_not_same_day_as_seaweed()
@@ -408,4 +432,5 @@ if __name__ == "__main__":
     test_lawn_deep_green_includes_iron()
     test_humate_granules_not_watered_in()
     test_plan_notes_are_tidy()
+    test_nutrient_lockout_leads_with_fulvic()
     print("ok")
