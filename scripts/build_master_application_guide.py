@@ -107,6 +107,18 @@ PROGRAM_NOTES = [
         "text": "For natives and other sensitive plants, use Seaweed Secrets and Activ8Mate at half strength.",
     },
     {
+        "note_id": "fungal_no_chemical_fungicides",
+        "applies_when": "Fungal issues selected",
+        "sku": "",
+        "text": "This plan does not include chemical fungicides. We support plant and soil health so lawns and gardens can resist disease, and we ease high-nitrogen feeds in summer.",
+    },
+    {
+        "note_id": "weed_suppression_no_chemicals",
+        "applies_when": "Weed suppression through dominance selected",
+        "sku": "",
+        "text": "This plan does not include chemical weed killers. We support thicker, healthier growth so lawns and gardens can crowd weeds out. Chemical products are on https://www.plantdoctor.com.au/weed-and-pest-control",
+    },
+    {
         "note_id": "humate_top_of_soil",
         "applies_when": "Humate granules (513) on the plan",
         "sku": "513",

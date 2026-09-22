@@ -280,6 +280,8 @@ def test_master_application_guide_joins_sources():
     notes = list(csv.DictReader((root / "data" / "pd_master_program_notes.csv").open(encoding="utf-8-sig")))
     ids = {r["note_id"] for r in notes}
     assert "garden_natives_half_strength" in ids
+    assert "fungal_no_chemical_fungicides" in ids
+    assert "weed_suppression_no_chemicals" in ids
     assert "winter_nights_below_10c" in ids
     assert (root / "data" / "pd_master_application_guide.xlsx").is_file()
 
@@ -399,6 +401,28 @@ def test_humate_granules_not_watered_in():
     assert "does not need to be watered in" in (event.get("notes") or "").lower()
 
 
+def test_fungal_issues_note_explains_no_fungicides():
+    plan = _calendar_payload(
+        _lawn_payload(recommendation_mode="problems", fungal_issues=True)
+    )
+    blob = " ".join(plan["notes"]).lower()
+    assert "chemical fungicides" in blob
+    assert "high-nitrogen" in blob
+    healthy = _calendar_payload(_lawn_payload())
+    assert "fungicide" not in " ".join(healthy["notes"]).lower()
+
+
+def test_weed_suppression_note_explains_no_chemicals():
+    plan = _calendar_payload(
+        _lawn_payload(goal_weights={"weed_suppression_through_dominance": 1.0})
+    )
+    blob = " ".join(plan["notes"]).lower()
+    assert "chemical weed killers" in blob
+    assert "plantdoctor.com.au/weed-and-pest-control" in blob
+    healthy = _calendar_payload(_lawn_payload())
+    assert "weed killer" not in " ".join(healthy["notes"]).lower()
+
+
 def test_plan_notes_are_tidy():
     plan = _calendar_payload(
         _lawn_payload(goal_weights={"deep_green_colour": 1.0, "thickening_and_density": 1.0})
@@ -460,6 +484,8 @@ if __name__ == "__main__":
     test_fert_granules_every_three_months()
     test_lawn_deep_green_includes_iron()
     test_humate_granules_not_watered_in()
+    test_fungal_issues_note_explains_no_fungicides()
+    test_weed_suppression_note_explains_no_chemicals()
     test_plan_notes_are_tidy()
     test_nutrient_lockout_leads_with_fulvic()
     print("ok")

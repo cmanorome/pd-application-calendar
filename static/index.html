@@ -66,21 +66,53 @@
         flex-wrap: wrap;
         min-width: 0;
       }
+      .plan-lead {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin: 0 0 12px;
+      }
       .plan-notes {
-        margin: 0 0 10px;
-        padding: 0 2px;
+        flex: 1 1 260px;
+        width: auto;
+        max-width: min(640px, 100%);
+        margin: 0;
+        padding: 12px 16px;
+        background: #f0faf3;
+        border: 1px solid #d8eee0;
+        border-radius: 12px;
       }
       .plan-notes ul {
         margin: 0;
-        padding-left: 18px;
+        padding: 0;
+        list-style: none;
       }
       .plan-notes li {
+        position: relative;
+        padding: 0 0 0 16px;
         font-size: 13px;
-        line-height: 1.45;
-        color: #374151;
-        margin: 0 0 6px;
+        line-height: 1.5;
+        color: #14532d;
+        margin: 0 0 8px;
       }
       .plan-notes li:last-child { margin-bottom: 0; }
+      .plan-notes li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.55em;
+        width: 6px;
+        height: 6px;
+        border-radius: 99px;
+        background: var(--green);
+      }
+      .plan-notes a {
+        color: var(--green-dark);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
       .card {
         border: 1px solid var(--line);
         border-radius: 12px;
@@ -209,7 +241,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin: 0 0 12px;
+        margin: 0;
       }
       .prod-tile {
         display: flex;
@@ -458,6 +490,11 @@
       }
       .print-jobs th { width: 72px; white-space: nowrap; }
       .print-note { font-size: 12px; color: #4b5563; line-height: 1.45; margin: 12px 0 8px; }
+      .print-note a {
+        color: var(--green-dark);
+        font-weight: 600;
+        text-decoration: underline;
+      }
       .print-only { display: none; }
       @media print {
         .header, .no-print, .actions, .screen-only, .view-tabs { display: none !important; }
@@ -851,6 +888,12 @@
       function esc(s) {
         return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
       }
+      function noteHtml(s) {
+        return esc(s).replace(/https?:\/\/[^\s<]+/g, (url) => {
+          const label = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+          return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
+        });
+      }
       function roleLabel(role) {
         return ({
           biology: "Soil life",
@@ -1041,11 +1084,17 @@
         if (notes.some((n) => /natives|sensitive plants/i.test(n))) {
           lines.push("For natives and sensitive plants, use Seaweed Secrets and Activ8Mate at half strength.");
         }
+        if (notes.some((n) => /fungicide/i.test(n))) {
+          lines.push("This plan does not include chemical fungicides. We support plant and soil health, and ease high-nitrogen feeds in summer.");
+        }
+        if (notes.some((n) => /weed killer|weed-and-pest/i.test(n))) {
+          lines.push("This plan does not include chemical weed killers. Chemical products are on https://www.plantdoctor.com.au/weed-and-pest-control");
+        }
         if (notes.some((n) => /liquid iron/i.test(n))) {
           lines.push("Liquid iron is on a different day from seaweed, humic, wetter, and Activ8.");
         }
         if (!lines.length) return "";
-        return `<p class="print-note">${lines.map(esc).join("<br/>")}</p>`;
+        return `<p class="print-note">${lines.map(noteHtml).join("<br/>")}</p>`;
       }
 
       const PRINT_PAGE_CSS = `
@@ -1066,6 +1115,7 @@
         .print-jobs td { color: #111; }
         .print-month { break-inside: avoid; }
         .print-note { font-size: 12px; color: #4b5563; line-height: 1.45; margin: 12px 0 8px; }
+        .print-note a { color: #14532d; font-weight: 600; }
         @media print { .toolbar { display: none !important; } }
       `;
 
@@ -1166,14 +1216,17 @@
         }).join("");
         const notes = (data.notes || []).filter(Boolean);
         const notesToggle = notes.length
-          ? `<button type="button" class="view-tab" id="notesToggle" aria-expanded="false" aria-controls="planNotes">Notes</button>`
+          ? `<button type="button" class="view-tab is-on" id="notesToggle" aria-expanded="true" aria-controls="planNotes">Notes</button>`
           : "";
         const notesHtml = notes.length
-          ? `<div id="planNotes" class="plan-notes hidden no-print"><ul>${notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></div>`
+          ? `<div id="planNotes" class="plan-notes no-print"><ul>${notes.map((n) => `<li>${noteHtml(n)}</li>`).join("")}</ul></div>`
           : "";
         const why = (data.choice_summary || []).map((l) => `<li>${esc(l)}</li>`).join("");
         document.getElementById("results").innerHTML = `
-          <div class="prod-thumbs">${products}</div>
+          <div class="plan-lead">
+            <div class="prod-thumbs">${products}</div>
+            ${notesHtml}
+          </div>
           <div class="plan-toolbar no-print">
             <div class="plan-toolbar-start">
               <div class="view-tabs" role="tablist" aria-label="Plan view">
@@ -1195,7 +1248,6 @@
               <span><i class="dot visual"></i> Colour</span>
             </div>
           </div>
-          ${notesHtml}
           <div id="calendarView" class="screen-only">
             <div class="year-layout">
               <div class="year">${months}</div>
@@ -1251,13 +1303,6 @@
           tab.classList.toggle("is-on", on);
           tab.setAttribute("aria-selected", on ? "true" : "false");
         });
-        const notesBox = document.getElementById("planNotes");
-        const notesBtn = document.getElementById("notesToggle");
-        if (name === "text" && notesBox && notesBtn) {
-          notesBox.classList.add("hidden");
-          notesBtn.classList.remove("is-on");
-          notesBtn.setAttribute("aria-expanded", "false");
-        }
       }
 
       document.getElementById("run").addEventListener("click", async () => {

@@ -40,6 +40,12 @@ DISCLAIMER = (
     "Typical temperate / southern Australia program for warm-season lawns and home gardens. "
     "Adjust to growth, weather, and the label. This is not a prescription."
 )
+WEED_CONTROL_URL = "https://www.plantdoctor.com.au/weed-and-pest-control"
+WEED_SUPPRESSION_NOTE = (
+    "This plan does not include chemical weed killers. We support thicker, healthier growth "
+    "so lawns and gardens can crowd weeds out. Chemical products are on "
+    f"{WEED_CONTROL_URL}"
+)
 
 
 def _product_dict(p: Product) -> dict[str, Any]:
@@ -423,6 +429,7 @@ def build_calendar(
     area_m2: float | None,
     lawn: bool,
     fungal: bool,
+    weed_suppression: bool = False,
     extra_notes: list[str] | None = None,
     choice_summary: list[str] | None = None,
 ) -> dict[str, Any]:
@@ -538,6 +545,12 @@ def build_calendar(
         all_notes.append(
             "For natives and other sensitive plants, use Seaweed Secrets and Activ8Mate at half strength."
         )
+    if fungal:
+        all_notes.append(
+            "This plan does not include chemical fungicides. We support plant and soil health so lawns and gardens can resist disease, and we ease high-nitrogen feeds in summer."
+        )
+    if weed_suppression:
+        all_notes.append(WEED_SUPPRESSION_NOTE)
     if any(p.id == "513" for p in products):
         all_notes.append(
             "Spread Humate granules on the top layer of soil, under mulch, or dug in. They do not need to be watered in."

@@ -45,6 +45,15 @@ def _truthy(v: Any) -> bool:
     return str(v or "").strip().lower() in {"1", "true", "yes", "y", "on", "checked"}
 
 
+def _goal_selected(form: dict[str, Any], key: str) -> bool:
+    if _truthy(form.get(key)):
+        return True
+    gw = form.get("goal_weights")
+    if isinstance(gw, dict):
+        return _f01(gw.get(key)) >= 0.35
+    return False
+
+
 def _f01(v: Any, default: float = 0.0) -> float:
     try:
         return max(0.0, min(1.0, float(v)))
@@ -249,6 +258,7 @@ def _plan_from_products(
     area_m2: float | None,
     lawn: bool,
     fungal: bool,
+    weed_suppression: bool = False,
     extra_notes: list[str] | None = None,
     choice_summary: list[str] | None = None,
     engine_input: dict[str, Any] | None = None,
@@ -264,6 +274,7 @@ def _plan_from_products(
         area_m2=area_m2,
         lawn=lawn,
         fungal=fungal,
+        weed_suppression=weed_suppression,
         extra_notes=extra_notes,
         choice_summary=choice_summary,
     )
@@ -286,6 +297,7 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
 
     lawn = _use_case(form) == "lawn"
     fungal = _truthy(form.get("fungal_issues"))
+    weed_suppression = _goal_selected(form, "weed_suppression_through_dominance")
 
     if path == "pick":
         by_id = {p.id.upper(): p for p in _catalog.products}
@@ -321,6 +333,7 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
             area_m2=area_m2,
             lawn=lawn,
             fungal=fungal,
+            weed_suppression=weed_suppression,
             extra_notes=notes,
             choice_summary=["This calendar is built from the products you selected."],
             path="pick",
@@ -351,6 +364,7 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
         or float(problems.get("poor_flowering") or 0) >= 0.35
     )
     deep_green = float(gw.get("deep_green_colour") or 0) >= 0.35
+    weed_suppression = float(gw.get("weed_suppression_through_dominance") or 0) >= 0.35
     products, extra_notes = program_products_from_catalog(
         rec,
         _catalog.products,
@@ -366,6 +380,7 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
         area_m2=area_m2,
         lawn=engine_input.get("use_case") == "lawn",
         fungal=fungal,
+        weed_suppression=weed_suppression,
         extra_notes=extra_notes + rec_notes,
         choice_summary=list((rec.explanations or {}).get("choice_summary") or []),
         engine_input=engine_input,
