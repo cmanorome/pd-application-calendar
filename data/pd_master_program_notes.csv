@@ -1,0 +1,13 @@
+﻿note_id,applies_when,sku,text
+winter_nights_below_10c,Garden or lawn plans with year-round sprays (cadence 42 days or less),,"Keep applying through winter, just less often. Winter means nights below 10°C — usually June to August in southern Australia, and shorter or sometimes missing in the north."
+garden_natives_half_strength,Garden selected,"SWS, A8M","For natives and other sensitive plants, use Seaweed Secrets and Activ8Mate at half strength."
+humate_top_of_soil,Humate granules (513) on the plan,513,"Spread Humate granules on the top layer of soil, under mulch, or dug in. They do not need to be watered in."
+ffr_alternate_activ8,"Flowers, Fruits & Roots liquid plus Activ8Mate or Activ8EXTRA","721, A8M, A8X","Alternate between Flowers, Fruits & Roots and Activ8 each feed. FFR is for flowering/fruiting; Activ8 is the regular feed. Do not mix those two in the same sprayer."
+mixable_same_day,Two or more mix_together concentrates,,Mix mixable concentrates in one sprayer on the same day. Do not add iron to that tank. Jar test if it is a new combination.
+iron_separate_day,"Liquid iron plus seaweed, humic, wetter, or Activ8","LIR, LEN, MG, 547, 846","Liquid iron is on a different day from seaweed, humic, wetter, and Activ8. Do not mix them in the same sprayer."
+lime_wait_before_iron,Lime or dolomite and an iron product,"LIMEGr, DOL",Wait 42 days after lime or dolomite before applying iron.
+iron_gap_days,Iron with seaweed / humic / wetter / Activ8,,"Keep liquid iron at least 3 days away from seaweed, humic, wetter, and Activ8."
+volcamin_no_badges,VolcaMin (557),557,"VolcaMin has no mix, apply-independently, or water-in badges. Incorporate into soil, potting mix, or the root zone."
+stimulizer_iron_exception,Tank-mixing,STM,Stimulizer is the only product the usage guide says can be tank-mixed with iron.
+default_home_rate,No product-specific rate,,"Unless otherwise specified, apply 10 mL per 10 m² (100 mL per 100 m²) of lawn or garden."
+source,Always,,"Joined from Product Usage Guide (Aug 2025), PD application rates sheet, schedule_intervals.csv, and the product catalog. Follow the label."

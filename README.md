@@ -35,7 +35,8 @@ Returns products, dated events, and an `ics` string.
 - `data/plant_doctor_recommendation_engine_template.csv` — catalog (from PD-Product-Guide)
 - `data/PD-application-rates-sheet.csv` — rates (from PD-Rates-Calculator)
 - `data/schedule_intervals.csv` — cadence, season window, tank-mix group
-- `data/product_usage_guide.csv` — Product Usage Guide extract (join on `sku`; 0/1 mix and method flags). Excel copy: `Product Usage Guide.xlsx`
+- `data/product_usage_guide.csv` — Product Usage Guide extract (join on `sku`; 0/1 mix and method flags). Excel copy: `product_usage_guide.xlsx`
+- `data/pd_master_application_guide.xlsx` — master join of rates, calendar intervals, badges, and notes (CSV: `pd_master_products.csv`, `pd_master_program_notes.csv`). Rebuild with `python scripts/build_master_application_guide.py`
 
 Typical program only. Follow the product label and adjust to growth.
 

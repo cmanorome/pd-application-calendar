@@ -262,6 +262,28 @@ def test_usage_guide_export_joins_on_sku():
     assert any(r["sku"] == "STM" and "3 mL" in r["amount_text"] for r in rate_rows)
 
 
+def test_master_application_guide_joins_sources():
+    import csv
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    products = list(csv.DictReader((root / "data" / "pd_master_products.csv").open(encoding="utf-8-sig")))
+    by_sku = {r["sku"].upper(): r for r in products}
+    assert by_sku["513"]["water_in"] == "0"
+    assert "top layer of soil" in by_sku["513"]["combined_notes"].lower()
+    assert by_sku["557"]["mix_together"] == "0"
+    assert by_sku["557"]["water_in"] == "0"
+    assert by_sku["SWS"]["garden_natives_half_strength"] == "1"
+    assert by_sku["A8M"]["garden_natives_half_strength"] == "1"
+    assert by_sku["A8X"]["garden_natives_half_strength"] == "0"
+    assert by_sku["STM"]["calculator_rate_100m2"]
+    notes = list(csv.DictReader((root / "data" / "pd_master_program_notes.csv").open(encoding="utf-8-sig")))
+    ids = {r["note_id"] for r in notes}
+    assert "garden_natives_half_strength" in ids
+    assert "winter_nights_below_10c" in ids
+    assert (root / "data" / "pd_master_application_guide.xlsx").is_file()
+
+
 def test_year_round_fills_twelfth_month():
     plan = _calendar_payload(
         {
@@ -432,6 +454,7 @@ if __name__ == "__main__":
     test_usage_guide_dots()
     test_mixable_concentrates_share_spray_days()
     test_usage_guide_export_joins_on_sku()
+    test_master_application_guide_joins_sources()
     test_year_round_fills_twelfth_month()
     test_winter_eases_year_round_cadence()
     test_fert_granules_every_three_months()
