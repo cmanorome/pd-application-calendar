@@ -1,6 +1,6 @@
 # Plant Doctor Application Calendar
 
-Generate a 12-month lawn or garden application schedule. Temperate / southern Australia default.
+Generate a 12-month lawn or garden application schedule. Optional South, North, or East coast — southern Australia is the default.
 
 This app reuses the Product Guide recommendation engine for *what* to apply, the rates sheet for *how much*, and a new interval table for *when*.
 

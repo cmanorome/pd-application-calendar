@@ -5,7 +5,7 @@ from typing import Any
 
 from pd_engine.types import Product, RoleType
 
-from .climate import CLIMATE_LABEL, in_growing_season, in_summer, in_winter, season_for
+from .climate import Region, in_growing_season, in_summer, in_winter, parse_region, season_for
 from .intervals import Interval, IntervalTable, usage_labels
 from .rates import RateBook
 
@@ -37,7 +37,7 @@ def _calendar_end(start: date) -> date:
 
 
 DISCLAIMER = (
-    "Typical temperate / southern Australia program for warm-season lawns and home gardens. "
+    "Typical program for warm-season lawns and home gardens in Australia. "
     "Adjust to growth, weather, and the label. This is not a prescription."
 )
 WEED_CONTROL_URL = "https://www.plantdoctor.com.au/weed-and-pest-control"
@@ -149,19 +149,27 @@ def _first_ok(
     product: Product,
     *,
     fungal: bool,
+    region: Region,
     until: date | None = None,
 ) -> date | None:
     day = start
     stop = until or (start + timedelta(days=366))
     while day < stop:
-        if _date_allowed(day, interval, product, fungal=fungal):
+        if _date_allowed(day, interval, product, fungal=fungal, region=region):
             return day
         day += timedelta(days=1)
     return None
 
 
-def _date_allowed(day: date, interval: Interval, product: Product, *, fungal: bool) -> bool:
-    if interval.window == "growing_season" and not in_growing_season(day):
+def _date_allowed(
+    day: date,
+    interval: Interval,
+    product: Product,
+    *,
+    fungal: bool,
+    region: Region,
+) -> bool:
+    if interval.window == "growing_season" and not in_growing_season(day, region):
         return False
     if product.is_high_nitrogen and fungal and in_summer(day):
         return False
@@ -207,6 +215,7 @@ def _alternate_ffr_activ8(
     *,
     start: date,
     fungal: bool,
+    region: Region,
     pair: tuple[str, str],
 ) -> list[dict[str, Any]]:
     ffr_sku, a8_sku = pair
@@ -215,12 +224,16 @@ def _alternate_ffr_activ8(
     a8_p = by_id.get(a8_sku)
     if ffr_p is None or a8_p is None:
         return events
-    slots = _place_dates(start, interval_for[a8_sku], a8_p, fungal=fungal, offset=0)
+    slots = _place_dates(
+        start, interval_for[a8_sku], a8_p, fungal=fungal, region=region, offset=0
+    )
     ffr_dates: list[date] = []
     a8_dates: list[date] = []
     want_ffr = True
     for slot in slots:
-        if want_ffr and _date_allowed(slot, interval_for[ffr_sku], ffr_p, fungal=fungal):
+        if want_ffr and _date_allowed(
+            slot, interval_for[ffr_sku], ffr_p, fungal=fungal, region=region
+        ):
             ffr_dates.append(slot)
             want_ffr = False
         else:
@@ -253,7 +266,7 @@ def _product_blocks_iron(product: Product, interval: Interval) -> bool:
     )
 
 
-def _step_after(last: date, interval: Interval) -> int:
+def _step_after(last: date, interval: Interval, region: Region) -> int:
     """Normal cadence, doubled in winter for frequent year-round sprays."""
     base = interval.cadence_days
     if base <= 0:
@@ -261,13 +274,15 @@ def _step_after(last: date, interval: Interval) -> int:
     if interval.window != "year_round" or interval.one_off or base > 42:
         return base
     nxt = last + timedelta(days=base)
-    if in_winter(nxt):
+    if in_winter(nxt, region):
         return base * 2
     return base
 
 
-def _how_often_label(interval: Interval) -> str:
+def _how_often_label(interval: Interval, region: Region) -> str:
     text = interval.how_often
+    if not region.winter_months:
+        return text
     if interval.window == "year_round" and not interval.one_off and 0 < interval.cadence_days <= 42:
         if interval.cadence_days <= 16:
             return text.rstrip(".") + " · once a month when nights are below 10°C"
@@ -301,6 +316,7 @@ def _place_dates(
     product: Product,
     *,
     fungal: bool,
+    region: Region,
     offset: int,
 ) -> list[date]:
     end = _calendar_end(start)
@@ -309,6 +325,7 @@ def _place_dates(
         interval,
         product,
         fungal=fungal,
+        region=region,
         until=end,
     )
     if first is None:
@@ -319,15 +336,15 @@ def _place_dates(
     out = [first]
     last = first
     while len(out) < _PLACE_CAP:
-        day = last + timedelta(days=_step_after(last, interval))
+        day = last + timedelta(days=_step_after(last, interval, region))
         if day >= end:
             break
-        if _date_allowed(day, interval, product, fungal=fungal):
+        if _date_allowed(day, interval, product, fungal=fungal, region=region):
             out.append(day)
             last = day
             continue
         # Skip closed windows (winter / fungal summer) and resume when allowed.
-        resumed = _first_ok(day, interval, product, fungal=fungal, until=end)
+        resumed = _first_ok(day, interval, product, fungal=fungal, region=region, until=end)
         if resumed is None or resumed >= end:
             break
         last = resumed
@@ -430,9 +447,11 @@ def build_calendar(
     lawn: bool,
     fungal: bool,
     weed_suppression: bool = False,
+    region: str | Region | None = None,
     extra_notes: list[str] | None = None,
     choice_summary: list[str] | None = None,
 ) -> dict[str, Any]:
+    loc = region if isinstance(region, Region) else parse_region(region)
     ids = [p.id for p in products]
     others_for = {p.id: [x for x in products if x.id != p.id] for p in products}
     interval_for = {p.id: intervals.for_product(p.id, p.role_type.value) for p in products}
@@ -450,12 +469,14 @@ def build_calendar(
             others_for[product.id],
             others_block_iron=others_block_iron,
         )
-        dates = _place_dates(start, interval, product, fungal=fungal, offset=offset)
+        dates = _place_dates(
+            start, interval, product, fungal=fungal, region=loc, offset=offset
+        )
         rate = rates.for_sku(product.id, lawn=lawn, area_m2=area_m2)
         rate_label = (rate.per_100m2 if rate else "") or ""
         amount_label = (rate.for_area if rate else None)
         url = product.product_url or (rate.product_url if rate else None)
-        how_often = _how_often_label(interval)
+        how_often = _how_often_label(interval, loc)
         card = _product_dict(product)
         card.update(
             {
@@ -512,13 +533,13 @@ def build_calendar(
             interval_for,
             start=start,
             fungal=fungal,
+            region=loc,
             pair=pair,
         )
         ffr_how = "Every 4 weeks during flowering/fruiting, alternating with Activ8"
-        a8_how = (
-            "Every 4 weeks, alternating with Flowers, Fruits & Roots"
-            " · once a month when nights are below 10°C"
-        )
+        a8_how = "Every 4 weeks, alternating with Flowers, Fruits & Roots"
+        if loc.winter_months:
+            a8_how += " · once a month when nights are below 10°C"
         for card in product_cards:
             if card["id"] == pair[0]:
                 card["how_often"] = ffr_how
@@ -561,9 +582,7 @@ def build_calendar(
         and interval_for[p.id].cadence_days <= 42
         for p in products
     ):
-        all_notes.append(
-            "Keep applying through winter, just less often. Winter means nights below 10°C — usually June to August in southern Australia, and shorter or sometimes missing in the north."
-        )
+        all_notes.append(loc.winter_note)
     if pair:
         a8_label = "Activ8EXTRA" if pair[1] == "A8X" else "Activ8Mate"
         all_notes.append(
@@ -596,8 +615,9 @@ def build_calendar(
         )
 
     return {
-        "climate": "temperate",
-        "climate_label": CLIMATE_LABEL,
+        "region": loc.id,
+        "climate": loc.id,
+        "climate_label": loc.label,
         "disclaimer": DISCLAIMER,
         "start_date": start.isoformat(),
         "season": season_for(start),

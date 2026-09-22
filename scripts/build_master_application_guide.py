@@ -101,6 +101,18 @@ PROGRAM_NOTES = [
         "text": "Keep applying through winter, just less often. Winter means nights below 10°C — usually June to August in southern Australia, and shorter or sometimes missing in the north.",
     },
     {
+        "note_id": "winter_east_coast_june_july",
+        "applies_when": "East coast selected, year-round sprays (cadence 42 days or less)",
+        "sku": "",
+        "text": "Keep applying through winter, just less often. On the east coast winter is shorter — usually June and July, when nights dip below 10°C.",
+    },
+    {
+        "note_id": "winter_north_usual_cadence",
+        "applies_when": "North selected, year-round sprays (cadence 42 days or less)",
+        "sku": "",
+        "text": "Nights rarely drop below 10°C in the north, so this plan keeps the usual cadence year-round.",
+    },
+    {
         "note_id": "garden_natives_half_strength",
         "applies_when": "Garden selected",
         "sku": "SWS, A8M",
@@ -581,7 +593,7 @@ def write_xlsx(
         ("independent", "1", "Apply independently — do not tank-mix as a concentrate."),
         ("water_in", "1", "Water in after application."),
         ("garden_natives_half_strength", "1", "On garden plans, use this product at half strength on natives and sensitive plants."),
-        ("calendar_window", "growing_season | year_round", "growing_season skips typical temperate winter; year_round eases to about half cadence in June–August."),
+        ("calendar_window", "growing_season | year_round", "growing_season skips the region's winter; year_round eases to about half cadence in winter months (south Jun–Aug, east coast Jun–Jul, north no winter slowdown)."),
         ("tank_group", "mixable | no_iron_mix | iron | granular", "How the calendar groups same-day applications."),
         ("combined_notes", "text", "Calendar notes + usage-guide application notes + calculator notes, de-duplicated."),
     ]:

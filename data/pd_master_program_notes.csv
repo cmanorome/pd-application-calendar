@@ -1,5 +1,7 @@
 ﻿note_id,applies_when,sku,text
 winter_nights_below_10c,Garden or lawn plans with year-round sprays (cadence 42 days or less),,"Keep applying through winter, just less often. Winter means nights below 10°C — usually June to August in southern Australia, and shorter or sometimes missing in the north."
+winter_east_coast_june_july,"East coast selected, year-round sprays (cadence 42 days or less)",,"Keep applying through winter, just less often. On the east coast winter is shorter — usually June and July, when nights dip below 10°C."
+winter_north_usual_cadence,"North selected, year-round sprays (cadence 42 days or less)",,"Nights rarely drop below 10°C in the north, so this plan keeps the usual cadence year-round."
 garden_natives_half_strength,Garden selected,"SWS, A8M","For natives and other sensitive plants, use Seaweed Secrets and Activ8Mate at half strength."
 fungal_no_chemical_fungicides,Fungal issues selected,,"This plan does not include chemical fungicides. We support plant and soil health so lawns and gardens can resist disease, and we ease high-nitrogen feeds in summer."
 weed_suppression_no_chemicals,Weed suppression through dominance selected,,"This plan does not include chemical weed killers. We support thicker, healthier growth so lawns and gardens can crowd weeds out. Chemical products are on https://www.plantdoctor.com.au/weed-and-pest-control"

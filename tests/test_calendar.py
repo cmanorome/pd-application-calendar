@@ -283,6 +283,8 @@ def test_master_application_guide_joins_sources():
     assert "fungal_no_chemical_fungicides" in ids
     assert "weed_suppression_no_chemicals" in ids
     assert "winter_nights_below_10c" in ids
+    assert "winter_east_coast_june_july" in ids
+    assert "winter_north_usual_cadence" in ids
     assert (root / "data" / "pd_master_application_guide.xlsx").is_file()
 
 
@@ -337,6 +339,85 @@ def test_winter_eases_year_round_cadence():
     winter_note = " ".join(plan["notes"])
     assert "10°C" in winter_note or "10°c" in winter_note.lower()
     assert "pause until spring" not in winter_note.lower()
+
+
+def test_blank_region_uses_southern_winter():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-01",
+            "skus": ["SWS"],
+        }
+    )
+    assert plan["region"] == "south"
+    assert "Southern" in plan["climate_label"]
+
+
+def test_north_keeps_usual_year_round_cadence():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-01",
+            "region": "north",
+            "skus": ["SWS", "A8X"],
+        }
+    )
+    assert plan["region"] == "north"
+    cool = sorted(
+        date.fromisoformat(e["date"])
+        for e in plan["events"]
+        if e["sku"] == "SWS" and e["date"][5:7] in {"06", "07", "08"}
+    )
+    assert len(cool) >= 5
+    for a, b in zip(cool, cool[1:]):
+        assert (b - a).days <= 16, f"north winter should stay fortnightly: {a} -> {b}"
+    card = next(p for p in plan["products"] if p["id"] == "SWS")
+    assert "once a month when nights" not in card["how_often"]
+    notes = " ".join(plan["notes"]).lower()
+    assert "usual cadence" in notes
+    assert "june to august" not in notes
+
+
+def test_east_coast_winter_is_shorter_than_south():
+    body = {
+        "path": "pick",
+        "use_case": "lawn",
+        "start_date": "2026-09-01",
+        "skus": ["SWS"],
+    }
+    south = _calendar_payload(body)
+    east = _calendar_payload({**body, "region": "east_coast"})
+    assert east["region"] == "east_coast"
+    jun_jul = sorted(
+        date.fromisoformat(e["date"])
+        for e in east["events"]
+        if e["sku"] == "SWS" and e["date"][5:7] in {"06", "07"}
+    )
+    assert jun_jul
+    for a, b in zip(jun_jul, jun_jul[1:]):
+        assert (b - a).days >= 21, f"east-coast Jun–Jul should ease: {a} -> {b}"
+    south_aug = [e for e in south["events"] if e["sku"] == "SWS" and e["date"].startswith("2027-08")]
+    east_aug = [e for e in east["events"] if e["sku"] == "SWS" and e["date"].startswith("2027-08")]
+    assert len(east_aug) > len(south_aug)
+    notes = " ".join(east["notes"]).lower()
+    assert "june and july" in notes
+
+
+def test_north_growing_season_products_run_in_june():
+    body = {
+        "path": "pick",
+        "use_case": "lawn",
+        "start_date": "2026-09-01",
+        "skus": ["LIR"],
+    }
+    south = _calendar_payload(body)
+    north = _calendar_payload({**body, "region": "north"})
+    south_june = [e for e in south["events"] if e["sku"] == "LIR" and e["date"][5:7] == "06"]
+    north_june = [e for e in north["events"] if e["sku"] == "LIR" and e["date"][5:7] == "06"]
+    assert not south_june
+    assert north_june
 
 
 def test_fert_granules_every_three_months():
@@ -481,6 +562,10 @@ if __name__ == "__main__":
     test_master_application_guide_joins_sources()
     test_year_round_fills_twelfth_month()
     test_winter_eases_year_round_cadence()
+    test_blank_region_uses_southern_winter()
+    test_north_keeps_usual_year_round_cadence()
+    test_east_coast_winter_is_shorter_than_south()
+    test_north_growing_season_products_run_in_june()
     test_fert_granules_every_three_months()
     test_lawn_deep_green_includes_iron()
     test_humate_granules_not_watered_in()

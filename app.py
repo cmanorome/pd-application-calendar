@@ -14,6 +14,7 @@ from pd_engine.soil_test import lime_is_appropriate
 from pd_engine.types import RoleType
 from scheduler import build_calendar, to_ics
 from scheduler.build import program_products_from_catalog
+from scheduler.climate import parse_region
 from scheduler.intervals import IntervalTable
 from scheduler.rates import RateBook
 
@@ -259,6 +260,7 @@ def _plan_from_products(
     lawn: bool,
     fungal: bool,
     weed_suppression: bool = False,
+    region: str | None = None,
     extra_notes: list[str] | None = None,
     choice_summary: list[str] | None = None,
     engine_input: dict[str, Any] | None = None,
@@ -275,6 +277,7 @@ def _plan_from_products(
         lawn=lawn,
         fungal=fungal,
         weed_suppression=weed_suppression,
+        region=region,
         extra_notes=extra_notes,
         choice_summary=choice_summary,
     )
@@ -298,6 +301,7 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
     lawn = _use_case(form) == "lawn"
     fungal = _truthy(form.get("fungal_issues"))
     weed_suppression = _goal_selected(form, "weed_suppression_through_dominance")
+    region = parse_region(form.get("region") or form.get("climate")).id
 
     if path == "pick":
         by_id = {p.id.upper(): p for p in _catalog.products}
@@ -334,6 +338,7 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
             lawn=lawn,
             fungal=fungal,
             weed_suppression=weed_suppression,
+            region=region,
             extra_notes=notes,
             choice_summary=["This calendar is built from the products you selected."],
             path="pick",
@@ -381,6 +386,7 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
         lawn=engine_input.get("use_case") == "lawn",
         fungal=fungal,
         weed_suppression=weed_suppression,
+        region=region,
         extra_notes=extra_notes + rec_notes,
         choice_summary=list((rec.explanations or {}).get("choice_summary") or []),
         engine_input=engine_input,

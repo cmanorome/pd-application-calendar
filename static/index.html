@@ -551,6 +551,15 @@
                 </select>
               </div>
               <div>
+                <label for="region">Where in Australia? (optional)</label>
+                <select id="region">
+                  <option value="" selected>Not sure</option>
+                  <option value="south">South</option>
+                  <option value="north">North</option>
+                  <option value="east_coast">East coast</option>
+                </select>
+              </div>
+              <div>
                 <label for="start_date">Start date</label>
                 <input id="start_date" type="date" />
               </div>
@@ -696,7 +705,7 @@
     </main>
 
     <footer class="footer container">
-      <p class="muted">Plant Doctor application calendar · temperate / southern Australia</p>
+      <p class="muted">Plant Doctor application calendar · Australia</p>
     </footer>
 
     <script>
@@ -854,6 +863,7 @@
           start_date: document.getElementById("start_date").value,
           area_m2: document.getElementById("area_m2").value,
           use_case: document.getElementById("use_case").value,
+          region: document.getElementById("region").value,
         };
         if (path === "pick") {
           p.skus = selectedSkus();
@@ -1075,8 +1085,15 @@
       function printNotesHtml(data) {
         const notes = data.notes || [];
         const lines = [];
-        if (notes.some((n) => /winter|nights below 10/i.test(n))) {
-          lines.push("Winter means nights below 10°C. Keep applying, just less often — usually June to August in the south, shorter or missing in the north.");
+        if (notes.some((n) => /winter|nights below 10|usual cadence year-round/i.test(n))) {
+          const region = data.region || "south";
+          if (region === "north") {
+            lines.push("Nights rarely drop below 10°C in the north, so keep the usual cadence year-round.");
+          } else if (region === "east_coast") {
+            lines.push("On the east coast winter is shorter — usually June and July when nights dip below 10°C. Keep applying, just less often.");
+          } else {
+            lines.push("Winter means nights below 10°C. Keep applying, just less often — usually June to August in the south, shorter or missing in the north.");
+          }
         }
         if (notes.some((n) => /mix these|on each feed day, mix/i.test(n))) {
           lines.push("Where it says Mix, put those concentrates in one sprayer. Do not add iron to that tank.");
@@ -1136,7 +1153,7 @@
       <button type="button" class="secondary" onclick="window.close()">Close</button>
     </div>
     <h1>Plant Doctor application calendar</h1>
-    <p class="muted">${esc(where)} · ${esc(fmtDate(data.start_date))} · temperate / southern Australia</p>
+    <p class="muted">${esc(where)} · ${esc(fmtDate(data.start_date))} · ${esc(data.climate_label || "Southern Australia")}</p>
     ${printKeyHtml(data)}
     ${printNotesHtml(data)}
     ${printJobsHtml(data)}
@@ -1336,6 +1353,7 @@
         document.querySelector('input[name="path"][value="recommend"]').checked = true;
         document.querySelector('input[name="rec_mode"][value="goals"]').checked = true;
         document.getElementById("use_case").value = "lawn";
+        document.getElementById("region").value = "";
         document.getElementById("intent").value = "maintenance_mode";
         document.getElementById("start_date").value = new Date().toISOString().slice(0, 10);
         document.getElementById("area_m2").value = "";
