@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +15,7 @@ from pd_engine.soil_test import lime_is_appropriate
 from pd_engine.types import RoleType
 from scheduler import build_calendar, to_ics
 from scheduler.build import prefer_single_ffr, program_products_from_catalog
+from scheduler.plan_store import load_form, parse_plan_id, save_form
 from scheduler.climate import parse_region
 from scheduler.intervals import IntervalTable
 from scheduler.rates import RateBook
@@ -427,6 +429,51 @@ async def api_ics(request: Request) -> PlainTextResponse:
         ics,
         media_type="text/calendar",
         headers={"Content-Disposition": 'attachment; filename="plant-doctor-calendar.ics"'},
+    )
+
+
+def _public_base(request: Request) -> str:
+    host = request.headers.get("x-forwarded-host") or request.headers.get("host")
+    if host:
+        proto = request.headers.get("x-forwarded-proto") or request.url.scheme
+        return f"{proto}://{host}".rstrip("/")
+    return str(request.base_url).rstrip("/")
+
+
+@app.post("/api/calendar/subscribe")
+async def api_subscribe(request: Request) -> JSONResponse:
+    body = await request.json()
+    form = body or {}
+    plan = _calendar_payload(form)
+    if plan.get("error"):
+        return JSONResponse(plan, status_code=400)
+    try:
+        plan_id = save_form(form)
+    except RuntimeError as exc:
+        return JSONResponse({"error": str(exc)}, status_code=503)
+    ics_url = f"{_public_base(request)}/c/{plan_id}.ics"
+    webcal = "webcal://" + ics_url.split("://", 1)[-1]
+    google = "https://calendar.google.com/calendar/r?cid=" + quote(ics_url, safe="")
+    return JSONResponse({"id": plan_id, "url": ics_url, "webcal": webcal, "google": google})
+
+
+@app.get("/c/{plan_id}")
+async def subscribed_ics(plan_id: str) -> PlainTextResponse:
+    pid = parse_plan_id(plan_id)
+    form = load_form(pid) if pid else None
+    if not form:
+        return PlainTextResponse("Calendar not found.", status_code=404)
+    plan = _calendar_payload(form)
+    if plan.get("error"):
+        return PlainTextResponse(str(plan["error"]), status_code=400)
+    ics = to_ics(plan.get("events") or [], plan_id=pid)
+    return PlainTextResponse(
+        ics,
+        media_type="text/calendar; charset=utf-8",
+        headers={
+            "Content-Disposition": 'inline; filename="plant-doctor-calendar.ics"',
+            "Cache-Control": "public, max-age=3600",
+        },
     )
 
 

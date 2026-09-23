@@ -51,6 +51,29 @@
         margin: 0;
       }
       .plan-actions button { padding: 8px 14px; font-size: 14px; }
+      .subscribe-help {
+        flex: 1 1 100%;
+        margin: 8px 0 0;
+        padding: 10px 12px;
+        border: 1px solid #d1fae5;
+        background: #f0fdf4;
+        border-radius: 10px;
+        font-size: 13px;
+        color: #14532d;
+      }
+      .subscribe-help p { margin: 0 0 8px; }
+      .subscribe-help code {
+        display: block;
+        word-break: break-all;
+        font-size: 12px;
+        background: #fff;
+        border: 1px solid #bbf7d0;
+        border-radius: 6px;
+        padding: 6px 8px;
+        margin: 0 0 8px;
+      }
+      .subscribe-help .subscribe-links { display: flex; gap: 10px; flex-wrap: wrap; }
+      .subscribe-help a { color: #166534; font-weight: 600; }
       .plan-toolbar {
         display: flex;
         align-items: center;
@@ -1205,6 +1228,51 @@
         URL.revokeObjectURL(a.href);
       }
 
+      async function subscribeCalendar() {
+        const btn = document.getElementById("subscribeIcs");
+        const help = document.getElementById("subscribeHelp");
+        if (!btn) return;
+        btn.disabled = true;
+        btn.textContent = "Creating link…";
+        try {
+          const res = await fetch("/api/calendar/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload()),
+          });
+          const data = await res.json();
+          if (!res.ok || data.error) {
+            btn.disabled = false;
+            btn.textContent = "Subscribe calendar";
+            if (help) {
+              help.classList.remove("hidden");
+              help.innerHTML = `<p>${esc(data.error || "Couldn’t create a subscribe link.")}</p>`;
+            }
+            return;
+          }
+          try { await navigator.clipboard.writeText(data.url); } catch (_) {}
+          btn.textContent = "Link copied";
+          if (help) {
+            help.classList.remove("hidden");
+            help.innerHTML = `
+              <p>Your phone will keep this calendar up to date. Closing this page is fine — the link stays on the phone.</p>
+              <code>${esc(data.url)}</code>
+              <div class="subscribe-links">
+                <a href="${esc(data.webcal)}">Add on iPhone / Mac</a>
+                <a href="${esc(data.google)}" target="_blank" rel="noopener">Add in Google Calendar</a>
+              </div>
+            `;
+          }
+        } catch (err) {
+          btn.disabled = false;
+          btn.textContent = "Subscribe calendar";
+          if (help) {
+            help.classList.remove("hidden");
+            help.innerHTML = `<p>Couldn’t create a subscribe link. Try again.</p>`;
+          }
+        }
+      }
+
       function hidePlanActions() {
         const actions = document.getElementById("plan_actions");
         if (!actions) return;
@@ -1252,8 +1320,10 @@
               </div>
               ${notesToggle}
               <div id="plan_actions" class="plan-actions">
-                <button type="button" id="downloadIcs">Add to calendar (.ics)</button>
+                <button type="button" id="subscribeIcs">Subscribe calendar</button>
+                <button type="button" class="secondary" id="downloadIcs">Download .ics</button>
                 <button type="button" class="secondary" id="printPlan">Print</button>
+                <div id="subscribeHelp" class="subscribe-help hidden"></div>
               </div>
             </div>
             <div class="legend">
@@ -1282,6 +1352,7 @@
           </div>
           ${why ? `<details class="fold no-print"><summary>${data.path === "pick" ? "How this schedule works" : "Why we chose these"}</summary><ul class="why-list">${why}</ul></details>` : ""}
         `;
+        document.getElementById("subscribeIcs").addEventListener("click", subscribeCalendar);
         document.getElementById("downloadIcs").addEventListener("click", downloadIcs);
         document.getElementById("printPlan").addEventListener("click", openPrintView);
         document.querySelectorAll(".view-tab[data-view]").forEach((tab) => {

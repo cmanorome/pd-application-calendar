@@ -30,6 +30,8 @@ Returns products, dated events, and an `ics` string.
 
 `POST /api/calendar.ics` returns a downloadable calendar file.
 
+`POST /api/calendar/subscribe` stores the form answers and returns a live feed URL. `GET /c/{id}.ics` rebuilds that calendar so a phone can keep it up to date. Locally this saves files under `data/subscribed_plans/`. On Vercel, connect **Upstash Redis** (Storage tab) so the env vars `KV_REST_API_URL` and `KV_REST_API_TOKEN` (or `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`) are set, then redeploy.
+
 ## Data
 
 - `data/plant_doctor_recommendation_engine_template.csv` — catalog (from PD-Product-Guide)

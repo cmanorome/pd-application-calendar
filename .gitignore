@@ -6,3 +6,4 @@ __pycache__/
 .env
 .env.local
 .vercel
+data/subscribed_plans/

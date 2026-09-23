@@ -668,6 +668,29 @@ def test_majority_lawn_adds_soil_specific_products():
         assert sku in lime_ids, lime_ids
 
 
+def test_subscribe_roundtrip():
+    import tempfile
+    from pathlib import Path
+
+    from scheduler import plan_store
+    from scheduler.ics import to_ics
+
+    old = plan_store.LOCAL_DIR
+    plan_store.LOCAL_DIR = Path(tempfile.mkdtemp())
+    try:
+        form = _lawn_payload()
+        plan_id = plan_store.save_form(form)
+        loaded = plan_store.load_form(f"{plan_id}.ics")
+        assert loaded == form
+        plan = _calendar_payload(loaded)
+        ics = to_ics(plan["events"], plan_id=plan_id)
+        assert ics.startswith("BEGIN:VCALENDAR")
+        assert plan_id in ics
+        assert plan_store.load_form("ffffffffffffffff") is None
+    finally:
+        plan_store.LOCAL_DIR = old
+
+
 def test_majority_garden_goals_prefer_quantum_h():
     plan = _calendar_payload(
         {
@@ -719,4 +742,5 @@ if __name__ == "__main__":
     test_majority_lawn_goals_use_full_pro_pack()
     test_majority_lawn_adds_soil_specific_products()
     test_majority_garden_goals_prefer_quantum_h()
+    test_subscribe_roundtrip()
     print("ok")
