@@ -691,6 +691,30 @@ def test_subscribe_roundtrip():
         plan_store.LOCAL_DIR = old
 
 
+def test_subscribe_expires_after_thirteen_months():
+    import json
+    import tempfile
+    from datetime import datetime, timezone
+    from pathlib import Path
+
+    from scheduler import plan_store
+
+    old = plan_store.LOCAL_DIR
+    plan_store.LOCAL_DIR = Path(tempfile.mkdtemp())
+    try:
+        plan_id = plan_store.save_form(_lawn_payload())
+        path = plan_store.LOCAL_DIR / f"{plan_id}.json"
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        now = int(datetime.now(timezone.utc).timestamp())
+        assert abs(payload["exp"] - now - plan_store.TTL_SECONDS) < 5
+        payload["exp"] = 1
+        path.write_text(json.dumps(payload), encoding="utf-8")
+        assert plan_store.load_form(plan_id) is None
+        assert not path.exists()
+    finally:
+        plan_store.LOCAL_DIR = old
+
+
 def test_majority_garden_goals_prefer_quantum_h():
     plan = _calendar_payload(
         {
@@ -743,4 +767,5 @@ if __name__ == "__main__":
     test_majority_lawn_adds_soil_specific_products()
     test_majority_garden_goals_prefer_quantum_h()
     test_subscribe_roundtrip()
+    test_subscribe_expires_after_thirteen_months()
     print("ok")
