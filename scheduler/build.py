@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 from typing import Any
 
+from pd_engine.catalog import LAWN_LOVERS_PRO_SKUS
 from pd_engine.types import Product, RoleType
 
 from .climate import Region, in_growing_season, in_summer, in_winter, parse_region, season_for
@@ -15,6 +16,8 @@ MIX_SNAP_DAYS = 7
 MAX_EVENTS = 500
 _PLACE_CAP = 40
 _FFR_LIQUID = "721"
+_FFR_GRANULAR = "575"
+_RSL_GRANULAR = "1156"
 _ACTIV8 = ("A8M", "A8X")
 _NOTE_NAMES = {
     "A8X": "Activ8EXTRA",
@@ -88,6 +91,17 @@ def _join_names(names: list[str]) -> str:
     return ", ".join(names[:-1]) + ", and " + names[-1]
 
 
+def prefer_single_ffr(products: list[Product]) -> tuple[list[Product], str | None]:
+    """Liquid and granular Flowers, Fruits & Roots are the same job — keep one."""
+    ids = {p.id for p in products}
+    if _FFR_LIQUID in ids and _FFR_GRANULAR in ids:
+        return [p for p in products if p.id != _FFR_GRANULAR], (
+            "Flowers, Fruits & Roots is either the liquid or the granules — not both. "
+            "This plan uses the liquid so it can alternate with Activ8."
+        )
+    return products, None
+
+
 def program_products_from_catalog(
     rec,
     catalog_products: list[Product],
@@ -113,10 +127,11 @@ def program_products_from_catalog(
     add(rec.primary_fertiliser)
 
     champ = (rec.explanations or {}).get("champion_turf_pair") if rec.explanations else None
-    if champ:
+    pro_pack_complete = all(sku in seen for sku in LAWN_LOVERS_PRO_SKUS)
+    if champ or (lawn and pro_pack_complete):
         add(by_id.get("886"))
         notes.append(
-            "Champion Fairway is on the calendar for everyday lawns. Swap to Greens Grade if you keep a low-cut surface."
+            "Champion Fairway is on the calendar as the granular lawn fertiliser. Swap to Greens Grade if you keep a low-cut surface."
         )
         if "892" in seen and "886" in seen:
             products = [p for p in products if p.id != "892"]
@@ -125,10 +140,16 @@ def program_products_from_catalog(
     if not lawn:
         if flowering and _FFR_LIQUID not in seen:
             add(by_id.get(_FFR_LIQUID))
-        has_ffr = _FFR_LIQUID in seen or "575" in seen
+        has_ffr = _FFR_LIQUID in seen or _FFR_GRANULAR in seen
         has_a8 = any(sku in seen for sku in _ACTIV8)
         if has_ffr and not has_a8:
             add(by_id.get("A8M") or by_id.get("A8X"))
+        if rec.intent == "performance_mode":
+            add(by_id.get(_RSL_GRANULAR))
+            if _RSL_GRANULAR in seen:
+                notes.append(
+                    "Roots, Shoots & Leaves granules are the slow-release garden fertiliser — about every 3 months."
+                )
 
     if lawn and deep_green:
         has_iron = any(p.is_iron_based or p.id == "LEN" for p in products)
@@ -139,6 +160,10 @@ def program_products_from_catalog(
     if wants_lime and not any(p.is_lime_based for p in products):
         add(by_id.get("LIMEGr"))
         notes.append("Lime is first. Wait 6 weeks before iron so pH can move.")
+
+    products, ffr_note = prefer_single_ffr(products)
+    if ffr_note:
+        notes.append(ffr_note)
 
     return products, notes
 

@@ -2,15 +2,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .catalog import LAWN_LOVERS_PRO_SKUS
 from .constraints import (
     incompatible_with_stack,
     iron_humic_spacing_needed,
     is_gardenish,
+    is_lawnish,
     is_valid_primary,
     product_fits_context,
     recommended_max_stack,
     role_is_warranted,
 )
+from .goal_layer import majority_keep_it_healthy_goals
 from .types import Product, RoleType, ScoredProduct, UserInput
 
 
@@ -26,6 +29,9 @@ ROLE_ORDER: list[RoleType] = [
 # If a Lawn Lovers core SKU is close to the role leader, prefer it.
 _CORE_PICK_RATIO = 0.85
 _FULVIC_LIQUID = "414"
+_QUANTUM_H = "29800"
+_FFR_LIQUID = "721"
+_FFR_GRANULAR = "575"
 
 
 def _lockout_on(user: UserInput) -> bool:
@@ -45,6 +51,13 @@ def _preferred_core(product: Product, user: UserInput) -> bool:
     if is_gardenish(user) and product.id == "A8X":
         return False
     return True
+
+
+def _without_duplicate_ffr(candidates: list[ScoredProduct]) -> list[ScoredProduct]:
+    ids = {sp.product.id for sp in candidates}
+    if _FFR_LIQUID in ids and _FFR_GRANULAR in ids:
+        return [sp for sp in candidates if sp.product.id != _FFR_GRANULAR]
+    return candidates
 
 
 def _first_eligible(scored: list[ScoredProduct], role: RoleType, stack: list[Product], user: UserInput) -> list[ScoredProduct]:
@@ -67,6 +80,7 @@ def _first_eligible(scored: list[ScoredProduct], role: RoleType, stack: list[Pro
         if sp.product.is_iron_based and any(p.is_iron_based for p in stack):
             continue
         out.append(sp)
+    out = _without_duplicate_ffr(out)
     if out:
         return out
     # Second pass: if uptake was skipped for tank-mix, still allow a humic later in the program.
@@ -78,7 +92,7 @@ def _first_eligible(scored: list[ScoredProduct], role: RoleType, stack: list[Pro
                 continue
             if incompatible_with_stack(sp.product, stack, user).ok:
                 out.append(sp)
-    return out
+    return _without_duplicate_ffr(out)
 
 
 def _pick_from_role(scored: list[ScoredProduct], role: RoleType, stack: list[Product], user: UserInput) -> Product | None:
@@ -89,6 +103,14 @@ def _pick_from_role(scored: list[ScoredProduct], role: RoleType, stack: list[Pro
         fulvic = next((sp for sp in candidates if sp.product.id == _FULVIC_LIQUID), None)
         if fulvic is not None:
             return fulvic.product
+    if (
+        majority_keep_it_healthy_goals(user)
+        and role == RoleType.UPTAKE
+        and not is_lawnish(user)
+    ):
+        quantum = next((sp for sp in candidates if sp.product.id == _QUANTUM_H), None)
+        if quantum is not None:
+            return quantum.product
     core = next((sp for sp in candidates if _preferred_core(sp.product, user)), None)
     if core is not None:
         return core.product
@@ -202,6 +224,8 @@ def _pick_goals_foundation_primary(scored: list[ScoredProduct], user: UserInput)
         for sp in scored:
             if sp.product.role_type != RoleType.NUTRITION:
                 continue
+            if sp.product.id == _FFR_GRANULAR:
+                continue
             if is_valid_primary(sp.product, user).ok:
                 return sp.product, notes
     primary = _pick_primary_from(scored, user, skip_nutrition=True)
@@ -257,6 +281,8 @@ def ensure_goals_fertiliser(
             continue
         if sp.product.id in in_stack:
             continue
+        if sp.product.id == _FFR_GRANULAR:
+            continue
         if incompatible_with_stack(sp.product, plan.stack, user).ok:
             chosen = sp.product
             break
@@ -277,3 +303,33 @@ def ensure_goals_fertiliser(
     stack.append(chosen)
     notes.append("Goals mode: added a recommended fertiliser so the plan always includes nutrition.")
     return _finish_plan(stack, notes)
+
+
+def ensure_lawn_lovers_pro_pack(
+    plan: StackPlan,
+    catalog_products: list[Product],
+    user: UserInput,
+) -> StackPlan:
+    """When most Keep it healthy goals are ticked on a lawn, use the full Pro Pack of 5."""
+    if not majority_keep_it_healthy_goals(user) or not is_lawnish(user):
+        return plan
+    by_id = {p.id: p for p in catalog_products}
+    pack = [by_id[sku] for sku in LAWN_LOVERS_PRO_SKUS if sku in by_id]
+    if not pack:
+        return plan
+    pack_ids = {p.id for p in pack}
+    extras = [p for p in plan.stack if p.id not in pack_ids]
+    notes = list(plan.notes)
+    notes.append(
+        "This keep-it-healthy plan uses the full Lawn Lovers Pro Pack: Seaweed Secrets, Activ8EXTRA, Quantum H, Liquid Iron, and Stimulizer — plus Champion granules as the slow-release lawn feed."
+    )
+    if iron_humic_spacing_needed(pack + extras) and not any(_is_iron_note(n) for n in notes):
+        notes.append(
+            "Apply liquid iron on a different day from seaweed, humic, or soil wetter — do not mix them in the same sprayer."
+        )
+    return StackPlan(primary=pack[0], stack=pack + extras, notes=notes)
+
+
+def _is_iron_note(text: str) -> bool:
+    blob = (text or "").lower()
+    return "iron" in blob and "different day" in blob

@@ -8,6 +8,7 @@ from .goal_layer import (
     goal_alignment_01,
     goal_multiplier,
     goal_pair_synergy_bonus,
+    majority_keep_it_healthy_goals,
 )
 from .types import (
     Product,
@@ -255,6 +256,10 @@ def score_product(product: Product, user: UserInput, *, weights: Weights) -> Sco
     if user.recommendation_mode == "goals":
         stage_alignment_bonus, stage_note = _garden_stage_alignment_bonus(product, user)
 
+    quantum_h_bonus = 0.0
+    if majority_keep_it_healthy_goals(user) and product.id == "29800":
+        quantum_h_bonus = 2.0
+
     context_fit = _context_fit(product, user)
     core_bonus = _core_range_bonus(product, user)
 
@@ -271,6 +276,7 @@ def score_product(product: Product, user: UserInput, *, weights: Weights) -> Sco
             + context_engine
             + pair_goal_bonus
             + stage_alignment_bonus
+            + quantum_h_bonus
             + context_fit
             + core_bonus
         )
@@ -304,6 +310,8 @@ def score_product(product: Product, user: UserInput, *, weights: Weights) -> Sco
             reasons.append(f"Soil match: {soil_match:.2f}")
         if stage_alignment_bonus > 0 and stage_note:
             reasons.append(f"Stage alignment: +{stage_alignment_bonus:.2f} ({stage_note})")
+        if quantum_h_bonus > 0:
+            reasons.append("Broad keep-it-healthy goals: Quantum H preferred")
     else:
         if problem_match > 0:
             reasons.append(f"Problem match: {problem_match:.2f}")
@@ -336,6 +344,7 @@ def score_product(product: Product, user: UserInput, *, weights: Weights) -> Sco
             "seasonal": seasonal,
             "synergy": synergy,
             "stage_alignment_bonus": stage_alignment_bonus,
+            "quantum_h_bonus": quantum_h_bonus,
             "targeted_bonus": targeted_bonus,
             "context_fit": context_fit,
             "core_range_bonus": core_bonus,

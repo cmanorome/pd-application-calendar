@@ -121,6 +121,73 @@ def test_garden_ffr_alternates_with_activ8():
     assert "alternating" in a8_card["how_often"].lower()
 
 
+def test_garden_does_not_use_both_ffr_forms():
+    plan = _calendar_payload(
+        {
+            "recommendation_mode": "goals",
+            "use_case": "garden_beds",
+            "intent": "maintenance_mode",
+            "start_date": "2026-09-17",
+            "goal_weights": {
+                "strong_flowering_and_fruiting": 1.0,
+                "improved_soil_fertility": 1.0,
+                "root_development_transplant": 1.0,
+            },
+        }
+    )
+    ids = [p["id"] for p in plan["products"]]
+    assert "721" in ids
+    assert "575" not in ids
+
+    picked = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "garden_beds",
+            "start_date": "2026-09-17",
+            "skus": ["575", "721", "A8M"],
+        }
+    )
+    picked_ids = [p["id"] for p in picked["products"]]
+    assert "721" in picked_ids
+    assert "575" not in picked_ids
+    assert any("not both" in n.lower() for n in picked["notes"])
+
+
+def test_garden_max_results_includes_rsl_granular():
+    keep = _calendar_payload(
+        {
+            "recommendation_mode": "goals",
+            "use_case": "garden_beds",
+            "intent": "maintenance_mode",
+            "start_date": "2026-09-17",
+            "goal_weights": {"strong_flowering_and_fruiting": 1.0},
+        }
+    )
+    assert "1156" not in {p["id"] for p in keep["products"]}
+
+    plan = _calendar_payload(
+        {
+            "recommendation_mode": "goals",
+            "use_case": "garden_beds",
+            "intent": "performance_mode",
+            "start_date": "2026-09-17",
+            "goal_weights": {"strong_flowering_and_fruiting": 1.0},
+        }
+    )
+    ids = [p["id"] for p in plan["products"]]
+    assert "1156" in ids
+    assert "721" in ids
+    assert "575" not in ids
+    assert "A8M" in ids or "A8X" in ids
+    card = next(p for p in plan["products"] if p["id"] == "1156")
+    assert "3 months" in card["how_often"].lower() or "90" in card["how_often"]
+    dates = sorted(date.fromisoformat(e["date"]) for e in plan["events"] if e["sku"] == "1156")
+    assert dates
+    for a, b in zip(dates, dates[1:]):
+        assert 80 <= (b - a).days <= 100, f"RSL gap should be ~3 months: {a} -> {b}"
+    assert any("Roots, Shoots & Leaves" in n for n in plan["notes"])
+
+
 def test_picked_ffr_and_activ8_alternate():
     plan = _calendar_payload(
         {
@@ -546,12 +613,88 @@ def test_nutrient_lockout_leads_with_fulvic():
     assert garden_ids[0] == "414"
 
 
+def test_majority_lawn_goals_use_full_pro_pack():
+    few = _calendar_payload(_lawn_payload())
+    few_ids = [p["id"] for p in few["products"]]
+    assert "STM" in few_ids
+    assert "29800" not in few_ids
+
+    majority = _calendar_payload(
+        _lawn_payload(
+            goal_weights={
+                "deep_green_colour": 1.0,
+                "thickening_and_density": 1.0,
+                "fast_recovery_from_stress": 1.0,
+            }
+        )
+    )
+    majority_ids = [p["id"] for p in majority["products"]]
+    for sku in ("SWS", "A8X", "29800", "LIR", "STM", "886"):
+        assert sku in majority_ids, majority_ids
+    assert majority_ids[:5] == ["SWS", "A8X", "29800", "LIR", "STM"]
+    assert any("Lawn Lovers Pro Pack" in n for n in majority["notes"])
+    assert any("Champion" in n for n in majority["notes"])
+
+
+def test_majority_lawn_adds_soil_specific_products():
+    wet = _calendar_payload(
+        _lawn_payload(
+            hydrophobic=True,
+            goal_weights={
+                "deep_green_colour": 1.0,
+                "thickening_and_density": 1.0,
+                "fast_recovery_from_stress": 1.0,
+            },
+        )
+    )
+    wet_ids = [p["id"] for p in wet["products"]]
+    for sku in ("SWS", "A8X", "29800", "LIR", "STM", "886"):
+        assert sku in wet_ids, wet_ids
+    assert "NSWL" in wet_ids or "664" in wet_ids, wet_ids
+
+    lime = _calendar_payload(
+        _lawn_payload(
+            acidic=True,
+            goal_weights={
+                "deep_green_colour": 1.0,
+                "thickening_and_density": 1.0,
+                "fast_recovery_from_stress": 1.0,
+            },
+        )
+    )
+    lime_ids = [p["id"] for p in lime["products"]]
+    assert "LIMEGr" in lime_ids or "DOL" in lime_ids, lime_ids
+    for sku in ("SWS", "A8X", "29800", "LIR", "STM", "886"):
+        assert sku in lime_ids, lime_ids
+
+
+def test_majority_garden_goals_prefer_quantum_h():
+    plan = _calendar_payload(
+        {
+            "recommendation_mode": "goals",
+            "use_case": "garden_beds",
+            "intent": "maintenance_mode",
+            "start_date": "2026-09-17",
+            "goal_weights": {
+                "improved_soil_fertility": 1.0,
+                "root_development_transplant": 1.0,
+                "consistent_growth_across_seasons": 1.0,
+            },
+            "confidence_level": "somewhat_sure",
+        }
+    )
+    ids = [p["id"] for p in plan["products"]]
+    assert "29800" in ids
+
+
 if __name__ == "__main__":
     test_lawn_calendar_has_events()
     test_iron_not_same_day_as_seaweed()
     test_lime_before_iron()
     test_garden_uses_garden_products()
     test_garden_ffr_alternates_with_activ8()
+    test_garden_does_not_use_both_ffr_forms()
+    test_garden_max_results_includes_rsl_granular()
     test_picked_ffr_and_activ8_alternate()
     test_picked_products_only_those_skus()
     test_pick_requires_a_product()
@@ -573,4 +716,7 @@ if __name__ == "__main__":
     test_weed_suppression_note_explains_no_chemicals()
     test_plan_notes_are_tidy()
     test_nutrient_lockout_leads_with_fulvic()
+    test_majority_lawn_goals_use_full_pro_pack()
+    test_majority_lawn_adds_soil_specific_products()
+    test_majority_garden_goals_prefer_quantum_h()
     print("ok")

@@ -13,7 +13,7 @@ from pd_engine.catalog import Catalog
 from pd_engine.soil_test import lime_is_appropriate
 from pd_engine.types import RoleType
 from scheduler import build_calendar, to_ics
-from scheduler.build import program_products_from_catalog
+from scheduler.build import prefer_single_ffr, program_products_from_catalog
 from scheduler.climate import parse_region
 from scheduler.intervals import IntervalTable
 from scheduler.rates import RateBook
@@ -331,6 +331,9 @@ def _calendar_payload(form: dict[str, Any]) -> dict[str, Any]:
             notes.append(
                 "Fairway and Greens Grade are two intensities of the same turf fertiliser — you usually only need one."
             )
+        products, ffr_note = prefer_single_ffr(products)
+        if ffr_note:
+            notes.append(ffr_note)
         return _plan_from_products(
             products,
             start=start,

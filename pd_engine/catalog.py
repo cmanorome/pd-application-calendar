@@ -117,6 +117,8 @@ _LAWN_SPECIALIST_SKUS = frozenset({"886", "892", "LEN", "MG", "1231", "1235", "1
 _GARDEN_REPRODUCTIVE_SKUS = frozenset({"575", "721"})
 # Lawn Lovers Starter (SWS + A8X + NSWL) and Pro (adds Quantum H, Liquid Iron, Stimulizer)
 _CORE_RANGE_SKUS = frozenset({"SWS", "A8X", "NSWL", "29800", "LIR", "STM"})
+# Pro Pack liquids, pack order: Seaweed Secrets + Activ8EXTRA + Quantum H + Liquid Iron + Stimulizer
+LAWN_LOVERS_PRO_SKUS = ("SWS", "A8X", "29800", "LIR", "STM")
 
 
 def _has_token(blob: str, *tokens: str) -> bool:

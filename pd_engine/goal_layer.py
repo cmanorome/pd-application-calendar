@@ -140,6 +140,22 @@ def _goal_scores_dict(product: Product, vertical: GoalVertical) -> dict[str, flo
     return {}
 
 
+_GOAL_SELECTED = 0.35
+
+
+def majority_keep_it_healthy_goals(user: UserInput) -> bool:
+    """True when more than half of the current 'What do you want?' goals are selected."""
+    if user.recommendation_mode != "goals" or not user.goal_vertical:
+        return False
+    keys = list(_priorities(user.goal_vertical))
+    if not keys:
+        return False
+    selected = sum(
+        1 for k in keys if float(user.goal_weights.get(k, 0.0)) >= _GOAL_SELECTED
+    )
+    return selected * 2 > len(keys)
+
+
 def effective_goal_weights(user: UserInput) -> dict[str, float]:
     """Selected goals × default vertical priorities × intent factors → normalized capped weights."""
     if user.recommendation_mode != "goals" or not user.goal_vertical or not user.goal_weights:
