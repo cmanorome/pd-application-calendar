@@ -47,33 +47,38 @@
       .plan-actions {
         display: flex;
         gap: 8px;
-        flex-wrap: wrap;
+        align-items: center;
         margin: 0;
       }
-      .plan-actions button { padding: 8px 14px; font-size: 14px; }
-      .subscribe-help {
-        flex: 1 1 100%;
-        margin: 8px 0 0;
-        padding: 10px 12px;
-        border: 1px solid #d1fae5;
-        background: #f0fdf4;
-        border-radius: 10px;
-        font-size: 13px;
-        color: #14532d;
-      }
-      .subscribe-help p { margin: 0 0 8px; }
-      .subscribe-help code {
-        display: block;
-        word-break: break-all;
-        font-size: 12px;
+      .plan-actions > button { padding: 8px 14px; font-size: 14px; }
+      .cal-menu { position: relative; }
+      .cal-menu > button { padding: 8px 14px; font-size: 14px; }
+      .cal-menu-list {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        z-index: 20;
+        min-width: 188px;
+        padding: 4px;
         background: #fff;
-        border: 1px solid #bbf7d0;
-        border-radius: 6px;
-        padding: 6px 8px;
-        margin: 0 0 8px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: 0 10px 24px rgba(17, 24, 39, 0.1);
       }
-      .subscribe-help .subscribe-links { display: flex; gap: 10px; flex-wrap: wrap; }
-      .subscribe-help a { color: #166534; font-weight: 600; }
+      .cal-menu-list button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--ink);
+        font-weight: 500;
+        font-size: 14px;
+      }
+      .cal-menu-list button:hover {
+        background: #f0faf3;
+      }
       .plan-toolbar {
         display: flex;
         align-items: center;
@@ -966,6 +971,7 @@
 
       let lastPlan = null;
       let selectedDate = null;
+      let subscribeFeed = null;
 
       function eventsOn(iso) {
         return (lastPlan.events || []).filter((e) => e.date === iso);
@@ -1228,47 +1234,67 @@
         URL.revokeObjectURL(a.href);
       }
 
-      async function subscribeCalendar() {
-        const btn = document.getElementById("subscribeIcs");
-        const help = document.getElementById("subscribeHelp");
-        if (!btn) return;
-        btn.disabled = true;
-        btn.textContent = "Creating link…";
-        try {
+      function closeCalMenu() {
+        const menu = document.getElementById("calMenu");
+        const btn = document.getElementById("addToCalendar");
+        if (menu) menu.classList.add("hidden");
+        if (btn) btn.setAttribute("aria-expanded", "false");
+      }
+
+      function toggleCalMenu(ev) {
+        ev.stopPropagation();
+        const menu = document.getElementById("calMenu");
+        const btn = document.getElementById("addToCalendar");
+        if (!menu || !btn) return;
+        const open = menu.classList.contains("hidden");
+        menu.classList.toggle("hidden", !open);
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+
+      async function getSubscribeFeed() {
+        if (subscribeFeed && typeof subscribeFeed.then === "function") return subscribeFeed;
+        if (subscribeFeed) return subscribeFeed;
+        subscribeFeed = (async () => {
           const res = await fetch("/api/calendar/subscribe", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload()),
           });
           const data = await res.json();
-          if (!res.ok || data.error) {
-            btn.disabled = false;
-            btn.textContent = "Subscribe calendar";
-            if (help) {
-              help.classList.remove("hidden");
-              help.innerHTML = `<p>${esc(data.error || "Couldn’t create a subscribe link.")}</p>`;
-            }
-            return;
-          }
-          try { await navigator.clipboard.writeText(data.url); } catch (_) {}
-          btn.textContent = "Link copied";
-          if (help) {
-            help.classList.remove("hidden");
-            help.innerHTML = `
-              <p>Your phone will keep this calendar up to date. Closing this page is fine — the link stays on the phone.</p>
-              <code>${esc(data.url)}</code>
-              <div class="subscribe-links">
-                <a href="${esc(data.webcal)}">Add on iPhone / Mac</a>
-                <a href="${esc(data.google)}" target="_blank" rel="noopener">Add in Google Calendar</a>
-              </div>
-            `;
-          }
+          if (!res.ok || data.error) throw new Error(data.error || "Couldn’t add to calendar.");
+          return data;
+        })();
+        try {
+          const data = await subscribeFeed;
+          subscribeFeed = data;
+          return data;
         } catch (err) {
-          btn.disabled = false;
-          btn.textContent = "Subscribe calendar";
-          if (help) {
-            help.classList.remove("hidden");
-            help.innerHTML = `<p>Couldn’t create a subscribe link. Try again.</p>`;
+          subscribeFeed = null;
+          throw err;
+        }
+      }
+
+      async function addToCalendar(kind) {
+        closeCalMenu();
+        if (kind === "download") {
+          downloadIcs();
+          return;
+        }
+        const btn = document.getElementById("addToCalendar");
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Adding…";
+        }
+        try {
+          const data = await getSubscribeFeed();
+          if (kind === "apple") window.location.href = data.webcal;
+          else if (kind === "google") window.open(data.google, "_blank", "noopener");
+        } catch (err) {
+          /* leave the button available to try again */
+        } finally {
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Add to calendar";
           }
         }
       }
@@ -1282,6 +1308,7 @@
 
       function renderPlan(data) {
         lastPlan = data;
+        subscribeFeed = null;
         selectedDate = (data.events[0] && data.events[0].date) || data.start_date;
         const start = new Date((data.start_date || "") + "T00:00:00");
         let months = "";
@@ -1320,10 +1347,15 @@
               </div>
               ${notesToggle}
               <div id="plan_actions" class="plan-actions">
-                <button type="button" id="subscribeIcs">Subscribe calendar</button>
-                <button type="button" class="secondary" id="downloadIcs">Download .ics</button>
+                <div class="cal-menu">
+                  <button type="button" id="addToCalendar" aria-expanded="false" aria-haspopup="true">Add to calendar</button>
+                  <div id="calMenu" class="cal-menu-list hidden" role="menu">
+                    <button type="button" role="menuitem" data-cal="apple">Apple Calendar</button>
+                    <button type="button" role="menuitem" data-cal="google">Google Calendar</button>
+                    <button type="button" role="menuitem" data-cal="download">Download</button>
+                  </div>
+                </div>
                 <button type="button" class="secondary" id="printPlan">Print</button>
-                <div id="subscribeHelp" class="subscribe-help hidden"></div>
               </div>
             </div>
             <div class="legend">
@@ -1352,8 +1384,11 @@
           </div>
           ${why ? `<details class="fold no-print"><summary>${data.path === "pick" ? "How this schedule works" : "Why we chose these"}</summary><ul class="why-list">${why}</ul></details>` : ""}
         `;
-        document.getElementById("subscribeIcs").addEventListener("click", subscribeCalendar);
-        document.getElementById("downloadIcs").addEventListener("click", downloadIcs);
+        document.getElementById("addToCalendar").addEventListener("click", toggleCalMenu);
+        document.getElementById("calMenu").addEventListener("click", (ev) => {
+          const item = ev.target.closest("[data-cal]");
+          if (item) addToCalendar(item.getAttribute("data-cal"));
+        });
         document.getElementById("printPlan").addEventListener("click", openPrintView);
         document.querySelectorAll(".view-tab[data-view]").forEach((tab) => {
           tab.addEventListener("click", () => showPlanView(tab.getAttribute("data-view")));
@@ -1392,6 +1427,11 @@
           tab.setAttribute("aria-selected", on ? "true" : "false");
         });
       }
+
+      document.addEventListener("click", (ev) => {
+        if (ev.target.closest(".cal-menu")) return;
+        closeCalMenu();
+      });
 
       document.getElementById("run").addEventListener("click", async () => {
         const btn = document.getElementById("run");
