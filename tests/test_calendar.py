@@ -207,6 +207,37 @@ def test_picked_ffr_and_activ8_alternate():
     assert "alternate" in " ".join(plan["notes"]).lower()
 
 
+def test_liquid_gypsum_shows_home_garden_rate():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-17",
+            "area_m2": 100,
+            "skus": ["636"],
+        }
+    )
+    assert plan.get("error") is None
+    gypsum = next(p for p in plan["products"] if p["id"] == "636")
+    label = " ".join(
+        filter(
+            None,
+            [
+                gypsum.get("amount_label") or "",
+                gypsum.get("rate_label") or "",
+            ],
+        )
+    )
+    assert "500" in label and "mL" in label, label
+    events = [e for e in plan["events"] if e["sku"] == "636"]
+    assert events
+    assert any("500" in (e.get("amount_label") or e.get("rate_label") or "") for e in events)
+    notes = " ".join(filter(None, [e.get("notes") or e.get("note") or "" for e in events]))
+    notes = notes or " ".join(plan.get("notes") or [])
+    blob = (gypsum.get("how_often") or "") + " " + notes + " " + " ".join(plan.get("notes") or [])
+    assert "45 mL" in blob
+
+
 def test_picked_products_only_those_skus():
     plan = _calendar_payload(
         {
@@ -327,6 +358,11 @@ def test_usage_guide_export_joins_on_sku():
     assert by_sku["NSO"]["in_catalog"] == "0"
     rate_rows = list(csv.DictReader((root / "data" / "product_usage_guide_rates.csv").open(encoding="utf-8-sig")))
     assert any(r["sku"] == "STM" and "3 mL" in r["amount_text"] for r in rate_rows)
+    assert "45 mL" in by_sku["636"]["rate_text"]
+    assert "500 mL" in by_sku["636"]["rate_text"]
+    assert by_sku["636"]["min_dilution"] == "1:3"
+    assert any(r["sku"] == "636" and r["use_case"] == "home_garden" and "45 mL" in r["amount_text"] for r in rate_rows)
+    assert any(r["sku"] == "636" and r["use_case"] == "liquid_inject" and "2–5 L/ha" in r["amount_text"] for r in rate_rows)
 
 
 def test_master_application_guide_joins_sources():
@@ -344,6 +380,8 @@ def test_master_application_guide_joins_sources():
     assert by_sku["A8M"]["garden_natives_half_strength"] == "1"
     assert by_sku["A8X"]["garden_natives_half_strength"] == "0"
     assert by_sku["STM"]["calculator_rate_100m2"]
+    assert "500 mL" in by_sku["636"]["calculator_rate_100m2"]
+    assert by_sku["636"]["in_rates_calculator"] == "1"
     notes = list(csv.DictReader((root / "data" / "pd_master_program_notes.csv").open(encoding="utf-8-sig")))
     ids = {r["note_id"] for r in notes}
     assert "garden_natives_half_strength" in ids
@@ -769,6 +807,7 @@ if __name__ == "__main__":
     test_garden_does_not_use_both_ffr_forms()
     test_garden_max_results_includes_rsl_granular()
     test_picked_ffr_and_activ8_alternate()
+    test_liquid_gypsum_shows_home_garden_rate()
     test_picked_products_only_those_skus()
     test_pick_requires_a_product()
     test_lawn_picker_includes_uptake_products()

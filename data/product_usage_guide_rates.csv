@@ -49,9 +49,14 @@ LIR,Liquid Iron Fertiliser - 7% Iron 3% Sulphur,vegetables_trees_ornamentals,spr
 MG,MaxGreen Hi-N & Iron liquid fertiliser,hose_on,hose-on,2 L covers 200 m²,
 MG,MaxGreen Hi-N & Iron liquid fertiliser,concentrate,spray,140–400 mL / 100 m²,
 MG,MaxGreen Hi-N & Iron liquid fertiliser,vegetables_trees_ornamentals,spray,140–300 mL / 100 m² or 10–25 mL per 9 L water,
-636,Micronised Gypsum Liquid,home_garden,drench,45 mL per 9 L water,Apply at 1 L/m²
-636,Micronised Gypsum Liquid,soil_amelioration_fertigation,fertigation,10–50 L/ha,
-636,Micronised Gypsum Liquid,foliar,foliar,1 L per 100 L water,Rate varies by crop
+636,Micronised Gypsum Liquid,home_garden,drench,45 mL per 9 L water,Apply 1 L/m² every 2–4 weeks (500 mL per 100 m²)
+636,Micronised Gypsum Liquid,soil_amelioration_fertigation,fertigation,10–50 L/ha,Use higher rates for heavy clay
+636,Micronised Gypsum Liquid,foliar_vegetables,foliar,"1 L per 100 L water, up to 5 L/ha",Weekly or as required
+636,Micronised Gypsum Liquid,foliar_orchards_vineyards,foliar,"1 L per 100 L water, up to 7 L/ha",Every 2–4 weeks or as required
+636,Micronised Gypsum Liquid,foliar_ornamentals_turf,foliar,"1 L per 100 L water, up to 5 L/ha",Every 2–4 weeks or as required
+636,Micronised Gypsum Liquid,broadacre_crops_pasture,spray,1–3 L/ha in 60–100 L water,Depending on canopy closure
+636,Micronised Gypsum Liquid,spot_spraying,spray,50 mL per 10 L water,Apply as required
+636,Micronised Gypsum Liquid,liquid_inject,inject,2–5 L/ha,Minimum dilution 1:3
 NSWL,Nature's Soil Wetter - Liquid,lawn_garden,spray,100 mL / 100 m²,Do not shake
 664,Nature's Soil Wetter granules,lawns_gardens,spread,1.5–2 kg / 100 m² every 3–6 months,
 664,Nature's Soil Wetter granules,golf_greens,spread,1.5 kg / 100 m² every 1–2 months,
