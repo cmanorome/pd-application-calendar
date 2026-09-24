@@ -65,19 +65,27 @@
         border-radius: 10px;
         box-shadow: 0 10px 24px rgba(17, 24, 39, 0.1);
       }
+      .cal-menu-list a,
       .cal-menu-list button {
         display: block;
         width: 100%;
         text-align: left;
-        padding: 8px 10px;
+        padding: 12px 10px;
         border-radius: 8px;
         background: transparent;
         color: var(--ink);
         font-weight: 500;
         font-size: 14px;
+        text-decoration: none;
+        touch-action: manipulation;
       }
+      .cal-menu-list a:hover,
       .cal-menu-list button:hover {
         background: #f0faf3;
+      }
+      .cal-menu-list a:not([href]) {
+        pointer-events: none;
+        opacity: 0.45;
       }
       .plan-toolbar {
         display: flex;
@@ -1249,6 +1257,18 @@
         const open = menu.classList.contains("hidden");
         menu.classList.toggle("hidden", !open);
         btn.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) primeCalLinks();
+      }
+
+      function applyCalLinks(data) {
+        const apple = document.getElementById("calApple");
+        const google = document.getElementById("calGoogle");
+        if (apple && data.webcal) apple.setAttribute("href", data.webcal);
+        if (google && data.google) google.setAttribute("href", data.google);
+      }
+
+      function primeCalLinks() {
+        getSubscribeFeed().then(applyCalLinks).catch(() => {});
       }
 
       async function getSubscribeFeed() {
@@ -1275,27 +1295,9 @@
       }
 
       async function addToCalendar(kind) {
-        closeCalMenu();
         if (kind === "download") {
+          closeCalMenu();
           downloadIcs();
-          return;
-        }
-        const btn = document.getElementById("addToCalendar");
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = "Adding…";
-        }
-        try {
-          const data = await getSubscribeFeed();
-          if (kind === "apple") window.location.href = data.webcal;
-          else if (kind === "google") window.open(data.google, "_blank", "noopener");
-        } catch (err) {
-          /* leave the button available to try again */
-        } finally {
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "Add to calendar";
-          }
         }
       }
 
@@ -1350,8 +1352,8 @@
                 <div class="cal-menu">
                   <button type="button" id="addToCalendar" aria-expanded="false" aria-haspopup="true">Add to calendar</button>
                   <div id="calMenu" class="cal-menu-list hidden" role="menu">
-                    <button type="button" role="menuitem" data-cal="apple">Apple Calendar</button>
-                    <button type="button" role="menuitem" data-cal="google">Google Calendar</button>
+                    <a id="calApple" role="menuitem" data-cal="apple">Apple Calendar</a>
+                    <a id="calGoogle" role="menuitem" data-cal="google" target="_blank" rel="noopener">Google Calendar</a>
                     <button type="button" role="menuitem" data-cal="download">Download</button>
                   </div>
                 </div>
@@ -1387,8 +1389,13 @@
         document.getElementById("addToCalendar").addEventListener("click", toggleCalMenu);
         document.getElementById("calMenu").addEventListener("click", (ev) => {
           const item = ev.target.closest("[data-cal]");
-          if (item) addToCalendar(item.getAttribute("data-cal"));
+          if (!item) return;
+          if (item.getAttribute("data-cal") === "download") {
+            ev.preventDefault();
+            addToCalendar("download");
+          }
         });
+        primeCalLinks();
         document.getElementById("printPlan").addEventListener("click", openPrintView);
         document.querySelectorAll(".view-tab[data-view]").forEach((tab) => {
           tab.addEventListener("click", () => showPlanView(tab.getAttribute("data-view")));

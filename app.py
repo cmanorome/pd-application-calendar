@@ -472,7 +472,7 @@ async def subscribed_ics(plan_id: str) -> PlainTextResponse:
         media_type="text/calendar; charset=utf-8",
         headers={
             "Content-Disposition": 'inline; filename="plant-doctor-calendar.ics"',
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": "no-cache",
         },
     )
 
