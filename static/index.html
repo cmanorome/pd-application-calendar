@@ -462,7 +462,7 @@
         color: #374151;
         overflow: hidden;
       }
-      .day.empty { background: transparent; }
+      .day.is-blank { background: transparent; pointer-events: none; min-height: 0; padding: 0; }
       .day.has {
         background: #f0faf3;
         cursor: pointer;
@@ -1127,7 +1127,7 @@
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const title = first.toLocaleDateString("en-AU", { month: "long", year: "numeric" });
         let cells = "";
-        for (let i = 0; i < startPad; i++) cells += `<div class="day empty"></div>`;
+        for (let i = 0; i < startPad; i++) cells += `<div class="day is-blank" aria-hidden="true"></div>`;
         for (let d = 1; d <= daysInMonth; d++) {
           const iso = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
           const evs = eventsOn(iso);
