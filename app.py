@@ -3,11 +3,12 @@ from __future__ import annotations
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
+from html import escape as html_escape
 from urllib.parse import quote
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
 
 from pd_engine import recommend
 from pd_engine.catalog import Catalog
@@ -414,10 +415,39 @@ async def home() -> FileResponse:
     return FileResponse(INDEX_HTML)
 
 
+def _public_base(request: Request) -> str:
+    host = request.headers.get("x-forwarded-host") or request.headers.get("host")
+    if host:
+        proto = request.headers.get("x-forwarded-proto") or request.url.scheme
+        return f"{proto}://{host}".rstrip("/")
+    return str(request.base_url).rstrip("/")
+
+
+def _subscribe_urls(form: dict[str, Any], request: Request) -> dict[str, str]:
+    plan_id = save_form(form)
+    ics_url = f"{_public_base(request)}/c/{plan_id}.ics"
+    webcal = "webcal://" + ics_url.split("://", 1)[-1]
+    google = "https://calendar.google.com/calendar/r?cid=" + quote(ics_url, safe="")
+    return {
+        "id": plan_id,
+        "url": ics_url,
+        "add": f"{_public_base(request)}/add/{plan_id}",
+        "webcal": webcal,
+        "google": google,
+    }
+
+
 @app.post("/api/calendar")
 async def api_calendar(request: Request) -> dict[str, Any]:
     body = await request.json()
-    return _calendar_payload(body or {})
+    form = body or {}
+    plan = _calendar_payload(form)
+    if not plan.get("error"):
+        try:
+            plan["subscribe"] = _subscribe_urls(form, request)
+        except RuntimeError:
+            pass
+    return plan
 
 
 @app.post("/api/calendar.ics")
@@ -432,14 +462,6 @@ async def api_ics(request: Request) -> PlainTextResponse:
     )
 
 
-def _public_base(request: Request) -> str:
-    host = request.headers.get("x-forwarded-host") or request.headers.get("host")
-    if host:
-        proto = request.headers.get("x-forwarded-proto") or request.url.scheme
-        return f"{proto}://{host}".rstrip("/")
-    return str(request.base_url).rstrip("/")
-
-
 @app.post("/api/calendar/subscribe")
 async def api_subscribe(request: Request) -> JSONResponse:
     body = await request.json()
@@ -448,17 +470,47 @@ async def api_subscribe(request: Request) -> JSONResponse:
     if plan.get("error"):
         return JSONResponse(plan, status_code=400)
     try:
-        plan_id = save_form(form)
+        return JSONResponse(_subscribe_urls(form, request))
     except RuntimeError as exc:
         return JSONResponse({"error": str(exc)}, status_code=503)
-    ics_url = f"{_public_base(request)}/c/{plan_id}.ics"
-    webcal = "webcal://" + ics_url.split("://", 1)[-1]
-    google = "https://calendar.google.com/calendar/r?cid=" + quote(ics_url, safe="")
-    return JSONResponse({"id": plan_id, "url": ics_url, "webcal": webcal, "google": google})
+
+
+@app.get("/add/{plan_id}")
+async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
+    pid = parse_plan_id(plan_id)
+    form = load_form(pid) if pid else None
+    if not form:
+        return HTMLResponse("<p>Calendar not found.</p>", status_code=404)
+    ics_url = html_escape(f"{_public_base(request)}/c/{pid}.ics", quote=True)
+    return HTMLResponse(
+        f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Plant Doctor calendar</title>
+  <style>
+    body {{ margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #f6f7f8; color: #111; }}
+    .wrap {{ width: min(420px, 92vw); margin: 0 auto; padding: 48px 0; }}
+    h1 {{ font-size: 22px; margin: 0 0 8px; }}
+    p {{ color: #6b7280; line-height: 1.45; margin: 0 0 20px; }}
+    a {{ display: block; padding: 16px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; }}
+    .primary {{ background: #22b14c; color: #fff; }}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Add to Calendar</h1>
+    <p>Tap the button to put this Plant Doctor plan on your phone.</p>
+    <a class="primary" href="{ics_url}">Add to Calendar</a>
+  </div>
+</body>
+</html>"""
+    )
 
 
 @app.get("/c/{plan_id}")
-async def subscribed_ics(plan_id: str) -> PlainTextResponse:
+async def subscribed_ics(plan_id: str, request: Request) -> PlainTextResponse:
     pid = parse_plan_id(plan_id)
     form = load_form(pid) if pid else None
     if not form:
@@ -467,11 +519,18 @@ async def subscribed_ics(plan_id: str) -> PlainTextResponse:
     if plan.get("error"):
         return PlainTextResponse(str(plan["error"]), status_code=400)
     ics = to_ics(plan.get("events") or [], plan_id=pid)
+    ua = request.headers.get("user-agent") or ""
+    safari_ios = ("iPhone" in ua or "iPad" in ua) and "Safari" in ua
+    disposition = (
+        'attachment; filename="plant-doctor-calendar.ics"'
+        if safari_ios
+        else 'inline; filename="plant-doctor-calendar.ics"'
+    )
     return PlainTextResponse(
         ics,
         media_type="text/calendar; charset=utf-8",
         headers={
-            "Content-Disposition": 'inline; filename="plant-doctor-calendar.ics"',
+            "Content-Disposition": disposition,
             "Cache-Control": "no-cache",
         },
     )

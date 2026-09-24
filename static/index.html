@@ -1260,10 +1260,22 @@
         if (open) primeCalLinks();
       }
 
+      function onIphone() {
+        return /iPhone|iPad|iPod/i.test(navigator.userAgent)
+          || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      }
+
+      function appleCalUrl(data) {
+        if (!data) return "";
+        if (onIphone()) return data.add || data.url || "";
+        return data.webcal || data.url || "";
+      }
+
       function applyCalLinks(data) {
         const apple = document.getElementById("calApple");
         const google = document.getElementById("calGoogle");
-        if (apple && data.webcal) apple.setAttribute("href", data.webcal);
+        const appleUrl = appleCalUrl(data);
+        if (apple && appleUrl) apple.setAttribute("href", appleUrl);
         if (google && data.google) google.setAttribute("href", data.google);
       }
 
@@ -1310,7 +1322,7 @@
 
       function renderPlan(data) {
         lastPlan = data;
-        subscribeFeed = null;
+        subscribeFeed = data.subscribe || null;
         selectedDate = (data.events[0] && data.events[0].date) || data.start_date;
         const start = new Date((data.start_date || "") + "T00:00:00");
         let months = "";
@@ -1336,6 +1348,8 @@
           ? `<div id="planNotes" class="plan-notes no-print"><ul>${notes.map((n) => `<li>${noteHtml(n)}</li>`).join("")}</ul></div>`
           : "";
         const why = (data.choice_summary || []).map((l) => `<li>${esc(l)}</li>`).join("");
+        const appleUrl = appleCalUrl(data.subscribe);
+        const googleUrl = (data.subscribe && data.subscribe.google) || "";
         document.getElementById("results").innerHTML = `
           <div class="plan-lead">
             <div class="prod-thumbs">${products}</div>
@@ -1352,8 +1366,8 @@
                 <div class="cal-menu">
                   <button type="button" id="addToCalendar" aria-expanded="false" aria-haspopup="true">Add to calendar</button>
                   <div id="calMenu" class="cal-menu-list hidden" role="menu">
-                    <a id="calApple" role="menuitem" data-cal="apple">Apple Calendar</a>
-                    <a id="calGoogle" role="menuitem" data-cal="google" target="_blank" rel="noopener">Google Calendar</a>
+                    <a id="calApple" role="menuitem" data-cal="apple"${appleUrl ? ` href="${esc(appleUrl)}"` : ""}>Apple Calendar</a>
+                    <a id="calGoogle" role="menuitem" data-cal="google" target="_blank" rel="noopener"${googleUrl ? ` href="${esc(googleUrl)}"` : ""}>Google Calendar</a>
                     <button type="button" role="menuitem" data-cal="download">Download</button>
                   </div>
                 </div>
