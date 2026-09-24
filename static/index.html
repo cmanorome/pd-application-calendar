@@ -1251,13 +1251,32 @@
 
       function toggleCalMenu(ev) {
         ev.stopPropagation();
+        if (onIphone()) {
+          openPhoneAddPage();
+          return;
+        }
         const menu = document.getElementById("calMenu");
         const btn = document.getElementById("addToCalendar");
         if (!menu || !btn) return;
         const open = menu.classList.contains("hidden");
         menu.classList.toggle("hidden", !open);
         btn.setAttribute("aria-expanded", open ? "true" : "false");
-        if (open) primeCalLinks();
+        if (open) {
+          primeCalLinks();
+          menu.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      }
+
+      async function openPhoneAddPage() {
+        const btn = document.getElementById("addToCalendar");
+        if (btn) btn.scrollIntoView({ behavior: "smooth", block: "center" });
+        try {
+          const data = await getSubscribeFeed();
+          const url = data.add || data.url;
+          if (url) window.location.href = String(url).split("#")[0] + "#add";
+        } catch (err) {
+          /* keep the button available */
+        }
       }
 
       function onIphone() {

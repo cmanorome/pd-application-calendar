@@ -481,7 +481,9 @@ async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
     form = load_form(pid) if pid else None
     if not form:
         return HTMLResponse("<p>Calendar not found.</p>", status_code=404)
-    ics_url = html_escape(f"{_public_base(request)}/c/{pid}.ics", quote=True)
+    ics_raw = f"{_public_base(request)}/c/{pid}.ics"
+    ics_url = html_escape(ics_raw, quote=True)
+    google = html_escape("https://calendar.google.com/calendar/r?cid=" + quote(ics_raw, safe=""), quote=True)
     return HTMLResponse(
         f"""<!doctype html>
 <html lang="en">
@@ -491,19 +493,50 @@ async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
   <title>Add Plant Doctor calendar</title>
   <style>
     body {{ margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #f6f7f8; color: #111; }}
-    .wrap {{ width: min(420px, 92vw); margin: 0 auto; padding: 48px 0; }}
+    .wrap {{ width: min(420px, 92vw); margin: 0 auto; padding: 28px 0 64px; }}
     h1 {{ font-size: 22px; margin: 0 0 8px; }}
-    p {{ color: #6b7280; line-height: 1.45; margin: 0 0 20px; }}
-    a {{ display: block; padding: 16px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; }}
-    .primary {{ background: #22b14c; color: #fff; }}
+    p {{ color: #6b7280; line-height: 1.45; margin: 0 0 16px; }}
+    a.primary, button.copy {{ display: block; width: 100%; box-sizing: border-box; padding: 16px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; border: 0; font-size: 16px; }}
+    a.primary {{ background: #22b14c; color: #fff; }}
+    a.google {{ display: block; text-align: center; margin: 14px 0 22px; color: #14532d; font-weight: 600; }}
+    .sub {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; }}
+    .sub p {{ margin: 0 0 10px; color: #374151; font-size: 14px; }}
+    code {{ display: block; word-break: break-all; font-size: 12px; background: #f6f7f8; border-radius: 8px; padding: 10px; margin: 0 0 10px; }}
+    button.copy {{ background: #fff; color: #111; border: 1px solid #e5e7eb; font-weight: 600; }}
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>Add to Calendar</h1>
-    <p>Tap the button to put this Plant Doctor plan on your phone.</p>
-    <a class="primary" href="{ics_url}">Add to Calendar</a>
+    <p>Tap the button to add this Plant Doctor plan.</p>
+    <a id="add" class="primary" href="{ics_url}">Add to Calendar</a>
+    <a class="google" href="{google}">Google Calendar</a>
+    <div class="sub">
+      <p>To keep it updating, copy this link. In Calendar tap Calendars, then Add Calendar, then Add Subscription Calendar, and paste it.</p>
+      <code id="subUrl">{ics_url}</code>
+      <button type="button" class="copy" id="copySub">Copy subscribe link</button>
+    </div>
   </div>
+  <script>
+    const btn = document.getElementById("add");
+    if (btn) btn.scrollIntoView({{ behavior: "smooth", block: "center" }});
+    const copy = document.getElementById("copySub");
+    const url = document.getElementById("subUrl");
+    if (copy && url) {{
+      copy.addEventListener("click", async () => {{
+        try {{
+          await navigator.clipboard.writeText(url.textContent);
+          copy.textContent = "Copied";
+        }} catch (err) {{
+          const range = document.createRange();
+          range.selectNodeContents(url);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }}
+      }});
+    }}
+  </script>
 </body>
 </html>"""
     )
