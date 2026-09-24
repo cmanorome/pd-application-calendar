@@ -248,6 +248,23 @@ def test_liquid_gypsum_shows_home_garden_rate():
     assert "45 mL" in blob
 
 
+def test_event_notes_skip_cadence_already_on_the_card():
+    plan = _calendar_payload(
+        {
+            "path": "pick",
+            "use_case": "lawn",
+            "start_date": "2026-09-17",
+            "skus": ["SWS", "A8X"],
+        }
+    )
+    notes = {e["sku"]: (e.get("notes") or "").lower() for e in plan["events"]}
+    assert "fortnightly" not in notes["SWS"]
+    assert "every 2 weeks" not in notes["SWS"]
+    assert "mixable with stimulizer" in notes["SWS"]
+    assert "fortnightly" not in notes["A8X"]
+    assert "do not tank-mix with iron" in notes["A8X"]
+
+
 def test_picked_products_only_those_skus():
     plan = _calendar_payload(
         {
@@ -819,6 +836,7 @@ if __name__ == "__main__":
     test_garden_max_results_includes_rsl_granular()
     test_picked_ffr_and_activ8_alternate()
     test_liquid_gypsum_shows_home_garden_rate()
+    test_event_notes_skip_cadence_already_on_the_card()
     test_picked_products_only_those_skus()
     test_pick_requires_a_product()
     test_lawn_picker_includes_uptake_products()

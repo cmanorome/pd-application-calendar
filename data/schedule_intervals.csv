@@ -1,31 +1,31 @@
 sku,cadence_days,one_off,window,max_per_year,tank_group,method,mix_together,independent,water_in,soil_drench,foliar,fertigation,hydroponic,hose_on,how_often,notes
-A8X,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks,Usage guide: fortnightly in spring/summer; once a month in cooler months. Do not tank-mix with iron.
-A8M,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks,Usage guide: fortnightly when growing; once a month in cooler months. Do not tank-mix with iron.
-886,90,0,year_round,4,granular,spread,0,1,1,0,0,0,0,0,Every 3 months,Usage guide: every 3 months year-round. Half rate in autumn and winter. Water in lightly.
-892,90,0,year_round,4,granular,spread,0,1,1,0,0,0,0,0,Every 3 months,Greens Grade for low-cut turf. Same 3-month interval as Fairway. Half rate in autumn and winter.
-575,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months,Garden flower/fruit granular. Not for lawns. Water in after spreading.
-721,28,0,growing_season,10,mixable,spray,1,0,1,1,1,1,0,0,Every 4 weeks during flowering/fruiting,"Usage guide: fortnightly on vegetables; every 6–8 weeks on trees, fruit and vines."
-LEN,28,0,year_round,12,iron,hose-on,0,1,1,0,0,0,0,1,Every 4 weeks year-round,Hose-on tonic with iron. Apply independently from other liquids. Offset ~2 weeks if alternating with MaxGreen.
-LIR,28,0,growing_season,8,iron,spray,0,1,1,0,0,0,0,0,Every 4 weeks in the growing season,"Usage guide: trees and grapevines every 6–8 weeks. Apply on a different day from seaweed, humic, wetter and Activ8. May stain paths."
-MG,28,0,growing_season,8,iron,hose-on,0,1,1,0,0,0,0,1,Monthly in the growing season,Usage guide: fortnightly on vegetables; every 6–8 weeks on trees and vines. Skip summer if fungal issues. Mixable with Stimulizer only.
-758,180,0,year_round,2,granular,spread,0,0,1,0,0,0,0,0,Once or twice a year,"Usage guide: 1–2 times per year; feeds up to 3 months. Ideal at renovation, before planting, or lawn recovery."
-1156,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months,Usage guide: every 3 months year-round. Water in after spreading.
-414,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,1,0,Weekly or fortnightly as required,Usage guide: weekly or fortnightly through the growing season. Do not tank-mix with iron.
-1075,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once at the start of the plan (repeat yearly),"Usage guide: compacted, clay or sodic soils; soil prep or an ongoing soil program. Water in after spreading."
+A8X,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks,Do not tank-mix with iron.
+A8M,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2 weeks,Do not tank-mix with iron.
+886,90,0,year_round,4,granular,spread,0,1,1,0,0,0,0,0,Every 3 months,Half rate in autumn and winter.
+892,90,0,year_round,4,granular,spread,0,1,1,0,0,0,0,0,Every 3 months,Greens Grade for low-cut turf. Half rate in autumn and winter.
+575,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months,Garden flower/fruit granular. Not for lawns.
+721,28,0,growing_season,10,mixable,spray,1,0,1,1,1,1,0,0,Every 4 weeks during flowering/fruiting,"Fortnightly on vegetables; every 6–8 weeks on trees, fruit and vines."
+LEN,28,0,year_round,12,iron,hose-on,0,1,1,0,0,0,0,1,Every 4 weeks year-round,Apply independently from other liquids. Offset ~2 weeks if alternating with MaxGreen.
+LIR,28,0,growing_season,8,iron,spray,0,1,1,0,0,0,0,0,Every 4 weeks in the growing season,"Trees and grapevines every 6–8 weeks. May stain paths."
+MG,28,0,growing_season,8,iron,hose-on,0,1,1,0,0,0,0,1,Monthly in the growing season,Fortnightly on vegetables; every 6–8 weeks on trees and vines. Skip summer if fungal issues. Mixable with Stimulizer only.
+758,180,0,year_round,2,granular,spread,0,0,1,0,0,0,0,0,Once or twice a year,"Feeds up to 3 months. Ideal at renovation, before planting, or lawn recovery."
+1156,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months,
+414,14,0,year_round,24,no_iron_mix,spray,1,0,1,1,1,1,1,0,Weekly or fortnightly as required,Do not tank-mix with iron.
+1075,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once at the start of the plan (repeat yearly),"For compacted, clay or sodic soils."
 513,90,0,year_round,4,granular,spread,0,0,0,0,0,0,0,0,Every 3 months,"Spread on the top layer of soil, under mulch, or dug in. Does not need to be watered in."
-LIMEGr,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once in autumn or early spring,Usage guide: when soil tests show low pH. Wait 6 weeks before iron.
-664,120,0,growing_season,3,granular,spread,0,0,1,0,0,0,0,0,Every 3–6 months on home lawns,Usage guide: 3–6 months lawns; 2–3 months sports turf; 1–2 months greens. Reapply if water still beads.
-NSWL,21,0,growing_season,12,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2–4 weeks when soils are dry or water-repellent,"Usage guide: mix gently, do not shake. Do not tank-mix with iron."
-526,21,0,growing_season,12,no_iron_mix,spray,0,0,0,1,1,1,0,0,Every 2–4 weeks during active growth,Soluble humic. Jar test before mixing. Do not tank-mix with iron.
-29800,14,0,year_round,20,no_iron_mix,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Usage guide: fortnightly for home gardens. Do not tank-mix with iron.
-29782,14,0,growing_season,16,mixable,spray,0,1,1,1,0,1,0,0,Every 2 weeks in the growing season,"Usage guide: apply independently; extra applications during drought, heat, frost or transplant stress."
-SWS,14,0,year_round,24,mixable,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Usage guide: fortnightly through the growing season; year-round for plant and soil health. Mixable with Stimulizer and most non-iron feeds.
-STM,14,0,year_round,24,mixable,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Usage guide: fortnightly year-round. Can tank-mix with iron. Use at very low rates.
-557,365,1,year_round,1,granular,spread,0,0,0,0,0,0,0,0,Once at the start of the plan (repeat yearly),"Usage guide: planting, turf install or annual amendment. Does not break down."
-DOL,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once in autumn or early spring,Usage guide: test pH and magnesium first. Wait 6 weeks before iron.
-846,28,0,growing_season,4,iron,spread,0,1,1,0,0,0,0,0,Every 4 weeks while correcting yellowing,Usage guide: moss prevention every 6–8 weeks from late autumn through winter. Do not combine with lime.
-547,28,0,growing_season,6,iron,spray,0,1,0,1,1,1,0,0,Every 4 weeks from spring through autumn,Usage guide: at the start of growth or when leaves yellow. Preferred on alkaline soils. Apply independently.
-636,21,0,growing_season,12,no_iron_mix,spray,0,0,0,1,1,1,0,0,Every 2–4 weeks for clay soils,"Home garden: 45 mL in 9 L water, apply 1 L/m² (500 mL per 100 m²) every 2–4 weeks. Higher rates on heavy clay. Drench or use equipment that can take larger particles. Coarse 500-micron filter. Do not tank-mix with iron. Not for drippers."
-29814,21,0,growing_season,12,no_iron_mix,spray,0,0,0,1,1,1,1,0,Every 3 weeks in the growing season,"Usage guide: as required at seeding, transplant, flowering or stress. Jar test before mixing. Do not tank-mix with iron."
-WMP,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months on lawns and beds,Usage guide: pots every 4–6 weeks; lawns/beds as an ongoing soil-health dressing. Water in after spreading.
-WMB,21,0,growing_season,12,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2–4 weeks in the growing season,Usage guide: more often during stress or transplanting. Do not tank-mix with iron (humic/fulvic).
+LIMEGr,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once in autumn or early spring,Apply when soil tests show low pH. Wait 6 weeks before iron.
+664,120,0,growing_season,3,granular,spread,0,0,1,0,0,0,0,0,Every 3–6 months on home lawns,3–6 months on lawns; 2–3 months on sports turf; 1–2 months on greens. Reapply if water still beads.
+NSWL,21,0,growing_season,12,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2–4 weeks when soils are dry or water-repellent,"Mix gently, do not shake. Do not tank-mix with iron."
+526,21,0,growing_season,12,no_iron_mix,spray,0,0,0,1,1,1,0,0,Every 2–4 weeks during active growth,Jar test before mixing. Do not tank-mix with iron.
+29800,14,0,year_round,20,no_iron_mix,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Do not tank-mix with iron.
+29782,14,0,growing_season,16,mixable,spray,0,1,1,1,0,1,0,0,Every 2 weeks in the growing season,"Apply independently. Extra applications during drought, heat, frost or transplant stress."
+SWS,14,0,year_round,24,mixable,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Mixable with Stimulizer and most non-iron feeds.
+STM,14,0,year_round,24,mixable,spray,1,0,1,1,1,1,1,0,Every 2 weeks,Can tank-mix with iron. Use at very low rates.
+557,365,1,year_round,1,granular,spread,0,0,0,0,0,0,0,0,Once at the start of the plan (repeat yearly),Does not break down.
+DOL,365,1,year_round,1,granular,spread,0,0,1,0,0,0,0,0,Once in autumn or early spring,Test pH and magnesium first. Wait 6 weeks before iron.
+846,28,0,growing_season,4,iron,spread,0,1,1,0,0,0,0,0,Every 4 weeks while correcting yellowing,For moss prevention, every 6–8 weeks from late autumn through winter. Do not combine with lime.
+547,28,0,growing_season,6,iron,spray,0,1,0,1,1,1,0,0,Every 4 weeks from spring through autumn,Use at the start of growth or when leaves yellow. Preferred on alkaline soils.
+636,21,0,growing_season,12,no_iron_mix,spray,0,0,0,1,1,1,0,0,Every 2–4 weeks for clay soils,"Home garden: 45 mL in 9 L water, apply 1 L/m². Higher rates on heavy clay. Drench or use equipment that can take larger particles. Coarse 500-micron filter. Do not tank-mix with iron. Not for drippers."
+29814,21,0,growing_season,12,no_iron_mix,spray,0,0,0,1,1,1,1,0,Every 3 weeks in the growing season,"Use at seeding, transplant, flowering or stress. Jar test before mixing. Do not tank-mix with iron."
+WMP,90,0,year_round,4,granular,spread,0,0,1,0,0,0,0,0,Every 3 months on lawns and beds,Pots every 4–6 weeks.
+WMB,21,0,growing_season,12,no_iron_mix,spray,1,0,1,1,1,1,0,0,Every 2–4 weeks in the growing season,More often during stress or transplanting. Do not tank-mix with iron (humic/fulvic).
