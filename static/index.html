@@ -219,6 +219,23 @@
         padding: 18px 20px 20px;
         counter-reset: ask;
       }
+      .ask-toggle {
+        display: none;
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        color: var(--green-dark);
+        border: 0;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .ask.has-plan .ask-toggle { display: block; }
+      .ask.is-collapsed {
+        padding: 12px 16px;
+        gap: 0;
+      }
+      .ask.is-collapsed #askBody { display: none; }
       #section_help { display: flex; flex-direction: column; gap: 18px; }
       .ask-step {
         display: grid;
@@ -570,7 +587,8 @@
         .check .title,
         .check-item .title,
         .pick-card .title,
-        .prod-name { font-size: 12px; }
+        .prod-name,
+        .ask-toggle { font-size: 12px; }
         .cal-menu-list a,
         .cal-menu-list button { font-size: 14px; }
         label,
@@ -635,6 +653,8 @@
     <main class="container">
       <div class="no-print">
         <div class="ask card">
+        <button type="button" id="askToggle" class="ask-toggle hidden" aria-expanded="true" aria-controls="askBody">Edit questions</button>
+        <div id="askBody">
         <p class="muted">
           Typical program only — follow the label and ease off if plants are stressed. Measure area in the
           <a class="link" href="https://www.plantdoctor.com.au/page/home-plant-doctor/plant-doctor-application-rate-calculator/" target="_blank" rel="noopener">rates calculator</a>
@@ -803,11 +823,12 @@
           </div>
         </section>
         </div>
-        </div>
 
         <div class="actions">
           <button id="run" type="button">Build my calendar</button>
           <button id="reset" class="secondary" type="button">Reset</button>
+        </div>
+        </div>
         </div>
       </div>
 
@@ -1570,6 +1591,38 @@
         closeCalMenu();
       });
 
+      function collapseAsk() {
+        const card = document.querySelector(".ask.card");
+        const toggle = document.getElementById("askToggle");
+        if (!card || !toggle) return;
+        card.classList.add("has-plan", "is-collapsed");
+        toggle.classList.remove("hidden");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.textContent = "Edit questions";
+        reportEmbedHeight();
+      }
+      function expandAsk(reset) {
+        const card = document.querySelector(".ask.card");
+        const toggle = document.getElementById("askToggle");
+        if (!card || !toggle) return;
+        card.classList.remove("is-collapsed");
+        if (reset) {
+          card.classList.remove("has-plan");
+          toggle.classList.add("hidden");
+          toggle.setAttribute("aria-expanded", "true");
+          reportEmbedHeight();
+          return;
+        }
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.textContent = "Hide questions";
+        reportEmbedHeight();
+      }
+      document.getElementById("askToggle").addEventListener("click", () => {
+        const card = document.querySelector(".ask.card");
+        if (card && card.classList.contains("is-collapsed")) expandAsk(false);
+        else collapseAsk();
+      });
+
       document.getElementById("run").addEventListener("click", async () => {
         const btn = document.getElementById("run");
         btn.disabled = true;
@@ -1587,6 +1640,7 @@
             return;
           }
           renderPlan(data);
+          collapseAsk();
           reportEmbedHeight();
           document.getElementById("results_heading").scrollIntoView({ behavior: "smooth", block: "start" });
         } catch (err) {
@@ -1623,6 +1677,7 @@
         syncPathUI();
         lastPlan = null;
         hidePlanActions();
+        expandAsk(true);
         document.getElementById("results").innerHTML = `<div class="empty">Fill in the form and tap Build my calendar.</div>`;
       });
     </script>
