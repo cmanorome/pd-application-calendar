@@ -431,17 +431,19 @@
       .month h4 { margin: 0 0 8px; font-size: 14px; color: var(--green-dark); }
       .dow, .days {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 2px;
         text-align: center;
       }
       .dow span { font-size: 10px; color: var(--muted); font-weight: 600; padding: 2px 0; }
       .day {
         min-height: 34px;
+        min-width: 0;
         border-radius: 8px;
         padding: 2px 0 4px;
         font-size: 11px;
         color: #374151;
+        overflow: hidden;
       }
       .day.empty { background: transparent; }
       .day.has {
@@ -449,7 +451,7 @@
         cursor: pointer;
         font-weight: 600;
       }
-      .day.has:hover, .day.selected { outline: 2px solid var(--green); }
+      .day.has:hover, .day.selected { outline: 2px solid var(--green); outline-offset: -1px; }
       .dots { display: flex; justify-content: center; gap: 2px; flex-wrap: wrap; min-height: 6px; }
       .dot { width: 6px; height: 6px; border-radius: 99px; }
       .dot.biology { background: #16a34a; }
