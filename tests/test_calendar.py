@@ -27,6 +27,16 @@ def test_lawn_calendar_has_events():
     assert "half strength" not in " ".join(plan["notes"]).lower()
 
 
+def test_event_notes_do_not_repeat_the_rate():
+    plan = _calendar_payload(_lawn_payload())
+    assert plan["events"]
+    for ev in plan["events"]:
+        rate = (ev.get("amount_label") or ev.get("rate_label") or "").strip()
+        notes = (ev.get("notes") or "").strip()
+        if rate:
+            assert not notes.lower().startswith(rate.lower()), (ev["sku"], notes)
+
+
 def test_iron_not_same_day_as_seaweed():
     plan = _calendar_payload(
         _lawn_payload(
@@ -800,6 +810,7 @@ def test_majority_garden_goals_prefer_quantum_h():
 
 if __name__ == "__main__":
     test_lawn_calendar_has_events()
+    test_event_notes_do_not_repeat_the_rate()
     test_iron_not_same_day_as_seaweed()
     test_lime_before_iron()
     test_garden_uses_garden_products()

@@ -1332,22 +1332,39 @@
         setTimeout(() => URL.revokeObjectURL(url), 60000);
       }
 
+      function eventNoteText(e) {
+        let notes = (e.notes || "").trim();
+        const rate = (e.amount_label || e.rate_label || "").trim();
+        if (rate && notes.toLowerCase().startsWith(rate.toLowerCase())) {
+          notes = notes.slice(rate.length).trim();
+        }
+        if (notes.toLowerCase().startsWith("usage guide:")) {
+          notes = notes.slice("usage guide:".length).trim();
+        }
+        return notes;
+      }
+
       function renderEventList(events) {
         if (!events.length) return `<p class="muted">No applications on this day.</p>`;
         const mix = events.filter((e) => e.tank_mix);
         const mixTip = mix.length >= 2
           ? `<p class="tip">Mix in one sprayer today: ${mix.map((e) => esc(e.name)).join(", ")}. Jar test if this combo is new. Do not add iron to this tank.</p>`
           : "";
-        return mixTip + events.map((e) => `
+        return mixTip + events.map((e) => {
+          const rate = e.amount_label || e.rate_label || "";
+          const meta = [e.how_often, rate].filter(Boolean).join(" · ");
+          const notes = eventNoteText(e);
+          return `
           <article class="event-card">
             <div class="prod-name">${esc(e.name)}</div>
             <div class="role-tag">${esc(roleLabel(e.role))} · ${esc(e.method || "")}</div>
             ${renderUsage(e.usage)}
-            <p class="muted" style="margin:6px 0;">${esc(e.how_often || "")}${e.amount_label ? " · " + esc(e.amount_label) : e.rate_label ? " · " + esc(e.rate_label) : ""}</p>
-            <p class="muted">${esc(e.notes || "")}</p>
+            ${meta ? `<p class="muted" style="margin:6px 0;">${esc(meta)}</p>` : ""}
+            ${notes ? `<p class="muted">${esc(notes)}</p>` : ""}
             ${e.product_url ? `<a class="link" href="${esc(e.product_url)}" target="_blank" rel="noopener">View product</a>` : ""}
           </article>
-        `).join("");
+        `;
+        }).join("");
       }
 
       function downloadIcs() {

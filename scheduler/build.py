@@ -523,11 +523,6 @@ def build_calendar(
 
         blocks_iron = product.is_incompatible_with_iron or interval.tank_group == "no_iron_mix"
         for d in dates:
-            note_bits = [interval.notes]
-            if amount_label:
-                note_bits.insert(0, amount_label)
-            elif rate_label:
-                note_bits.insert(0, rate_label)
             events.append(
                 {
                     "date": d.isoformat(),
@@ -538,7 +533,7 @@ def build_calendar(
                     "how_often": how_often,
                     "rate_label": rate_label,
                     "amount_label": amount_label,
-                    "notes": " ".join(b for b in note_bits if b),
+                    "notes": interval.notes or "",
                     "product_url": url,
                     "image_url": product.image_url,
                     "method": interval.method,
