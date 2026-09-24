@@ -423,10 +423,18 @@ def _public_base(request: Request) -> str:
     return str(request.base_url).rstrip("/")
 
 
+def _webcal_url(ics_url: str) -> str:
+    scheme, _, rest = ics_url.partition("://")
+    hostport, _, path = rest.partition("/")
+    if scheme == "https" and ":" not in hostport:
+        hostport = f"{hostport}:443"
+    return f"webcal://{hostport}/{path}"
+
+
 def _subscribe_urls(form: dict[str, Any], request: Request) -> dict[str, str]:
     plan_id = save_form(form)
     ics_url = f"{_public_base(request)}/c/{plan_id}.ics"
-    webcal = "webcal://" + ics_url.split("://", 1)[-1]
+    webcal = _webcal_url(ics_url)
     google = "https://calendar.google.com/calendar/r?cid=" + quote(ics_url, safe="")
     return {
         "id": plan_id,
@@ -543,7 +551,7 @@ async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
 
 
 @app.get("/c/{plan_id}")
-async def subscribed_ics(plan_id: str, request: Request) -> PlainTextResponse:
+async def subscribed_ics(plan_id: str) -> PlainTextResponse:
     pid = parse_plan_id(plan_id)
     form = load_form(pid) if pid else None
     if not form:
@@ -552,18 +560,11 @@ async def subscribed_ics(plan_id: str, request: Request) -> PlainTextResponse:
     if plan.get("error"):
         return PlainTextResponse(str(plan["error"]), status_code=400)
     ics = to_ics(plan.get("events") or [], plan_id=pid)
-    ua = request.headers.get("user-agent") or ""
-    safari_ios = ("iPhone" in ua or "iPad" in ua) and "Safari" in ua
-    disposition = (
-        'attachment; filename="plant-doctor-calendar.ics"'
-        if safari_ios
-        else 'inline; filename="plant-doctor-calendar.ics"'
-    )
     return PlainTextResponse(
         ics,
         media_type="text/calendar; charset=utf-8",
         headers={
-            "Content-Disposition": disposition,
+            "Content-Disposition": 'inline; filename="plant-doctor-calendar.ics"',
             "Cache-Control": "no-cache",
         },
     )
