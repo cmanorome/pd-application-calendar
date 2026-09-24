@@ -431,20 +431,17 @@
       .month h4 { margin: 0 0 8px; font-size: 14px; color: var(--green-dark); }
       .dow, .days {
         display: grid;
-        grid-template-columns: repeat(7, minmax(0, 1fr));
+        grid-template-columns: repeat(7, 1fr);
         gap: 2px;
         text-align: center;
       }
       .dow span { font-size: 10px; color: var(--muted); font-weight: 600; padding: 2px 0; }
       .day {
-        min-height: 0;
-        min-width: 0;
+        min-height: 34px;
         border-radius: 8px;
-        padding: 2px 0;
+        padding: 2px 0 4px;
         font-size: 11px;
-        line-height: 1.2;
         color: #374151;
-        overflow: hidden;
       }
       .day.empty { background: transparent; }
       .day.has {
@@ -452,8 +449,8 @@
         cursor: pointer;
         font-weight: 600;
       }
-      .day.has:hover, .day.selected { outline: 2px solid var(--green); outline-offset: -1px; }
-      .dots { display: flex; justify-content: center; gap: 2px; flex-wrap: wrap; margin-top: 1px; }
+      .day.has:hover, .day.selected { outline: 2px solid var(--green); }
+      .dots { display: flex; justify-content: center; gap: 2px; flex-wrap: wrap; min-height: 6px; }
       .dot { width: 6px; height: 6px; border-radius: 99px; }
       .dot.biology { background: #16a34a; }
       .dot.uptake { background: #0f766e; }
@@ -495,31 +492,16 @@
         background: white;
       }
       @media (max-width: 820px) {
-        .month { padding: 6px 4px 8px; }
-        .month h4 { margin-bottom: 4px; }
-        .dow, .days { gap: 0; }
-        .day {
-          min-height: 0;
-          padding: 1px 0;
-          font-size: 8px;
-          line-height: 1.1;
-          border-radius: 3px;
-        }
-        .dots {
-          gap: 1px;
-          margin-top: 0;
-          flex-wrap: nowrap;
-          overflow: hidden;
-        }
-        .dot { width: 3px; height: 3px; flex: 0 0 3px; }
+        .month { padding: 8px; }
+        .day { min-height: 28px; font-size: 10px; }
         .event-card { padding: 8px; }
         .day-panel { padding: 10px; }
       }
       @media (max-width: 430px) {
         .container { width: min(1080px, 100%); padding: 0 10px; }
-        .dow span { font-size: 7px; }
-        .day { padding: 0; }
-        .dot { width: 3px; height: 3px; }
+        .dow span { font-size: 9px; }
+        .day { min-height: 26px; padding: 1px 0 2px; }
+        .dot { width: 5px; height: 5px; }
       }
       html.is-narrow-embed .header {
         padding: 14px 0 10px;
@@ -1127,8 +1109,7 @@
           const dots = evs.map((e) => `<i class="dot ${esc(e.role)}"></i>`).join("");
           const sel = selectedDate === iso ? " selected" : "";
           const has = evs.length ? " has" : "";
-          const dotsHtml = dots ? `<div class="dots">${dots}</div>` : "";
-          cells += `<div class="day${has}${sel}" data-date="${iso}" title="${esc(iso)}"><div>${d}</div>${dotsHtml}</div>`;
+          cells += `<div class="day${has}${sel}" data-date="${iso}" title="${esc(iso)}"><div>${d}</div><div class="dots">${dots}</div></div>`;
         }
         return `<section class="month"><h4>${esc(title)}</h4>
           <div class="dow">${["S","M","T","W","T","F","S"].map((d) => `<span>${d}</span>`).join("")}</div>
