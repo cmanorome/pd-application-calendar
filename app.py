@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
@@ -8,7 +9,7 @@ from urllib.parse import quote
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, Response
 
 from pd_engine import recommend
 from pd_engine.catalog import Catalog
@@ -433,6 +434,61 @@ def _google_subscribe_url(ics_url: str) -> str:
     return "https://www.google.com/calendar/render?cid=" + quote(_webcal_url(ics_url), safe="")
 
 
+def _apple_profile(plan_id: str, ics_url: str) -> str:
+    # iPhone Safari opens https:// .ics as a one-off import ("Add All").
+    # A configuration profile is Apple's way to subscribe over HTTPS.
+    name = html_escape("Plant Doctor application calendar")
+    host = html_escape(ics_url)
+    outer = str(uuid.uuid5(uuid.NAMESPACE_URL, f"https://plantdoctor.com.au/cal/{plan_id}"))
+    inner = str(uuid.uuid5(uuid.NAMESPACE_URL, f"https://plantdoctor.com.au/cal/{plan_id}/sub"))
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>PayloadDescription</key>
+      <string>Subscribes to your Plant Doctor application calendar</string>
+      <key>PayloadDisplayName</key>
+      <string>{name}</string>
+      <key>PayloadIdentifier</key>
+      <string>au.com.plantdoctor.calendar.sub.{plan_id}</string>
+      <key>PayloadType</key>
+      <string>com.apple.subscribedcalendar.account</string>
+      <key>PayloadUUID</key>
+      <string>{inner}</string>
+      <key>PayloadVersion</key>
+      <integer>1</integer>
+      <key>SubCalAccountDescription</key>
+      <string>{name}</string>
+      <key>SubCalAccountHostName</key>
+      <string>{host}</string>
+      <key>SubCalAccountUseSSL</key>
+      <true/>
+    </dict>
+  </array>
+  <key>PayloadDescription</key>
+  <string>Adds your Plant Doctor plan as a live calendar subscription</string>
+  <key>PayloadDisplayName</key>
+  <string>{name}</string>
+  <key>PayloadIdentifier</key>
+  <string>au.com.plantdoctor.calendar.{plan_id}</string>
+  <key>PayloadOrganization</key>
+  <string>Plant Doctor</string>
+  <key>PayloadRemovalDisallowed</key>
+  <false/>
+  <key>PayloadType</key>
+  <string>Configuration</string>
+  <key>PayloadUUID</key>
+  <string>{outer}</string>
+  <key>PayloadVersion</key>
+  <integer>1</integer>
+</dict>
+</plist>
+"""
+
+
 def _subscribe_urls(form: dict[str, Any], request: Request) -> dict[str, str]:
     plan_id = save_form(form)
     ics_url = f"{_public_base(request)}/c/{plan_id}.ics"
@@ -442,6 +498,7 @@ def _subscribe_urls(form: dict[str, Any], request: Request) -> dict[str, str]:
         "url": ics_url,
         "add": f"{_public_base(request)}/add/{plan_id}",
         "webcal": webcal,
+        "apple": f"{_public_base(request)}/c/{plan_id}.mobileconfig",
         "google": _google_subscribe_url(ics_url),
     }
 
@@ -492,6 +549,7 @@ async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
         return HTMLResponse("<p>Calendar not found.</p>", status_code=404)
     ics_raw = f"{_public_base(request)}/c/{pid}.ics"
     ics_url = html_escape(ics_raw, quote=True)
+    apple = html_escape(f"{_public_base(request)}/c/{pid}.mobileconfig", quote=True)
     google = html_escape(_google_subscribe_url(ics_raw), quote=True)
     return HTMLResponse(
         f"""<!doctype html>
@@ -518,7 +576,7 @@ async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
   <div class="wrap">
     <h1>Add to Calendar</h1>
     <p>Tap the button to add this Plant Doctor plan.</p>
-    <a id="add" class="primary" href="{ics_url}">Add to Calendar</a>
+    <a id="add" class="primary" href="{apple}">Add to Calendar</a>
     <a class="google" href="{google}">Google Calendar</a>
     <div class="sub">
       <p>To keep it updating, copy this link. In Calendar tap Calendars, then Add Calendar, then Add Subscription Calendar, and paste it.</p>
@@ -552,11 +610,18 @@ async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
 
 
 @app.get("/c/{plan_id}")
-async def subscribed_ics(plan_id: str) -> PlainTextResponse:
+async def subscribed_ics(plan_id: str, request: Request):
     pid = parse_plan_id(plan_id)
     form = load_form(pid) if pid else None
     if not form:
         return PlainTextResponse("Calendar not found.", status_code=404)
+    if str(plan_id).lower().endswith(".mobileconfig"):
+        ics_url = f"{_public_base(request)}/c/{pid}.ics"
+        return Response(
+            content=_apple_profile(pid, ics_url),
+            media_type="application/x-apple-aspen-config",
+            headers={"Cache-Control": "no-cache"},
+        )
     plan = _calendar_payload(form)
     if plan.get("error"):
         return PlainTextResponse(str(plan["error"]), status_code=400)

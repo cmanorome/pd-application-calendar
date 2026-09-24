@@ -503,6 +503,22 @@
         .day { min-height: 26px; padding: 1px 0 2px; }
         .dot { width: 5px; height: 5px; }
       }
+      html.is-narrow-embed .header {
+        padding: 14px 0 10px;
+        margin-bottom: 10px;
+      }
+      html.is-narrow-embed .header h1 { font-size: 22px; }
+      html.is-narrow-embed .subtitle { font-size: 14px; }
+      html.is-narrow-embed .container { padding-left: 12px; padding-right: 12px; }
+      html.is-narrow-embed .ask { padding: 12px 12px 14px; gap: 14px; }
+      html.is-narrow-embed .year-layout,
+      html.is-narrow-embed .year { grid-template-columns: 1fr; }
+      html.is-narrow-embed .day-panel {
+        position: static;
+        max-height: none;
+      }
+      html.is-narrow-embed .check-grid,
+      html.is-narrow-embed .ask-fields { grid-template-columns: 1fr; }
       .event-date { font-size: 12px; font-weight: 700; color: var(--green-dark); margin: 0 0 4px; }
       .pick-card { padding: 10px 12px; }
       .pick-card.is-on { border-color: var(--green); background: #f0faf3; }
@@ -760,6 +776,42 @@
     </footer>
 
     <script>
+      function inIframe() {
+        try { return window.self !== window.top; } catch (err) { return true; }
+      }
+      function syncEmbedLayout() {
+        if (!inIframe()) return;
+        document.documentElement.classList.add("is-embedded");
+        document.documentElement.classList.toggle(
+          "is-narrow-embed",
+          document.documentElement.clientWidth < 720
+        );
+      }
+      syncEmbedLayout();
+      function reportEmbedHeight() {
+        if (!inIframe()) return;
+        const header = document.querySelector(".header");
+        const main = document.querySelector("main");
+        const footer = document.querySelector(".footer");
+        const height = Math.ceil(
+          (header ? header.offsetHeight : 0) +
+          (main ? Math.max(main.scrollHeight, main.offsetHeight) : 0) +
+          (footer ? footer.offsetHeight : 0) +
+          32
+        );
+        parent.postMessage({ type: "pd-calendar-height", height: Math.max(960, height) }, "*");
+      }
+      if (inIframe()) {
+        reportEmbedHeight();
+        window.addEventListener("resize", () => {
+          syncEmbedLayout();
+          reportEmbedHeight();
+        });
+        if (window.ResizeObserver) {
+          new ResizeObserver(reportEmbedHeight).observe(document.body);
+        }
+      }
+
       const startEl = document.getElementById("start_date");
       startEl.value = new Date().toISOString().slice(0, 10);
       let catalog = { products: [], roles: [] };
@@ -1285,7 +1337,7 @@
 
       function appleCalUrl(data) {
         if (!data) return "";
-        if (onIphone()) return data.url || data.webcal || "";
+        if (onIphone()) return data.apple || data.webcal || "";
         return data.webcal || data.url || "";
       }
 
@@ -1489,6 +1541,7 @@
             return;
           }
           renderPlan(data);
+          reportEmbedHeight();
           document.getElementById("results_heading").scrollIntoView({ behavior: "smooth", block: "start" });
         } catch (err) {
           hidePlanActions();

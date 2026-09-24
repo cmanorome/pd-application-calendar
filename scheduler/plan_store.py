@@ -32,7 +32,10 @@ def new_plan_id() -> str:
 
 def parse_plan_id(raw: str) -> str | None:
     text = str(raw or "").strip()
-    if text.lower().endswith(".ics"):
+    lower = text.lower()
+    if lower.endswith(".mobileconfig"):
+        text = text[: -len(".mobileconfig")]
+    elif lower.endswith(".ics"):
         text = text[:-4]
     text = text.strip("/").lower()
     if _ID_RE.fullmatch(text):

@@ -682,6 +682,7 @@ def test_subscribe_roundtrip():
         plan_id = plan_store.save_form(form)
         loaded = plan_store.load_form(f"{plan_id}.ics")
         assert loaded == form
+        assert plan_store.parse_plan_id(f"{plan_id}.mobileconfig") == plan_id
         plan = _calendar_payload(loaded)
         ics = to_ics(plan["events"], plan_id=plan_id)
         assert ics.startswith("BEGIN:VCALENDAR")
@@ -728,6 +729,16 @@ def test_google_subscribe_uses_webcal_cid():
     assert cid.startswith("webcal://")
     assert cid.endswith("/c/0123456789abcdef.ics")
     assert "https://" not in cid
+
+
+def test_apple_profile_is_a_https_subscribe():
+    from app import _apple_profile
+
+    ics = "https://pd-application-calendar.vercel.app/c/0123456789abcdef.ics"
+    profile = _apple_profile("0123456789abcdef", ics)
+    assert "com.apple.subscribedcalendar.account" in profile
+    assert ics in profile
+    assert "<true/>" in profile
 
 
 def test_majority_garden_goals_prefer_quantum_h():
@@ -784,4 +795,5 @@ if __name__ == "__main__":
     test_subscribe_roundtrip()
     test_subscribe_expires_after_thirteen_months()
     test_google_subscribe_uses_webcal_cid()
+    test_apple_profile_is_a_https_subscribe()
     print("ok")
