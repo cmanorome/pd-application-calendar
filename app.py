@@ -427,17 +427,22 @@ def _webcal_url(ics_url: str) -> str:
     return "webcal://" + ics_url.split("://", 1)[-1]
 
 
+def _google_subscribe_url(ics_url: str) -> str:
+    # Google Calendar ignores https:// ICS URLs in cid= and just opens empty.
+    # It still subscribes when cid is a webcal:// feed on the classic render URL.
+    return "https://www.google.com/calendar/render?cid=" + quote(_webcal_url(ics_url), safe="")
+
+
 def _subscribe_urls(form: dict[str, Any], request: Request) -> dict[str, str]:
     plan_id = save_form(form)
     ics_url = f"{_public_base(request)}/c/{plan_id}.ics"
     webcal = _webcal_url(ics_url)
-    google = "https://calendar.google.com/calendar/r?cid=" + quote(ics_url, safe="")
     return {
         "id": plan_id,
         "url": ics_url,
         "add": f"{_public_base(request)}/add/{plan_id}",
         "webcal": webcal,
-        "google": google,
+        "google": _google_subscribe_url(ics_url),
     }
 
 
@@ -487,7 +492,7 @@ async def add_calendar_page(plan_id: str, request: Request) -> HTMLResponse:
         return HTMLResponse("<p>Calendar not found.</p>", status_code=404)
     ics_raw = f"{_public_base(request)}/c/{pid}.ics"
     ics_url = html_escape(ics_raw, quote=True)
-    google = html_escape("https://calendar.google.com/calendar/r?cid=" + quote(ics_raw, safe=""), quote=True)
+    google = html_escape(_google_subscribe_url(ics_raw), quote=True)
     return HTMLResponse(
         f"""<!doctype html>
 <html lang="en">
@@ -562,6 +567,7 @@ async def subscribed_ics(plan_id: str) -> PlainTextResponse:
         headers={
             "Content-Disposition": 'inline; filename="plant-doctor-calendar.ics"',
             "Cache-Control": "no-cache",
+            "Access-Control-Allow-Origin": "*",
         },
     )
 

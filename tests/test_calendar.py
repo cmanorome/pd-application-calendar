@@ -715,6 +715,21 @@ def test_subscribe_expires_after_thirteen_months():
         plan_store.LOCAL_DIR = old
 
 
+def test_google_subscribe_uses_webcal_cid():
+    from urllib.parse import parse_qs, unquote, urlparse
+
+    from app import _google_subscribe_url
+
+    url = _google_subscribe_url("https://pd-application-calendar.vercel.app/c/0123456789abcdef.ics")
+    parts = urlparse(url)
+    cid = unquote(parse_qs(parts.query)["cid"][0])
+    assert parts.netloc == "www.google.com"
+    assert parts.path.endswith("/calendar/render")
+    assert cid.startswith("webcal://")
+    assert cid.endswith("/c/0123456789abcdef.ics")
+    assert "https://" not in cid
+
+
 def test_majority_garden_goals_prefer_quantum_h():
     plan = _calendar_payload(
         {
@@ -768,4 +783,5 @@ if __name__ == "__main__":
     test_majority_garden_goals_prefer_quantum_h()
     test_subscribe_roundtrip()
     test_subscribe_expires_after_thirteen_months()
+    test_google_subscribe_uses_webcal_cid()
     print("ok")
