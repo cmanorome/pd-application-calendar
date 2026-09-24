@@ -424,11 +424,7 @@ def _public_base(request: Request) -> str:
 
 
 def _webcal_url(ics_url: str) -> str:
-    scheme, _, rest = ics_url.partition("://")
-    hostport, _, path = rest.partition("/")
-    if scheme == "https" and ":" not in hostport:
-        hostport = f"{hostport}:443"
-    return f"webcal://{hostport}/{path}"
+    return "webcal://" + ics_url.split("://", 1)[-1]
 
 
 def _subscribe_urls(form: dict[str, Any], request: Request) -> dict[str, str]:
