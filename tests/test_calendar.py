@@ -390,6 +390,12 @@ def test_usage_guide_export_joins_on_sku():
     assert by_sku["636"]["min_dilution"] == "1:3"
     assert any(r["sku"] == "636" and r["use_case"] == "home_garden" and "45 mL" in r["amount_text"] for r in rate_rows)
     assert any(r["sku"] == "636" and r["use_case"] == "liquid_inject" and "2–5 L/ha" in r["amount_text"] for r in rate_rows)
+    assert "9–12 L/Ha" in by_sku["WMB"]["rate_text"]
+    assert "50–100 mL" in by_sku["WMB"]["rate_text"]
+    assert any(r["sku"] == "WMB" and r["use_case"] == "lawns" and "9–12 L/Ha" in r["amount_text"] for r in rate_rows)
+    assert any(r["sku"] == "WMB" and r["use_case"] == "garden_beds_small_lawns" and "50–100 mL" in r["amount_text"] for r in rate_rows)
+    assert any(r["sku"] == "WMB" and r["use_case"] == "pots" and "10–20 mL" in r["amount_text"] for r in rate_rows)
+    assert any(r["sku"] == "WMB" and r["use_case"] == "fruit_trees_shrubs" and "100–150 mL" in r["amount_text"] for r in rate_rows)
 
 
 def test_master_application_guide_joins_sources():
@@ -409,6 +415,10 @@ def test_master_application_guide_joins_sources():
     assert by_sku["STM"]["calculator_rate_100m2"]
     assert "500 mL" in by_sku["636"]["calculator_rate_100m2"]
     assert by_sku["636"]["in_rates_calculator"] == "1"
+    assert "8–12" in by_sku["886"]["calculator_frequency"]
+    assert "8-10" not in by_sku["886"]["calculator_frequency"]
+    assert "does not need to be watered in" in by_sku["513"]["calculator_dilution"].lower()
+    assert "then water in" not in by_sku["513"]["calculator_dilution"].lower()
     notes = list(csv.DictReader((root / "data" / "pd_master_program_notes.csv").open(encoding="utf-8-sig")))
     ids = {r["note_id"] for r in notes}
     assert "garden_natives_half_strength" in ids

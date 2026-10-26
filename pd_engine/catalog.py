@@ -115,10 +115,12 @@ _GYPSUM_SKUS = frozenset({"1075", "636"})
 _WETTER_SKUS = frozenset({"664", "NSWL"})
 _LAWN_SPECIALIST_SKUS = frozenset({"886", "892", "LEN", "MG", "1231", "1235", "1239", "1253", "1243"})
 _GARDEN_REPRODUCTIVE_SKUS = frozenset({"575", "721"})
-# Lawn Lovers Starter (SWS + A8X + NSWL) and Pro (adds Quantum H, Liquid Iron, Stimulizer)
-_CORE_RANGE_SKUS = frozenset({"SWS", "A8X", "NSWL", "29800", "LIR", "STM"})
-# Pro Pack liquids, pack order: Seaweed Secrets + Activ8EXTRA + Quantum H + Liquid Iron + Stimulizer
+# Lawn Lovers Starter Bundle: Seaweed Secrets + Activ8EXTRA + Nature's Soil Wetter
+LAWN_LOVERS_STARTER_SKUS = ("SWS", "A8X", "NSWL")
+# Lawn Lovers Pro Pack: Seaweed Secrets + Activ8EXTRA + Quantum H + Liquid Iron + Stimulizer
+# (different kit — does not include Nature's Soil Wetter)
 LAWN_LOVERS_PRO_SKUS = ("SWS", "A8X", "29800", "LIR", "STM")
+_CORE_RANGE_SKUS = frozenset(LAWN_LOVERS_STARTER_SKUS) | frozenset(LAWN_LOVERS_PRO_SKUS)
 
 
 def _has_token(blob: str, *tokens: str) -> bool:

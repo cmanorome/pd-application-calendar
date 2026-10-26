@@ -80,6 +80,10 @@ STM,Stimulizer,watering_can,drench,2 mL per 9 L watering can,
 WMP,Worm Magic Casting Pellets,lawns_gardens,spread,20–40 g/m²,
 WMP,Worm Magic Casting Pellets,pots,incorporate,2 tablespoons per 5 L potting mix,Every 4–6 weeks
 WMP,Worm Magic Casting Pellets,agriculture,spread,100–1000 kg/ha,Varies by crop
-WMB,Worm Magic Liquid Compost Tea,garden_beds_small_lawns,drench,50–100 mL per 9 L water,
-WMB,Worm Magic Liquid Compost Tea,pots,drench,10–20 mL per litre water,
-WMB,Worm Magic Liquid Compost Tea,fruit_trees_shrubs,drench,100–150 mL per 9 L water,
+WMB,Worm Magic Liquid Compost Tea,lawns,spray,9–12 L/Ha (90–120 mL per 100 m²),"Apply evenly after mowing, every 2–4 weeks"
+WMB,Worm Magic Liquid Compost Tea,vegetables_vines_fruit_trees_shrubs,foliar,5–7 L/Ha,"Every 2–3 weeks, especially before stress periods"
+WMB,Worm Magic Liquid Compost Tea,pastures_broadacre,spray,10–20 L/Ha,Early growth or reproductive phases; every 4–6 weeks
+WMB,Worm Magic Liquid Compost Tea,fertigation,fertigation,10–20 L/Ha,Soil or foliar through most irrigation systems
+WMB,Worm Magic Liquid Compost Tea,garden_beds_small_lawns,drench,50–100 mL per 9 L water,"Every 2–4 weeks, watered in well"
+WMB,Worm Magic Liquid Compost Tea,pots,drench,10–20 mL per 1 L water,Every 2–4 weeks
+WMB,Worm Magic Liquid Compost Tea,fruit_trees_shrubs,drench,100–150 mL per 9 L water,Around the drip line every 4–6 weeks during active growth
