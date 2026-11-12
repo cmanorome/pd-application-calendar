@@ -40,10 +40,6 @@
       h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 34px); }
       .subtitle { margin: 0; color: #dcfce7; max-width: 720px; }
       h3 { font-size: 16px; margin: 22px 0 10px; }
-      .plan-head {
-        margin: 22px 0 8px;
-      }
-      .plan-head h3 { margin: 0; }
       .plan-actions {
         display: flex;
         gap: 8px;
@@ -170,6 +166,20 @@
         padding: 14px 16px;
         background: var(--white);
       }
+      .ask-step.card,
+      .ask-toggle-card,
+      .plan-card {
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 18px;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+      }
+      .ask-step.card > h2,
+      .plan-card > h2 {
+        margin: 0 0 12px;
+        font-size: 20px;
+        color: var(--green-dark);
+      }
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
       label { display: block; font-size: 12px; color: #374151; margin-bottom: 4px; }
       input, select {
@@ -212,14 +222,10 @@
       }
       .mode-row label:has(input:checked) { border-color: var(--green); background: #f0faf3; }
       .mode-row label input[type="radio"] { width: auto; margin: 0; }
-      .ask.card {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        padding: 18px 20px 20px;
-      }
+      .ask-toggle-card { display: none; padding: 14px 16px; }
+      .ask.has-plan .ask-toggle-card { display: block; }
       .ask-toggle {
-        display: none;
+        display: block;
         width: 100%;
         text-align: left;
         background: transparent;
@@ -229,27 +235,14 @@
         font-size: 14px;
         font-weight: 600;
       }
-      .ask.has-plan .ask-toggle { display: block; }
-      .ask.is-collapsed {
-        padding: 12px 16px;
-        gap: 0;
-      }
       .ask.is-collapsed #askBody { display: none; }
-      #askBody {
-        display: flex;
-        flex-direction: column;
-        gap: 28px;
-      }
-      #section_help { display: flex; flex-direction: column; gap: 28px; }
-      .ask-step {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 10px;
-        align-items: start;
-      }
-      .ask-step h3 { margin: 4px 0 8px; }
-      .ask-step > div > label { margin-bottom: 8px; }
+      #askBody { display: block; }
       .ask-step .muted { margin: 0 0 10px; }
+      .ask-step > h2 + .muted { margin-top: -4px; }
+      .ask-step > label { margin: 4px 0 8px; }
+      #section_goals,
+      #section_symptoms { margin-top: 16px; }
+      #section_symptoms > h3 { margin: 0 0 10px; }
       .ask-fields {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -520,7 +513,11 @@
       html.is-narrow-embed .header h1 { font-size: 22px; }
       html.is-narrow-embed .subtitle { font-size: 14px; }
       html.is-narrow-embed .container { padding-left: 12px; padding-right: 12px; }
-      html.is-narrow-embed .ask { padding: 12px 12px 14px; gap: 14px; }
+      html.is-narrow-embed .ask-step.card,
+      html.is-narrow-embed .ask-toggle-card,
+      html.is-narrow-embed .plan-card { padding: 14px 12px; margin-bottom: 12px; }
+      html.is-narrow-embed .ask-step.card > h2,
+      html.is-narrow-embed .plan-card > h2 { font-size: 18px; }
       .event-date { font-size: 12px; font-weight: 700; color: var(--green-dark); margin: 0 0 4px; }
       .pick-card { padding: 10px 12px; }
       .pick-card.is-on { border-color: var(--green); background: #f0faf3; }
@@ -642,100 +639,90 @@
 
     <main class="container">
       <div class="no-print">
-        <div class="ask card">
-        <button type="button" id="askToggle" class="ask-toggle hidden" aria-expanded="true" aria-controls="askBody">Edit questions</button>
+        <div class="ask">
+        <section class="card ask-toggle-card">
+          <button type="button" id="askToggle" class="ask-toggle" aria-expanded="true" aria-controls="askBody">Edit questions</button>
+        </section>
         <div id="askBody">
-        <p class="muted">
-          Typical program only — follow the label and ease off if plants are stressed. Measure area in the
-          <a class="link" href="https://www.plantdoctor.com.au/page/home-plant-doctor/plant-doctor-application-rate-calculator/" target="_blank" rel="noopener">rates calculator</a>
-          if you want pack sizes later.
-        </p>
+        <section class="card ask-step">
+          <h2>1) How should we build your calendar?</h2>
+          <p class="muted">
+            Typical program only — follow the label and ease off if plants are stressed. Measure area in the
+            <a class="link" href="https://www.plantdoctor.com.au/page/home-plant-doctor/plant-doctor-application-rate-calculator/" target="_blank" rel="noopener">rates calculator</a>
+            if you want pack sizes later.
+          </p>
+          <div class="mode-row">
+            <label><input type="radio" name="path" value="recommend" checked /><span>I don’t know what to buy — choose for me</span></label>
+            <label><input type="radio" name="path" value="pick" /><span>I know what I’m buying — I’ll pick products</span></label>
+          </div>
+        </section>
 
-        <section class="ask-step">
-          <div>
-            <label>How should we build your calendar?</label>
-            <div class="mode-row">
-              <label><input type="radio" name="path" value="recommend" checked /><span>I don’t know what to buy — choose for me</span></label>
-              <label><input type="radio" name="path" value="pick" /><span>I know what I’m buying — I’ll pick products</span></label>
+        <section class="card ask-step">
+          <h2>2) About your space</h2>
+          <div class="ask-fields">
+            <div>
+              <label for="use_case">Where are you using it?</label>
+              <select id="use_case">
+                <option value="lawn" selected>Lawn</option>
+                <option value="garden_beds">Garden (beds, veg, flowers, pots)</option>
+              </select>
+            </div>
+            <div>
+              <label for="region">Where in Australia? (optional)</label>
+              <select id="region">
+                <option value="" selected>Not sure</option>
+                <option value="south">South</option>
+                <option value="north">North</option>
+                <option value="east_coast">East coast</option>
+              </select>
+            </div>
+            <div>
+              <label for="start_date">Start date</label>
+              <input id="start_date" type="date" />
+            </div>
+            <div>
+              <label for="area_m2">Area (m², optional)</label>
+              <input id="area_m2" type="number" min="1" step="1" placeholder="e.g. 250" />
+            </div>
+            <div id="card_intent">
+              <label for="intent">Stage</label>
+              <select id="intent">
+                <option value="establishment_mode">Just planting / establishing</option>
+                <option value="maintenance_mode" selected>Keep it healthy</option>
+                <option value="performance_mode">Push for best results</option>
+              </select>
+            </div>
+            <div id="card_confidence">
+              <label for="confidence_level">How sure are you?</label>
+              <select id="confidence_level">
+                <option value="not_sure">Not sure</option>
+                <option value="somewhat_sure" selected>Somewhat sure</option>
+                <option value="very_sure">Very sure</option>
+              </select>
             </div>
           </div>
         </section>
 
-        <section class="ask-step">
-          <div>
-            <div class="ask-fields">
-              <div>
-                <label for="use_case">Where are you using it?</label>
-                <select id="use_case">
-                  <option value="lawn" selected>Lawn</option>
-                  <option value="garden_beds">Garden (beds, veg, flowers, pots)</option>
-                </select>
-              </div>
-              <div>
-                <label for="region">Where in Australia? (optional)</label>
-                <select id="region">
-                  <option value="" selected>Not sure</option>
-                  <option value="south">South</option>
-                  <option value="north">North</option>
-                  <option value="east_coast">East coast</option>
-                </select>
-              </div>
-              <div>
-                <label for="start_date">Start date</label>
-                <input id="start_date" type="date" />
-              </div>
-              <div>
-                <label for="area_m2">Area (m², optional)</label>
-                <input id="area_m2" type="number" min="1" step="1" placeholder="e.g. 250" />
-              </div>
-              <div id="card_intent">
-                <label for="intent">Stage</label>
-                <select id="intent">
-                  <option value="establishment_mode">Just planting / establishing</option>
-                  <option value="maintenance_mode" selected>Keep it healthy</option>
-                  <option value="performance_mode">Push for best results</option>
-                </select>
-              </div>
-              <div id="card_confidence">
-                <label for="confidence_level">How sure are you?</label>
-                <select id="confidence_level">
-                  <option value="not_sure">Not sure</option>
-                  <option value="somewhat_sure" selected>Somewhat sure</option>
-                  <option value="very_sure">Very sure</option>
-                </select>
-              </div>
+        <section id="section_pick" class="card ask-step hidden">
+          <h2>3) Which products are you using?</h2>
+          <p class="muted">Tick what you have or are buying. We’ll space iron, lime, and seaweed so they don’t clash. <span id="pick_count">0 selected</span></p>
+          <div class="ask-fields" style="max-width:360px;margin-bottom:10px;">
+            <div>
+              <label for="pick_search">Search</label>
+              <input id="pick_search" type="search" placeholder="e.g. seaweed, Champion, iron" />
             </div>
           </div>
+          <div id="pick_list"></div>
         </section>
 
-        <section id="section_pick" class="ask-step hidden">
-          <div>
-            <h3>Which products are you using?</h3>
-            <p class="muted">Tick what you have or are buying. We’ll space iron, lime, and seaweed so they don’t clash. <span id="pick_count">0 selected</span></p>
-            <div class="ask-fields" style="max-width:360px;margin-bottom:10px;">
-              <div>
-                <label for="pick_search">Search</label>
-                <input id="pick_search" type="search" placeholder="e.g. seaweed, Champion, iron" />
-              </div>
-            </div>
-            <div id="pick_list"></div>
+        <section id="section_help" class="card ask-step">
+          <h2>3) What do you want?</h2>
+          <label>I want to</label>
+          <div class="mode-row">
+            <label><input type="radio" name="rec_mode" value="goals" checked /><span>Keep it healthy / improve results</span></label>
+            <label><input type="radio" name="rec_mode" value="problems" /><span>Fix a problem first</span></label>
           </div>
-        </section>
-
-        <div id="section_help">
-        <section class="ask-step">
-          <div>
-            <label>I want to</label>
-            <div class="mode-row">
-              <label><input type="radio" name="rec_mode" value="goals" checked /><span>Keep it healthy / improve results</span></label>
-              <label><input type="radio" name="rec_mode" value="problems" /><span>Fix a problem first</span></label>
-            </div>
-          </div>
-        </section>
-
-        <section id="section_goals" class="ask-step">
-          <div>
-            <h3>What do you want?</h3>
+          <div id="section_goals">
             <p class="muted">Tick one or more. These change with lawn vs garden.</p>
             <div id="goal_panel_lawn" class="check-grid">
               <label class="check-item"><input class="goal-cb" type="checkbox" data-goal-key="thickening_and_density" checked/><span><span class="title">Thickening and density</span></span></label>
@@ -752,10 +739,7 @@
               <label class="check-item"><input class="goal-cb" type="checkbox" data-goal-key="consistent_growth_across_seasons"/><span><span class="title">Steady growth through the year</span></span></label>
             </div>
           </div>
-        </section>
-
-        <section id="section_symptoms" class="ask-step hidden">
-          <div>
+          <div id="section_symptoms" class="hidden">
             <h3>What’s wrong?</h3>
             <div class="check-grid">
               <label class="check-item"><input id="yellowing" type="checkbox"/><span><span class="title" id="yellowing_title">Yellowing</span><span class="desc" id="yellowing_desc">Pale or yellow turf.</span></span></label>
@@ -771,41 +755,38 @@
           </div>
         </section>
 
-        <section class="ask-step">
-          <div>
-            <h3>Soil</h3>
-            <div class="check-grid">
-              <label class="check-item"><input id="sandy" type="checkbox"/><span><span class="title">Sandy</span><span class="desc">Drains fast, nutrients leach.</span></span></label>
-              <label class="check-item"><input id="clay" type="checkbox"/><span><span class="title">Clay</span><span class="desc">Heavy, holds water, compacts.</span></span></label>
-              <label class="check-item"><input id="acidic" type="checkbox"/><span><span class="title">Acidic</span><span class="desc">Low pH. Skip if you enter a measured pH.</span></span></label>
-              <label class="check-item"><input id="alkaline" type="checkbox"/><span><span class="title">Alkaline</span><span class="desc">High pH. Skip if you enter a measured pH.</span></span></label>
-              <label class="check-item"><input id="low_organic_matter" type="checkbox"/><span><span class="title">Low organic matter</span><span class="desc">Poor soil life.</span></span></label>
-              <label class="check-item"><input id="hydrophobic" type="checkbox"/><span><span class="title">Hydrophobic</span><span class="desc">Water beads or runs off.</span></span></label>
-            </div>
-            <details class="fold" id="section_soil_test">
-              <summary>I have a soil test (optional)</summary>
-              <p class="muted">pH is the most useful number. Home kits are usually water pH; Australian labs are often CaCl₂.</p>
-              <div class="ask-fields">
-                <div>
-                  <label for="soil_ph">Soil pH</label>
-                  <input id="soil_ph" type="number" min="3.5" max="10.5" step="0.1" placeholder="e.g. 6.2" />
-                </div>
-                <div>
-                  <label for="soil_ph_method">Measured in</label>
-                  <select id="soil_ph_method">
-                    <option value="water" selected>Water (home kit)</option>
-                    <option value="cacl2">CaCl₂ (lab report)</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="organic_matter_pct">Organic matter %</label>
-                  <input id="organic_matter_pct" type="number" min="0" max="20" step="0.1" placeholder="e.g. 1.8" />
-                </div>
-              </div>
-            </details>
+        <section id="section_soil" class="card ask-step">
+          <h2>4) Soil</h2>
+          <div class="check-grid">
+            <label class="check-item"><input id="sandy" type="checkbox"/><span><span class="title">Sandy</span><span class="desc">Drains fast, nutrients leach.</span></span></label>
+            <label class="check-item"><input id="clay" type="checkbox"/><span><span class="title">Clay</span><span class="desc">Heavy, holds water, compacts.</span></span></label>
+            <label class="check-item"><input id="acidic" type="checkbox"/><span><span class="title">Acidic</span><span class="desc">Low pH. Skip if you enter a measured pH.</span></span></label>
+            <label class="check-item"><input id="alkaline" type="checkbox"/><span><span class="title">Alkaline</span><span class="desc">High pH. Skip if you enter a measured pH.</span></span></label>
+            <label class="check-item"><input id="low_organic_matter" type="checkbox"/><span><span class="title">Low organic matter</span><span class="desc">Poor soil life.</span></span></label>
+            <label class="check-item"><input id="hydrophobic" type="checkbox"/><span><span class="title">Hydrophobic</span><span class="desc">Water beads or runs off.</span></span></label>
           </div>
+          <details class="fold" id="section_soil_test">
+            <summary>I have a soil test (optional)</summary>
+            <p class="muted">pH is the most useful number. Home kits are usually water pH; Australian labs are often CaCl₂.</p>
+            <div class="ask-fields">
+              <div>
+                <label for="soil_ph">Soil pH</label>
+                <input id="soil_ph" type="number" min="3.5" max="10.5" step="0.1" placeholder="e.g. 6.2" />
+              </div>
+              <div>
+                <label for="soil_ph_method">Measured in</label>
+                <select id="soil_ph_method">
+                  <option value="water" selected>Water (home kit)</option>
+                  <option value="cacl2">CaCl₂ (lab report)</option>
+                </select>
+              </div>
+              <div>
+                <label for="organic_matter_pct">Organic matter %</label>
+                <input id="organic_matter_pct" type="number" min="0" max="20" step="0.1" placeholder="e.g. 1.8" />
+              </div>
+            </div>
+          </details>
         </section>
-        </div>
 
         <div class="actions">
           <button id="run" type="button">Build my calendar</button>
@@ -815,10 +796,10 @@
         </div>
       </div>
 
-      <div class="plan-head">
-        <h3 id="results_heading">Your 12-month plan</h3>
-      </div>
-      <div id="results"><div class="empty">Fill in the form and tap Build my calendar.</div></div>
+      <section class="card plan-card">
+        <h2 id="results_heading">Your 12-month plan</h2>
+        <div id="results"><div class="empty">Fill in the form and tap Build my calendar.</div></div>
+      </section>
     </main>
 
     <footer class="footer container">
@@ -882,6 +863,7 @@
         const pick = currentPath() === "pick";
         document.getElementById("section_pick").classList.toggle("hidden", !pick);
         document.getElementById("section_help").classList.toggle("hidden", pick);
+        document.getElementById("section_soil").classList.toggle("hidden", pick);
         document.getElementById("card_intent").classList.toggle("hidden", pick);
         document.getElementById("card_confidence").classList.toggle("hidden", pick);
         if (pick) renderPicker();
@@ -1593,23 +1575,21 @@
       });
 
       function collapseAsk() {
-        const card = document.querySelector(".ask.card");
+        const card = document.querySelector(".ask");
         const toggle = document.getElementById("askToggle");
         if (!card || !toggle) return;
         card.classList.add("has-plan", "is-collapsed");
-        toggle.classList.remove("hidden");
         toggle.setAttribute("aria-expanded", "false");
         toggle.textContent = "Edit questions";
         reportEmbedHeight();
       }
       function expandAsk(reset) {
-        const card = document.querySelector(".ask.card");
+        const card = document.querySelector(".ask");
         const toggle = document.getElementById("askToggle");
         if (!card || !toggle) return;
         card.classList.remove("is-collapsed");
         if (reset) {
           card.classList.remove("has-plan");
-          toggle.classList.add("hidden");
           toggle.setAttribute("aria-expanded", "true");
           reportEmbedHeight();
           return;
@@ -1619,7 +1599,7 @@
         reportEmbedHeight();
       }
       document.getElementById("askToggle").addEventListener("click", () => {
-        const card = document.querySelector(".ask.card");
+        const card = document.querySelector(".ask");
         if (card && card.classList.contains("is-collapsed")) expandAsk(false);
         else collapseAsk();
       });
